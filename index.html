@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🐣 Tamagotchi World</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF6E5; --bg-accent:#FFE3C2; --primary:#FF9F68; --primary-hover:#FF7B3D;
+  --pink:#FFB6C1; --mint:#A8E6CF; --sky:#A8D8EA;
+  --text:#4A3728; --text-soft:#7A6553; --white:#fff;
+  --shadow:0 8px 24px rgba(255,159,104,.25);
+  --shadow-strong:0 12px 32px rgba(255,123,61,.35);
+  --radius:28px; --radius-sm:18px;
+  --room-wall:#3A342E; --room-wall-2:#4A423A; --room-floor:#2B241F;
+  --room-warm:#FFB67A; --room-bed:#E8E1D5; --room-bed-dark:#C9BFAF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.btn,.header-logo,.pet-name{font-family:'Baloo 2',cursive}
+a{color:var(--primary-hover);text-decoration:none;font-weight:700;cursor:pointer}
+a:hover{text-decoration:underline wavy var(--pink)}
+button{font-family:inherit}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:rgba(255,246,229,.85);backdrop-filter:blur(12px);border-bottom:3px dashed var(--bg-accent)}
+.header-logo{font-size:24px;font-weight:800;cursor:pointer}
+.header-logo span{color:var(--primary-hover)}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.coins-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(180deg,#FFF7C2,#FFE784);padding:8px 16px;border-radius:999px;font-weight:800;color:#8A6A00;box-shadow:0 4px 0 #E6C94A;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.user-pill{display:inline-flex;align-items:center;gap:8px;background:var(--white);padding:8px 14px 8px 8px;border-radius:999px;font-weight:700;box-shadow:var(--shadow)}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--pink);display:grid;place-items:center;font-weight:800;color:#fff}
+
+/* КНОПКИ */
+.btn{border:none;cursor:pointer;font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;padding:12px 26px;border-radius:999px;color:#fff;background:var(--primary);box-shadow:0 6px 0 var(--primary-hover),var(--shadow);transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-block}
+.btn:hover{transform:translateY(-3px);box-shadow:0 9px 0 var(--primary-hover),var(--shadow-strong);text-decoration:none}
+.btn:active{transform:translateY(2px);box-shadow:0 3px 0 var(--primary-hover)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-soft{background:#fff;color:var(--primary-hover);box-shadow:0 6px 0 var(--bg-accent),var(--shadow)}
+.btn-soft:hover{box-shadow:0 9px 0 var(--bg-accent),var(--shadow-strong)}
+.btn-mint{background:var(--mint);color:#2C6E52;box-shadow:0 6px 0 #6ED3A6,var(--shadow)}
+.btn-mint:hover{box-shadow:0 9px 0 #6ED3A6,var(--shadow-strong)}
+.btn-block{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-sm{font-size:15px;padding:8px 16px}
+
+/* ЭКРАНЫ */
+.screen{display:none;position:relative;z-index:1;min-height:calc(100vh - 70px)}
+.screen.active{display:block;animation:fadeIn .35s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section-title{text-align:center;font-size:clamp(22px,4vw,32px);font-weight:800;margin-bottom:24px}
+
+/* ФОН */
+.bg-decor{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-decor .cloud{position:absolute;font-size:60px;opacity:.5;animation:float 8s ease-in-out infinite}
+.bg-decor .c1{top:8%;left:5%} .bg-decor .c2{top:20%;right:8%;animation-delay:2s;font-size:48px} .bg-decor .c3{top:60%;left:12%;animation-delay:4s;font-size:40px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+
+/* HERO */
+.hero{text-align:center;padding:48px 20px 24px}
+.hero-title{font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.2;margin-bottom:12px}
+.wave{display:inline-block;animation:swing 1.6s ease-in-out infinite}
+@keyframes swing{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.hero-sub{font-size:18px;color:var(--text-soft)}
+
+/* КАРТОЧКИ ПИТОМЦЕВ */
+.pets-section{padding:24px 20px 48px;max-width:1200px;margin:0 auto}
+.pets-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
+.pet-card{background:#fff;border-radius:var(--radius);padding:22px;text-align:center;box-shadow:var(--shadow);border:4px solid var(--bg-accent);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+.pet-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-strong)}
+.pet-card::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:var(--pink);opacity:.25}
+.pet-avatar{width:110px;height:110px;margin:0 auto 12px;border-radius:50%;background:var(--bg-accent);display:grid;place-items:center;font-size:64px;border:5px dashed var(--primary);animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.pet-card h3{font-size:22px;margin-bottom:6px}
+.pet-badge{display:inline-block;background:var(--mint);color:#2C6E52;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+.pet-badge.cartoon{background:#FFD3A8;color:#8A4F00}
+.pet-sound{position:absolute;top:14px;left:14px;font-size:18px;opacity:.6}
+.pet-price{display:inline-block;background:#FFF7C2;color:#8A6A00;font-weight:800;font-size:13px;padding:4px 14px;border-radius:999px;margin:6px 0 12px}
+.pet-price.cartoon{background:linear-gradient(180deg,#FFE3A8,#FFC97A);color:#7A4200}
+
+/* ФИЧИ */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;max-width:1200px;margin:0 auto;padding:24px 20px 48px}
+.feature-card{background:#fff;border-radius:var(--radius);padding:28px 22px;text-align:center;box-shadow:var(--shadow);border:4px solid var(--bg-accent)}
+.feature-icon{font-size:52px;margin-bottom:12px}
+.feature-card h3{font-size:22px;margin-bottom:8px}
+.feature-card p{color:var(--text-soft);margin-bottom:16px;font-size:15px}
+
+/* FOOTER */
+.footer{text-align:center;padding:28px 20px;background:var(--bg-accent);border-top:3px dashed var(--primary);color:var(--text-soft);font-weight:600;position:relative;z-index:1}
+.footer nav{margin-top:10px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+.footer .disclaimer{font-size:12px;opacity:.65;margin-top:10px;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.5}
+
+/* МОДАЛКИ */
+.modal-backdrop{position:fixed;inset:0;background:rgba(74,55,40,.5);display:none;place-items:center;z-index:100;padding:20px;backdrop-filter:blur(4px)}
+.modal-backdrop.open{display:grid}
+.modal{background:#fff;border-radius:var(--radius);padding:32px;max-width:480px;width:100%;text-align:center;box-shadow:var(--shadow-strong);border:5px solid var(--bg-accent);animation:pop .3s ease-out;max-height:85vh;overflow-y:auto}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.modal h3{font-size:26px;margin-bottom:12px}
+.modal-pet{font-size:88px;margin:12px 0 20px}
+.modal-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ФОРМЫ */
+.auth-wrap{display:grid;place-items:center;min-height:calc(100vh - 70px);padding:20px}
+.auth-card{background:#fff;border-radius:var(--radius);padding:40px 32px;max-width:440px;width:100%;box-shadow:var(--shadow-strong);border:5px solid var(--bg-accent);text-align:center}
+.auth-emoji{font-size:72px;margin-bottom:8px;animation:breathe 3s ease-in-out infinite}
+.auth-title{font-size:30px;margin-bottom:6px}
+.auth-sub{color:var(--text-soft);margin-bottom:24px}
+.auth-form{text-align:left;display:flex;flex-direction:column;gap:14px}
+.auth-form label span{display:block;font-size:14px;font-weight:700;color:var(--text-soft);margin-bottom:6px}
+.input{width:100%;padding:14px 18px;font-size:16px;font-family:'Nunito',sans-serif;font-weight:600;border:3px solid var(--bg-accent);border-radius:var(--radius-sm);background:var(--bg);color:var(--text)}
+.input:focus{outline:none;border-color:var(--primary);background:#fff}
+.auth-error{color:#D9534F;font-weight:700;font-size:14px;min-height:18px;text-align:center}
+.auth-foot{margin-top:20px;color:var(--text-soft);font-weight:600}
+.auth-links{display:flex;justify-content:space-between;margin-top:12px;font-size:14px}
+
+/* КОМНАТА */
+.room-wrap{max-width:1200px;margin:0 auto;padding:24px 20px;display:grid;grid-template-columns:1.5fr 1fr;gap:24px}
+@media(max-width:900px){.room-wrap{grid-template-columns:1fr}}
+.room-stage{position:relative;border-radius:var(--radius);border:6px solid var(--bg-accent);box-shadow:var(--shadow-strong);min-height:520px;overflow:hidden;transition:background 1.5s ease;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,var(--room-wall) 0%, var(--room-wall-2) 62%, var(--room-floor) 62%, #1E1814 100%)}
+
+/* ВРЕМЯ СУТОК */
+.room-stage.time-morning{--room-wall:#5A4E42;--room-wall-2:#6A5E50;--room-floor:#3A3028;background:linear-gradient(180deg,#B8D8E8 0%, #D9C8A8 62%, #3A3028 62%, #2A2018 100%)}
+.room-stage.time-day{--room-wall:#6A5E50;--room-wall-2:#7A6E60;--room-floor:#4A4038;background:linear-gradient(180deg,#E8F0F8 0%, #EAD8B8 62%, #4A4038 62%, #3A3028 100%)}
+.room-stage.time-evening{--room-wall:#5A3E2E;--room-wall-2:#6A4A38;--room-floor:#3A2A20;background:linear-gradient(180deg,#E8A868 0%, #C87850 62%, #3A2A20 62%, #2A1E16 100%)}
+.room-stage.time-night{--room-wall:#1F1A24;--room-wall-2:#2A242E;--room-floor:#161218;background:linear-gradient(180deg,#0B1A2B 0%, #16324F 62%, #161218 62%, #0A0810 100%)}
+.room-stage.time-night::after{content:'';position:absolute;top:0;left:0;right:0;height:62%;background-image:radial-gradient(2px 2px at 20% 15%, #fff, transparent),radial-gradient(1.5px 1.5px at 60% 30%, #fff, transparent),radial-gradient(2px 2px at 80% 20%, #fff, transparent),radial-gradient(1px 1px at 35% 45%, #fff, transparent),radial-gradient(1.5px 1.5px at 75% 55%, #fff, transparent);opacity:.5;pointer-events:none}
+.room-stage.walking .pet-big{animation:walkBob .5s ease-in-out infinite}
+@keyframes walkBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+
+/* ЭМОЦИИ ПИТОМЦА */
+.pet-big{position:absolute;left:30%;bottom:30%;z-index:5;font-size:130px;cursor:pointer;filter:drop-shadow(0 12px 8px rgba(0,0,0,.6));transition:left 3s cubic-bezier(.4,0,.2,1),bottom 3s cubic-bezier(.4,0,.2,1),transform .25s;will-change:left,bottom}
+.pet-big.emotion-happy{animation:happyJump .6s ease-in-out infinite}
+@keyframes happyJump{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.pet-big.emotion-hungry{animation:hungryShake .4s ease-in-out infinite}
+@keyframes hungryShake{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.pet-big.emotion-sad{animation:sadSway 2.5s ease-in-out infinite}
+@keyframes sadSway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.pet-big.emotion-sleepy{animation:sleepyBreath 3s ease-in-out infinite}
+@keyframes sleepyBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.03) translateY(2px)}}
+
+.pet-name{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);z-index:6;font-size:20px;font-weight:800;background:#fff;padding:6px 20px;border-radius:999px;box-shadow:var(--shadow);border:3px solid var(--bg-accent);font-family:'Baloo 2',cursive;transition:bottom .5s}
+.pet-bubble{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:7;background:#fff;border-radius:var(--radius-sm);padding:10px 18px;font-weight:700;color:var(--text-soft);box-shadow:var(--shadow);border:3px solid var(--bg-accent);font-size:14px;max-width:70%;text-align:center}
+.pet-emotion-badge{position:absolute;top:16px;left:16px;z-index:8;background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px;box-shadow:var(--shadow);border:3px solid var(--bg-accent)}
+
+/* МЕБЕЛЬ */
+.wall-decor{position:absolute;top:0;left:0;right:0;height:60%;pointer-events:none}
+.poster{position:absolute;padding:8px 12px;background:#F5EFE6;color:#1F1B17;font-family:'Baloo 2',cursive;font-weight:800;font-size:13px;border-radius:4px;text-align:center;line-height:1.1;box-shadow:0 6px 12px rgba(0,0,0,.35);transform:rotate(-3deg)}
+.poster.p1{top:22%;left:12%;width:90px} .poster.p2{top:14%;left:34%;width:80px;font-size:11px;background:#FFE9C7;transform:rotate(3deg)}
+.polaroid{position:absolute;background:#F8F3EB;padding:4px 4px 14px;box-shadow:0 6px 12px rgba(0,0,0,.4);width:42px;height:52px;border-radius:2px}
+.polaroid::after{content:'';position:absolute;inset:4px 4px 16px;background:#B7A28C;border-radius:1px}
+.polaroid.pa1{top:44%;left:8%} .polaroid.pa2{top:48%;left:18%;transform:rotate(4deg)} .polaroid.pa3{top:42%;left:28%;transform:rotate(-2deg)}
+.clock{position:absolute;top:14%;left:6%;background:#111;color:#FF6B6B;padding:6px 12px;border-radius:6px;font-family:'Courier New',monospace;font-weight:800;font-size:13px;box-shadow:0 0 18px rgba(255,107,107,.5);letter-spacing:2px}
+.window{position:absolute;top:8%;right:6%;width:22%;height:42%;background:linear-gradient(180deg,#0B1A2B,#16324F,#1E4266);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 30px rgba(0,0,0,.7), 0 0 24px rgba(255,182,122,.4);border:3px solid #2A2620;transition:background 1.5s}
+.room-stage.time-morning .window{background:linear-gradient(180deg,#B8D8F0,#E8F0FF,#FFE8C8)}
+.room-stage.time-day .window{background:linear-gradient(180deg,#A8D0F0,#D8E8FF,#F0F0FF)}
+.room-stage.time-evening .window{background:linear-gradient(180deg,#FFA858,#FF7048,#8A3828)}
+.curtain{position:absolute;top:6%;right:4%;width:26%;height:46%;background:linear-gradient(180deg,#4A3F33,#2F2820);border-radius:10px 10px 4px 4px;box-shadow:inset 0 0 20px rgba(0,0,0,.6);border:2px solid #1F1A15}
+.curtain::after{content:'';position:absolute;left:-6px;top:-6px;right:-6px;height:8px;background:linear-gradient(90deg,#7A6A55,#A89275,#7A6A55);border-radius:4px}
+.bed{position:absolute;left:4%;bottom:8%;width:52%;height:38%;background:var(--room-bed);border-radius:12px;box-shadow:0 12px 24px rgba(0,0,0,.55), inset 0 -8px 0 var(--room-bed-dark);transform:rotate(-1deg)}
+.bed::before{content:'';position:absolute;top:-14%;left:-2%;width:104%;height:22%;background:linear-gradient(180deg,#2A2620,#1A1613);border-radius:10px 10px 0 0;box-shadow:0 4px 0 #0F0C0A}
+.bed::after{content:'';position:absolute;top:8%;left:6%;right:6%;height:60%;background:repeating-linear-gradient(115deg,#D9C9A8 0 6px,#C9B898 6px 12px);border-radius:8px}
+.pillow{position:absolute;width:46px;height:30px;background:#F5EEDC;border-radius:12px;box-shadow:inset 0 -4px 0 #D9CEB5, 0 4px 8px rgba(0,0,0,.35)}
+.pillow.pl1{left:8%;top:14%;transform:rotate(-6deg)} .pillow.pl2{left:22%;top:12%;transform:rotate(4deg)}
+.toy{position:absolute;left:36%;top:12%;font-size:30px;transform:rotate(-8deg)}
+.blanket{position:absolute;left:0;bottom:-4%;width:100%;height:70%;background:repeating-linear-gradient(160deg,#C9BBA0 0 8px,#B8A98C 8px 16px);border-radius:12px 20px 8px 8px}
+.desk{position:absolute;right:4%;bottom:12%;width:40%;height:32%;background:#E8E1D5;border-radius:8px;box-shadow:0 12px 24px rgba(0,0,0,.55), inset 0 -6px 0 #C9BFAF}
+.monitor{position:absolute;top:-36%;left:14%;width:42%;height:56%;background:#0A0A0A;border-radius:6px;box-shadow:0 0 20px rgba(120,180,255,.6);border:3px solid #1A1A1A}
+.monitor::after{content:'';position:absolute;inset:6px;border-radius:4px;background:linear-gradient(135deg,#6BB8FF,#3D6EA8,#2A4B7A);opacity:.9}
+.laptop{position:absolute;top:-20%;right:6%;width:22%;height:44%;background:#1A1A1A;border-radius:4px;box-shadow:0 0 12px rgba(255,180,120,.4)}
+.laptop::after{content:'';position:absolute;inset:4px;background:linear-gradient(180deg,#3A4A6A,#1A2A4A);border-radius:2px}
+.lamp{position:absolute;top:-24%;left:6%;font-size:22px;filter:drop-shadow(0 0 10px rgba(255,200,120,.9))}
+.room-stage.time-night .lamp{filter:drop-shadow(0 0 22px rgba(255,200,120,1))}
+.chair{position:absolute;right:6%;bottom:2%;width:18%;height:44%;background:linear-gradient(180deg,#F2EFEA,#D9D2C6);border-radius:14px;box-shadow:0 8px 14px rgba(0,0,0,.55), inset 0 -8px 0 #B8AFA0;transform:rotate(-2deg)}
+.chair::after{content:'';position:absolute;bottom:-22px;left:20%;right:20%;height:22px;background:radial-gradient(circle at 50% 0, #2A2620 0 40%, transparent 42%)}
+.rug{position:absolute;left:38%;bottom:-14%;width:44%;aspect-ratio:1/1;background:#111;border-radius:50%;box-shadow:0 8px 20px rgba(0,0,0,.7), inset 0 0 0 2px #222;display:grid;place-items:center;pointer-events:none}
+.rug::before{content:'';width:44%;height:44%;border-radius:50%;background:#F5F5F5;box-shadow:inset 0 0 0 3px #111}
+.rug::after{content:'8';position:absolute;color:#111;font-family:'Baloo 2',cursive;font-weight:800;font-size:22px}
+
+/* ПАНЕЛЬ КОМНАТЫ */
+.room-panel{display:flex;flex-direction:column;gap:16px}
+.stat{background:#fff;border-radius:var(--radius-sm);padding:16px 20px;box-shadow:var(--shadow);border:3px solid var(--bg-accent)}
+.stat-head{display:flex;justify-content:space-between;font-weight:800;margin-bottom:8px}
+.bar{height:16px;background:var(--bg-accent);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;transition:width .5s ease}
+.bar-hunger{background:linear-gradient(90deg,#FFB88C,#FF7B3D)}
+.bar-mood{background:linear-gradient(90deg,#A8E6CF,#6ED3A6)}
+.room-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.room-actions .btn-full{grid-column:span 2}
+.inventory{display:flex;gap:10px;flex-wrap:wrap}
+.inv-item{background:#fff;border-radius:999px;padding:8px 16px;font-weight:700;box-shadow:var(--shadow);border:3px solid var(--bg-accent);font-size:14px}
+
+/* ОТЕЛЬ */
+.hotel-wrap{max-width:1200px;margin:0 auto;padding:32px 20px}
+.hotel-sub{text-align:center;color:var(--text-soft);margin-bottom:24px;font-weight:600}
+.hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
+.hotel-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:4px solid var(--bg-accent);transition:transform .25s,box-shadow .25s;cursor:pointer;position:relative}
+.hotel-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-strong)}
+.hotel-card.active-room{border-color:var(--primary);box-shadow:0 0 0 4px rgba(255,159,104,.25),var(--shadow)}
+.hotel-room-preview{height:150px;display:grid;place-items:center;font-size:70px;background:linear-gradient(180deg,var(--room-wall) 0%, var(--room-wall-2) 62%, var(--room-floor) 62%, #1E1814 100%);position:relative}
+.hotel-room-preview > span{position:relative;z-index:1;filter:drop-shadow(0 6px 4px rgba(0,0,0,.6))}
+.hotel-body{padding:18px;text-align:center}
+.hotel-body h3{font-size:22px;margin-bottom:6px}
+.hotel-body .species{color:var(--text-soft);font-size:14px;font-weight:700;margin-bottom:8px}
+.hotel-stats{display:flex;justify-content:center;gap:14px;font-weight:700;font-size:14px;color:var(--text-soft)}
+.hotel-emotion{font-size:13px;font-weight:800;color:var(--primary-hover);margin-bottom:8px}
+.hotel-badge-active{position:absolute;top:12px;right:12px;background:var(--mint);color:#2C6E52;font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;box-shadow:0 3px 0 #6ED3A6;z-index:2}
+.hotel-empty{border:4px dashed var(--primary);background:rgba(255,255,255,.6);display:grid;place-items:center;text-align:center;padding:30px 20px;min-height:230px;border-radius:var(--radius)}
+.hotel-empty-icon{font-size:60px;margin-bottom:10px;opacity:.7}
+.hotel-empty h3{font-size:20px;margin-bottom:6px}
+.hotel-empty p{color:var(--text-soft);font-size:14px;font-weight:600;margin-bottom:16px}
+
+/* МАГАЗИН */
+.shop-wrap{max-width:1200px;margin:0 auto;padding:32px 20px;text-align:center}
+.shop-sub{color:var(--text-soft);margin-bottom:24px}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.shop-item{background:#fff;border-radius:var(--radius);padding:22px;text-align:center;box-shadow:var(--shadow);border:4px solid var(--bg-accent);transition:transform .2s}
+.shop-item:hover{transform:translateY(-6px)}
+.shop-item-icon{font-size:56px;margin-bottom:10px}
+.shop-item h3{font-size:19px;margin-bottom:6px}
+.shop-item .desc{color:var(--text-soft);font-size:13px;margin-bottom:10px;min-height:36px}
+.shop-item .price{color:#8A6A00;font-weight:800;background:#FFF7C2;padding:4px 14px;border-radius:999px;display:inline-block;margin-bottom:12px}
+.shop-hint{margin-top:20px;color:var(--text-soft);font-weight:700;min-height:24px}
+
+/* ХАБ ИГР */
+.games-wrap{max-width:1100px;margin:0 auto;padding:32px 20px;text-align:center}
+.games-sub{color:var(--text-soft);margin-bottom:28px}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.game-card{background:#fff;border-radius:var(--radius);padding:28px 22px;box-shadow:var(--shadow);border:4px solid var(--bg-accent);text-align:center;transition:transform .25s,box-shadow .25s}
+.game-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-strong)}
+.game-card .game-emoji{font-size:70px;margin-bottom:12px;display:block}
+.game-card h3{font-size:24px;margin-bottom:8px}
+.game-card p{color:var(--text-soft);margin-bottom:14px;font-size:14px}
+.game-card .reward{display:inline-block;background:#FFF7C2;color:#8A6A00;font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px;margin-bottom:14px}
+
+/* CANVAS */
+.play-wrap{max-width:900px;margin:0 auto;padding:24px 20px;text-align:center}
+.play-hud{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-weight:800;font-size:16px}
+.play-hud > div{background:#fff;padding:8px 16px;border-radius:999px;box-shadow:var(--shadow);border:3px solid var(--bg-accent)}
+.play-canvas{width:100%;max-width:800px;height:auto;border-radius:var(--radius);border:6px solid var(--bg-accent);box-shadow:var(--shadow-strong);background:#111;touch-action:none}
+.play-actions{margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.play-help{margin-top:12px;color:var(--text-soft);font-weight:600;font-size:14px}
+
+/* ДОСТИЖЕНИЯ */
+.toast-ach{position:fixed;top:90px;right:24px;z-index:200;background:linear-gradient(135deg,#FFE3A8,#FFC97A);border:4px solid #FF9F68;border-radius:var(--radius-sm);padding:14px 20px;box-shadow:var(--shadow-strong);display:flex;align-items:center;gap:12px;font-weight:800;animation:toastIn .5s ease-out;max-width:340px}
+@keyframes toastIn{from{transform:translateX(420px);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast-ach.out{animation:toastOut .5s ease-in forwards}
+@keyframes toastOut{to{transform:translateX(420px);opacity:0}}
+.toast-ach .toast-icon{font-size:36px}
+.toast-ach .toast-title{font-family:'Baloo 2',cursive;font-size:14px;color:#7A4200;text-transform:uppercase;letter-spacing:1px}
+.toast-ach .toast-name{font-family:'Baloo 2',cursive;font-size:18px;color:#4A2A00}
+.ach-wrap{max-width:1100px;margin:0 auto;padding:32px 20px}
+.ach-sub{text-align:center;color:var(--text-soft);margin-bottom:24px;font-weight:600}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.ach-card{background:#fff;border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow);border:4px solid var(--bg-accent);transition:transform .2s}
+.ach-card:hover{transform:translateY(-4px)}
+.ach-card.locked{filter:grayscale(.9);opacity:.55}
+.ach-card.unlocked{border-color:#FFC97A;background:linear-gradient(180deg,#FFFBF0,#FFEEC8)}
+.ach-icon{font-size:56px;margin-bottom:8px}
+.ach-card h3{font-size:18px;margin-bottom:6px}
+.ach-card p{font-size:13px;color:var(--text-soft);font-weight:600}
+.ach-status{margin-top:10px;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.ach-card.unlocked .ach-status{color:#8A6A00}
+.ach-card.locked .ach-status{color:#888}
+
+/* ДНЕВНИК */
+.diary-entry{background:#FFFBF0;border-left:5px solid var(--primary);border-radius:8px;padding:12px 16px;margin-bottom:12px;text-align:left}
+.diary-date{font-size:12px;color:var(--text-soft);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.diary-text{font-size:15px;font-weight:600;color:var(--text);font-style:italic}
+.diary-empty{color:var(--text-soft);font-style:italic;padding:20px;text-align:center}
+
+.badge-num{position:absolute;top:-6px;right:-6px;background:#FF4D4D;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px;border:2px solid #fff}
+
+@media(max-width:600px){
+  .header{padding:12px 16px} .header-logo{font-size:18px}
+  .coins-pill,.user-pill{font-size:13px;padding:6px 12px}
+  .room-actions{grid-template-columns:1fr} .room-actions .btn-full{grid-column:span 1}
+  .pet-big{font-size:90px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-decor">
+  <span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><span class="cloud c3">☁️</span>
+</div>
+
+<header class="header" id="header"></header>
+
+<!-- ГЛАВНАЯ -->
+<section class="screen active" id="screen-home">
+  <div class="hero">
+    <h1 class="hero-title"><span class="wave">✨</span> Добро пожаловать в мир Тамагочи! <span class="wave">✨</span></h1>
+    <p class="hero-sub" id="heroSub">Выбери друга — и начни о нём заботиться!</p>
+  </div>
+  <div class="pets-section">
+    <h2 class="section-title">🐾 Выбери своего питомца</h2>
+    <div class="pets-grid" id="petsGrid"></div>
+  </div>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🏨</div><h3>Мой отель</h3>
+      <p>Все комнаты с питомцами в одном месте</p>
+      <button class="btn btn-soft" onclick="App.go('rooms')">Открыть отель</button>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎮</div><h3>Мини-игры</h3>
+      <p>Марио, Пак-пак, Гонки</p>
+      <button class="btn btn-soft" onclick="App.go('minigames')">Играть</button>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div><h3>Достижения</h3>
+      <p>Собери все награды!</p>
+      <button class="btn btn-soft" onclick="App.go('achievements')">Смотреть</button>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🍖</div><h3>Магазин</h3>
+      <p>Еда для всех питомцев</p>
+      <button class="btn btn-soft" onclick="App.go('shop')">В магазин</button>
+    </div>
+  </div>
+</section>
+
+<!-- РЕГИСТРАЦИЯ -->
+<section class="screen" id="screen-register">
+  <div class="auth-wrap"><div class="auth-card">
+    <div class="auth-emoji">🐣</div>
+    <h1 class="auth-title">Создать аккаунт</h1>
+    <p class="auth-sub">Придумай имя — и заведи питомца!</p>
+    <form id="registerForm" class="auth-form">
+      <label><span>📧 Почта</span><input class="input" type="email" id="regEmail" required /></label>
+      <label><span>👤 Логин</span><input class="input" type="text" id="regLogin" required minlength="2" /></label>
+      <label><span>🔒 Пароль</span><input class="input" type="password" id="regPassword" required minlength="4" /></label>
+      <label><span>🔒 Повтори пароль</span><input class="input" type="password" id="regPassword2" required minlength="4" /></label>
+      <p class="auth-error" id="regError"></p>
+      <button class="btn btn-primary btn-block" type="submit">Зарегистрироваться 🎉</button>
+    </form>
+    <p class="auth-foot">Есть аккаунт? <a onclick="App.go('login')">Войти</a></p>
+  </div></div>
+</section>
+
+<!-- ВХОД -->
+<section class="screen" id="screen-login">
+  <div class="auth-wrap"><div class="auth-card">
+    <div class="auth-emoji">🐾</div>
+    <h1 class="auth-title">С возвращением!</h1>
+    <p class="auth-sub">Твои питомцы скучают</p>
+    <form id="loginForm" class="auth-form">
+      <label><span>👤 Логин</span><input class="input" type="text" id="logLogin" required /></label>
+      <label><span>🔒 Пароль</span><input class="input" type="password" id="logPassword" required /></label>
+      <p class="auth-error" id="logError"></p>
+      <button class="btn btn-primary btn-block" type="submit">Войти 🐾</button>
+    </form>
+    <div class="auth-links">
+      <a onclick="App.go('forgot')">Забыли пароль?</a>
+      <a onclick="App.go('register')">Создать аккаунт</a>
+    </div>
+  </div></div>
+</section>
+
+<!-- ЗАБЫЛИ ПАРОЛЬ -->
+<section class="screen" id="screen-forgot">
+  <div class="auth-wrap"><div class="auth-card">
+    <div class="auth-emoji">🔑</div>
+    <h1 class="auth-title">Восстановление</h1>
+    <p class="auth-sub">Введи почту — придёт код</p>
+    <form id="forgotForm" class="auth-form">
+      <label><span>📧 Почта</span><input class="input" type="email" id="forgotEmail" required /></label>
+      <p class="auth-error" id="forgotError"></p>
+      <button class="btn btn-primary btn-block" type="submit">Получить код 📨</button>
+    </form>
+    <p class="auth-foot"><a onclick="App.go('login')">← Назад</a></p>
+  </div></div>
+</section>
+
+<!-- СБРОС -->
+<section class="screen" id="screen-reset">
+  <div class="auth-wrap"><div class="auth-card">
+    <div class="auth-emoji">🔐</div>
+    <h1 class="auth-title">Новый пароль</h1>
+    <p class="auth-sub" id="resetHint">Введи код и новый пароль</p>
+    <form id="resetForm" class="auth-form">
+      <label><span>🔢 Код</span><input class="input" type="text" id="resetCode" required /></label>
+      <label><span>🔒 Новый пароль</span><input class="input" type="password" id="resetPassword" required minlength="4" /></label>
+      <p class="auth-error" id="resetError"></p>
+      <button class="btn btn-primary btn-block" type="submit">Сменить ✅</button>
+    </form>
+    <p class="auth-foot"><a onclick="App.go('login')">← Назад</a></p>
+  </div></div>
+</section>
+
+<!-- ОТЕЛЬ -->
+<section class="screen" id="screen-rooms">
+  <div class="hotel-wrap">
+    <h1 class="section-title">🏨 Мой отель питомцев</h1>
+    <p class="hotel-sub" id="hotelSub"></p>
+    <div class="hotel-grid" id="hotelGrid"></div>
+  </div>
+</section>
+
+<!-- КОМНАТА -->
+<section class="screen" id="screen-room">
+  <div class="room-wrap">
+    <div class="room-stage" id="roomStage">
+      <div class="wall-decor">
+        <div class="clock" id="clockEl">10:32</div>
+        <div class="poster p1">GOOD<br>VIBES<br>ONLY</div>
+        <div class="poster p2">FOCUS<br>PLAN<br>EXECUTE</div>
+        <div class="polaroid pa1"></div><div class="polaroid pa2"></div><div class="polaroid pa3"></div>
+      </div>
+      <div class="window"></div>
+      <div class="curtain"></div>
+      <div class="bed">
+        <div class="pillow pl1"></div><div class="pillow pl2"></div>
+        <div class="toy">🧸</div>
+        <div class="blanket"></div>
+      </div>
+      <div class="desk">
+        <div class="monitor"></div><div class="laptop"></div>
+        <div class="lamp">💡</div>
+      </div>
+      <div class="chair"></div>
+      <div class="rug"></div>
+      <div class="pet-bubble" id="petBubble">Привет!</div>
+      <div class="pet-emotion-badge" id="emotionBadge">🙂 Обычный</div>
+      <div class="pet-big" id="petBig">🐱</div>
+      <div class="pet-name" id="petName">Мурзик</div>
+    </div>
+    <div class="room-panel">
+      <div class="stat">
+        <div class="stat-head"><span>🍖 Сытость</span><span id="hungerVal">70%</span></div>
+        <div class="bar"><div class="bar-fill bar-hunger" id="hungerBar"></div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-head"><span>😊 Настроение</span><span id="moodVal">90%</span></div>
+        <div class="bar"><div class="bar-fill bar-mood" id="moodBar"></div></div>
+      </div>
+      <div class="room-actions">
+        <button class="btn btn-primary btn-full" id="feedBtn">🍖 Покормить</button>
+        <button class="btn btn-soft" id="playBtn">🎾 Поиграть</button>
+        <button class="btn btn-soft" id="petBtn">💖 Погладить</button>
+        <button class="btn btn-mint" id="diaryBtn">📔 Дневник</button>
+        <button class="btn btn-soft" onclick="App.go('rooms')">🏨 Отель</button>
+      </div>
+      <div class="inventory" id="inventory"></div>
+    </div>
+  </div>
+</section>
+
+<!-- МАГАЗИН -->
+<section class="screen" id="screen-shop">
+  <div class="shop-wrap">
+    <h1 class="section-title">🍖 Магазин корма</h1>
+    <p class="shop-sub">Каждый питомец любит что-то своё</p>
+    <div class="shop-grid" id="shopGrid"></div>
+    <p class="shop-hint" id="shopHint"></p>
+  </div>
+</section>
+
+<!-- ХАБ ИГР -->
+<section class="screen" id="screen-minigames">
+  <div class="games-wrap">
+    <h1 class="section-title">🎮 Мини-игры</h1>
+    <p class="games-sub">Играй и зарабатывай монеты</p>
+    <div class="games-grid" id="gamesGrid"></div>
+  </div>
+</section>
+
+<!-- ИГРА -->
+<section class="screen" id="screen-play">
+  <div class="play-wrap">
+    <h1 class="section-title" id="playTitle">🎮 Игра</h1>
+    <div class="play-hud" id="playHud"></div>
+    <canvas class="play-canvas" id="playCanvas" width="800" height="500"></canvas>
+    <div class="play-actions" id="playActions"></div>
+    <p class="play-help" id="playHelp"></p>
+  </div>
+</section>
+
+<!-- ДОСТИЖЕНИЯ -->
+<section class="screen" id="screen-achievements">
+  <div class="ach-wrap">
+    <h1 class="section-title">🏆 Достижения</h1>
+    <p class="ach-sub" id="achSub"></p>
+    <div class="ach-grid" id="achGrid"></div>
+  </div>
+</section>
+
+<!-- МОДАЛКИ -->
+<div class="modal-backdrop" id="chooseModal">
+  <div class="modal">
+    <h3 id="modalTitle">Выбрать?</h3>
+    <p class="modal-pet" id="modalPetImg">🐱</p>
+    <div class="modal-actions">
+      <button class="btn btn-soft" id="modalCancel">Отмена</button>
+      <button class="btn btn-primary" id="modalConfirm">Да!</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="buyPetModal">
+  <div class="modal">
+    <h3 id="buyPetTitle">Завести?</h3>
+    <p class="modal-pet" id="buyPetImg">🐶</p>
+    <p style="font-weight:700;margin-bottom:16px;">Стоимость: <span id="buyPetPrice" style="color:#8A6A00;background:#FFF7C2;padding:2px 10px;border-radius:999px;">🪙 300</span></p>
+    <div class="modal-actions">
+      <button class="btn btn-soft" id="buyPetCancel">Отмена</button>
+      <button class="btn btn-primary" id="buyPetConfirm">Купить! 🎉</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="namePetModal">
+  <div class="modal">
+    <h3>Как назовём?</h3>
+    <p class="modal-pet" id="namePetImg">🐱</p>
+    <input class="input" type="text" id="namePetInput" maxlength="16" />
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="btn btn-soft" id="namePetCancel">Отмена</button>
+      <button class="btn btn-primary" id="namePetConfirm">Готово! 🐾</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="diaryModal">
+  <div class="modal">
+    <h3 id="diaryTitle">📔 Дневник</h3>
+    <p class="modal-pet" id="diaryEmoji" style="font-size:50px;margin:8px 0 16px;">🐱</p>
+    <div id="diaryList" style="max-height:400px;overflow-y:auto;text-align:left;"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="btn btn-primary" onclick="document.getElementById('diaryModal').classList.remove('open')">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© Tamagotchi World 2025 · Сделано с ❤️ 🐾</p>
+  <p class="disclaimer">
+    Это некоммерческий фан-проект. Персонажи, напоминающие героев известных мультфильмов и игр,
+    использованы как отсылки в некоммерческих целях. Проект не связан с правообладателями и не
+    преследует цели извлечения прибыли. Если вы — правообладатель и хотите изменить или удалить
+    контент, свяжитесь с нами.
+  </p>
+</footer>
+
+<script>
+/* ============================================================
+   SOUNDS
+   ============================================================ */
+const Sounds = (() => {
+  const cache = {};
+  let enabled = localStorage.getItem('sound_enabled') !== 'off';
+  function get(n){ if(cache[n]) return cache[n]; const a = new Audio('sounds/'+n+'.mp3'); a.volume=.55; cache[n]=a; return a; }
+  function play(n){ if(!enabled) return; try{ const a=get(n); a.currentTime=0; const p=a.play(); if(p&&p.catch)p.catch(()=>{});}catch(e){} }
+  function toggle(){ enabled=!enabled; localStorage.setItem('sound_enabled', enabled?'on':'off'); return enabled; }
+  return { play, toggle, isEnabled: () => enabled };
+})();
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+const Auth = (() => {
+  const U='tamagotchi_users', S='tamagotchi_session', R='tamagotchi_resets';
+  function hash(s){ let h=0; for(let i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;} return String(h); }
+  function uid(p='id'){ return p+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  function getU(){ try{return JSON.parse(localStorage.getItem(U))||{};}catch{return{};} }
+  function saveU(u){ localStorage.setItem(U, JSON.stringify(u)); }
+  function getR(){ try{return JSON.parse(localStorage.getItem(R))||{};}catch{return{};} }
+  function saveR(r){ localStorage.setItem(R, JSON.stringify(r)); }
+
+  function currentUser(){ const l=localStorage.getItem(S); if(!l) return null; const u=getU(); return u[l]?{login:l,...u[l]}:null; }
+  function updateUser(l, patch){ const u=getU(); if(!u[l]) return; u[l]={...u[l],...patch}; saveU(u); }
+  function login(n){ localStorage.setItem(S,n); }
+  function logout(){ localStorage.removeItem(S); App.go('home'); }
+
+  function register(email, loginName, p1, p2){
+    email=email.trim().toLowerCase(); loginName=loginName.trim();
+    if(!email.includes('@')||!email.includes('.')) return 'Некорректная почта';
+    if(loginName.length<2) return 'Логин короткий';
+    if(p1.length<4) return 'Пароль минимум 4';
+    if(p1!==p2) return 'Пароли не совпадают';
+    const u=getU();
+    if(u[loginName]) return 'Логин занят';
+    for(const k in u) if(u[k].email===email) return 'Почта занята';
+    u[loginName]={ email, passwordHash:hash(p1), coins:500, pets:[], activePetUid:null,
+      inventory:{fish:2,bone:2,bread:1,grain:1}, achievements:[], stats:{feeds:0,petsCount:0,petsSum:0,gamesPlayed:0,marioCoins:0,pacmanWins:0,raceWins:0}, createdAt:Date.now() };
+    saveU(u); login(loginName); return null;
+  }
+  function tryLogin(l, p){
+    const u=getU(); const user=u[l.trim()];
+    if(!user) return 'Не найден';
+    if(user.passwordHash!==hash(p)) return 'Неверный пароль';
+    login(l.trim()); return null;
+  }
+  function requestReset(email){
+    email=email.trim().toLowerCase();
+    const u=getU(); let found=null;
+    for(const k in u) if(u[k].email===email){found=k;break;}
+    if(!found) return { error:'Почта не найдена' };
+    const code=String(Math.floor(100000+Math.random()*900000));
+    const r=getR(); r[found]={ code, expires:Date.now()+15*60*1000 }; saveR(r);
+    return { ok:true, login:found, code };
+  }
+  function confirmReset(login, code, newPass){
+    if(newPass.length<4) return 'Пароль минимум 4';
+    const r=getR(); const rec=r[login];
+    if(!rec) return 'Код не найден';
+    if(Date.now()>rec.expires) return 'Код истёк';
+    if(rec.code!==code.trim()) return 'Неверный код';
+    const u=getU(); if(!u[login]) return 'Не найден';
+    u[login].passwordHash=hash(newPass); saveU(u);
+    delete r[login]; saveR(r); return null;
+  }
+  function addCoins(amount){
+    const user=currentUser(); if(!user) return;
+    const newCoins=Math.max(0, user.coins + amount);
+    updateUser(user.login, { coins:newCoins });
+    const el=document.getElementById('coinsHeader');
+    if(el) el.textContent=newCoins;
+  }
+  function addStat(key, amount=1){
+    const user=currentUser(); if(!user) return;
+    const stats = { ...(user.stats||{}) };
+    stats[key] = (stats[key]||0) + amount;
+    updateUser(user.login, { stats });
+  }
+  return { currentUser, updateUser, register, tryLogin, login, logout, requestReset, confirmReset, addCoins, addStat, uid, hash };
+})();
+
+/* ============================================================
+   ACHIEVEMENTS
+   ============================================================ */
+const ACHIEVEMENTS = [
+  { id:'first_pet',  icon:'🐣', name:'Первый друг',  desc:'Завёл первого питомца',           check:u => (u.pets||[]).length >= 1 },
+  { id:'collector',  icon:'🐾', name:'Коллекционер', desc:'Собрал 3 разных питомца',         check:u => (u.pets||[]).length >= 3 },
+  { id:'hotelier',   icon:'🏨', name:'Отельер',      desc:'Завёл 5 питомцев',                check:u => (u.pets||[]).length >= 5 },
+  { id:'feeder',     icon:'🍖', name:'Кормилец',     desc:'Покормил питомцев 10 раз',        check:u => (u.stats?.feeds||0) >= 10 },
+  { id:'lover',      icon:'💖', name:'Любимчик',     desc:'Погладил питомцев 20 раз',        check:u => (u.stats?.petsSum||0) >= 20 },
+  { id:'gamer',      icon:'🎮', name:'Геймер',       desc:'Сыграл 5 мини-игр',               check:u => (u.stats?.gamesPlayed||0) >= 5 },
+  { id:'racer',      icon:'🏎️', name:'Гонщик',       desc:'Заработал 200 монет в Гонках',    check:u => (u.stats?.raceWins||0) >= 200 },
+  { id:'mario',      icon:'🍄', name:'Мариовец',     desc:'Собрал 10+ монет в Марио',        check:u => (u.stats?.marioCoins||0) >= 10 },
+  { id:'pacman',     icon:'👻', name:'Охотник',      desc:'Победил в Пак-паке',              check:u => (u.stats?.pacmanWins||0) >= 1 },
+  { id:'rich',       icon:'🪙', name:'Богач',        desc:'Накопил 5000 монет',              check:u => u.coins >= 5000 }
+];
+
+function checkAchievements(){
+  const user = Auth.currentUser(); if(!user) return;
+  const unlocked = user.achievements || [];
+  const newOnes = [];
+  ACHIEVEMENTS.forEach(a => {
+    if(unlocked.includes(a.id)) return;
+    if(a.check(user)){ unlocked.push(a.id); newOnes.push(a); }
+  });
+  if(newOnes.length){
+    Auth.updateUser(user.login, { achievements: unlocked });
+    newOnes.forEach((a, i) => setTimeout(() => showToast(a), i*800));
+  }
+}
+function showToast(a){
+  Sounds.play('happy');
+  const el = document.createElement('div');
+  el.className = 'toast-ach';
+  el.innerHTML = `<span class="toast-icon">${a.icon}</span><div><div class="toast-title">🏆 Достижение!</div><div class="toast-name">${a.name}</div></div>`;
+  document.body.appendChild(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 500); }, 3500);
+}
+
+/* ============================================================
+   PET_SPECIES — питомцы
+   Disney-персонажи — пародийные имена (некоммерческий фан-проект)
+   ============================================================ */
+function diaryTemplate(emoji, lines){ return { emoji, lines }; }
+
+const PET_SPECIES = [
+  /* --- Базовые --- */
+  { id:'cat', name:'Кошка', defaultName:'Мурзик', emoji:'🐱', trait:'Ласковая', sound:'meow', soundIcon:'🔊 мяу',
+    favFood:'fish', hunger:70, mood:90, price:0, cartoon:false, position:'on-bed', walkable:true,
+    food:['fish','milk','bread'],
+    diary: diaryTemplate('🐱', ['Сегодня я спал на подоконнике и видел сон про рыбок.','Хозяйка погладила меня 7 раз. Я мурчал.','Снова дождь. Лежу под пледом.','Поймал солнечный зайчик.','Разбудил всех в 6 утра — я же будильник!','Изучал новый столик — вкусно пахнет.','Сегодня мне снился Маус.','Сидел на столе, смотрел в монитор.','Молочко было тёплым. Хороший день.','Уронил кружку. Не жалею.']) },
+
+  { id:'dog', name:'Собака', defaultName:'Бублик', emoji:'🐶', trait:'Весёлая', sound:'bark', soundIcon:'🔊 гав',
+    favFood:'bone', hunger:60, mood:95, price:300, cartoon:false, position:'floor', walkable:true,
+    food:['bone','meat','bread'],
+    diary: diaryTemplate('🐶', ['Погнал за хвостом. Опять.','Принёс палку! Хозяйка рада.','Сегодня нашёл новую игрушку — носок.','Обнял всех, кого смог.','Вилял хвостом 1000 раз.','На улице встретил кота. Мы друзья.','Прыгал на кровать, пока не сказали нельзя.','Мечтаю о большой косточке.','Смотрел в окно. Там птицы!','Спал у ног весь день.']) },
+
+  { id:'duck', name:'Утка', defaultName:'Кряк', emoji:'🦆', trait:'Спокойная', sound:'quack', soundIcon:'🔊 кря',
+    favFood:'grain', hunger:65, mood:85, price:400, cartoon:false, position:'floor', walkable:true,
+    food:['grain','bread','worm'],
+    diary: diaryTemplate('🦆', ['Ходил по комнате вразвалочку.','Купался в тазике. Хорошо!','Крякнул три раза — так надо.','Смотрел на облака через окно.','Нашёл зёрнышко под кроватью.','Познакомился с Чайкой (по переписке).','Учил хомяка крякать. Не вышло.','Составил список из 100 дел. Не начал.','Спал стоя. Удобно.','Съел хлебушек. Всё хорошо.']) },
+
+  { id:'hamster', name:'Хомяк', defaultName:'Хома', emoji:'🐹', trait:'Запасливый', sound:'meow', soundIcon:'🔊 пи',
+    favFood:'grain', hunger:75, mood:88, price:600, cartoon:false, position:'on-bed', walkable:true,
+    food:['grain','bread','worm'],
+    diary: diaryTemplate('🐹', ['Принёс 5 зёрнышек в щеках. Запас!','Пробежал в колесе 5 км.','Закопал хлебушек в углу. Никому не скажу.','Съел зерно. Ещё хочу.','Уронил подушку. Ой.','Спрятал червячка под ковёр.','Сегодня я — хранитель запасов.','Разгрыз новую игрушку.','Мечтаю о второй комнате для запасов.','Смотрел на Рыбку. Завидую.']) },
+
+  { id:'fish', name:'Рыбка', defaultName:'Пузырь', emoji:'🐠', trait:'Тихая', sound:'bubble', soundIcon:'🔊 буль',
+    favFood:'worm', hunger:55, mood:92, price:700, cartoon:false, position:'in-pool', walkable:false,
+    food:['worm','bread'],
+    diary: diaryTemplate('🐠', ['Буль-буль.','Смотрел через стекло.','Пустил пузырики.','Плавал кругами.','Нашёл червячка — счастье!','Сегодня я мечтал о море.','Познакомился с Ари. Она милая.','Спал с открытыми глазами (как всегда).','Думал о смысле воды.','Пузырьки — это весело.']) },
+
+  { id:'peacock', name:'Павлин', defaultName:'Гордей', emoji:'🦚', trait:'Гордый', sound:'bark', soundIcon:'🔊 курлык',
+    favFood:'grain', hunger:70, mood:88, price:900, cartoon:false, position:'floor', walkable:true,
+    food:['grain','bread','worm'],
+    diary: diaryTemplate('🦚', ['Раскрыл хвост. Все восхищались.','Сегодня я особенно красив.','Расчесал перья 3 раза.','Смотрел в зеркало. Долго.','Позировал для полароидов.','Придумал новую позу. Роскошно.','Съел зёрнышко изящно.','Прошёлся по комнате как по подиуму.','Покрасовался перед Рыбкой.','День прошёл достойно.']) },
+
+  { id:'fox', name:'Лиса', defaultName:'Рыжик', emoji:'🦊', trait:'Хитрая', sound:'meow', soundIcon:'🔊 фыр',
+    favFood:'meat', hunger:65, mood:92, price:1100, cartoon:false, position:'floor', walkable:true,
+    food:['meat','bone','bread'],
+    diary: diaryTemplate('🦊', ['Придумал план. Наверняка сработает.','Обхитрил хомяка и забрал зёрнышко.','Ходил по комнате, изучал углы.','Улыбнулся в зеркало. Загадочно.','Спрятал косточку. Никому!','Сегодня был особенно хитрым.','Мечтаю о курятнике...','Смотрел в окно. Строил план.','Притворился спящим.','Рыжий — это стиль жизни.']) },
+
+  { id:'panda', name:'Панда', defaultName:'Бамбук', emoji:'🐼', trait:'Сонная', sound:'meow', soundIcon:'🔊 урчит',
+    favFood:'bread', hunger:80, mood:90, price:1300, cartoon:false, position:'on-bed', walkable:true,
+    food:['bread','grain','worm'],
+    diary: diaryTemplate('🐼', ['Спал 14 часов. Норм.','Съел хлебушек. Опять спать.','Приснился бамбук.','Проснулся. Поел. Уснул.','Сегодня был активным: 5 минут.','Спал на кровати. Удобно.','Смотрел на Рыбку сквозь сон.','Потянулся. Уснул.','Разбудили для кормления — не пожалел.','Мечтаю о большой подушке.']) },
+
+  { id:'frog', name:'Жабка', defaultName:'Квак', emoji:'🐸', trait:'Прыгучая', sound:'bubble', soundIcon:'🔊 ква',
+    favFood:'worm', hunger:70, mood:88, price:1000, cartoon:false, position:'floor', walkable:true,
+    food:['worm','bread','grain'],
+    diary: diaryTemplate('🐸', ['Прыгнул на стол. Высоко!','Съел червячка. Вкусно.','Сидел на ковре и квакал.','Прыгал по комнате 20 минут.','Смотрел на дождь.','Нашёл муху. Она улетела.','Прыгнул на кровать. Прыгнул обратно.','Сегодня я — король ковра.','Познакомился с Уткой. Она не квакает.','Мечтаю о болоте.']) },
+
+  { id:'tiger', name:'Тигр', defaultName:'Полосатик', emoji:'🐯', trait:'Смелый', sound:'bark', soundIcon:'🔊 р-р-р',
+    favFood:'meat', hunger:75, mood:92, price:1500, cartoon:false, position:'floor', walkable:true,
+    food:['meat','bone','bread'],
+    diary: diaryTemplate('🐯', ['Рычал на пылесос. Победил.','Съел мясо. Стал сильнее.','Прошёлся по комнате — все расступились.','Смотрел в окно на птиц. Строил план.','Позировал. Я красив.','Обнял подушку. Только я это знаю.','Полосы в порядке. Проверил.','Мечтаю о джунглях.','Прыгнул на стол. Впечатляет.','Сегодня я — главный в комнате.']) },
+
+  /* ============================================================
+     МУЛЬТЯШНЫЕ — пародийные имена (некоммерческий фан-проект)
+     ============================================================ */
+  { id:'simba', name:'Лео', defaultName:'Лео', emoji:'🦁', trait:'Храбрый', sound:'bark', soundIcon:'🔊 р-р-р',
+    favFood:'meat', hunger:80, mood:95, price:2500, cartoon:true, position:'floor', walkable:true,
+    food:['meat','bone','bread'],
+    diary: diaryTemplate('🦁', ['Смотрел на солнце. Как в детстве.','Пел песню. Все слушали.','Вспоминал отца.','Стою на ковре — как на скале.','Сегодня я — король комнаты.','Обнял друга. Друзья — сила.','Рычал. Впечатляюще.','Мечтаю о саванне.','Смотрел на птиц.','Всё идёт своим чередом.']) },
+
+  { id:'mouse', name:'Маус', defaultName:'Маус', emoji:'🐭', trait:'Весёлый', sound:'meow', soundIcon:'🔊 ха-ха',
+    favFood:'bread', hunger:65, mood:98, price:3000, cartoon:true, position:'floor', walkable:true,
+    food:['bread','milk','fish'],
+    diary: diaryTemplate('🐭', ['Хо-хо! Хороший день!','Познакомился с новым другом.','Спел песенку.','Танцевал под музыку.','Нашёл хлебушек. Ура!','Улыбался весь день.','Рассказал шутку. Все смеялись.','Мечтаю о большом парке.','Позировал для полароида.','Весёлый — это образ жизни!']) },
+
+  { id:'mushroom', name:'Грибочек', defaultName:'Гриша', emoji:'🍄', trait:'Загадочный', sound:'bubble', soundIcon:'🔊 пуф',
+    favFood:'bread', hunger:60, mood:80, price:1200, cartoon:true, position:'floor', walkable:true,
+    food:['bread','worm','milk'],
+    diary: diaryTemplate('🍄', ['Пуф.','Пустил споры.','Стоял под окном. Думал.','Меня полили. Спасибо.','Смотрел на звёзды.','Сегодня я — самый большой гриб в комнате.','Спрятался за стулом.','Придумал новую шляпку.','Мечтаю о лесе.','Пуф — это моё всё.']) },
+
+  { id:'bambi', name:'Бэм', defaultName:'Бэм', emoji:'🦌', trait:'Робкий', sound:'meow', soundIcon:'🔊 фыр',
+    favFood:'grain', hunger:70, mood:88, price:2200, cartoon:true, position:'floor', walkable:true,
+    food:['grain','bread','worm'],
+    diary: diaryTemplate('🦌', ['Гулял по комнате. Красиво.','Познакомился с Грибочком.','Смотрел на бабочку.','Пил воду из миски.','Испугался шороха. Обнял подушку.','Сегодня я — смелее.','Нашёл красивый листик.','Смотрел на закат.','Мама бы мной гордилась.','День прошёл тихо.']) },
+
+  { id:'ariel', name:'Ари', defaultName:'Ари', emoji:'🧜‍♀️', trait:'Мечтательная', sound:'bubble', soundIcon:'🔊 пение',
+    favFood:'fish', hunger:65, mood:96, price:3500, cartoon:true, position:'in-pool', walkable:false,
+    food:['fish','worm','bread'],
+    diary: diaryTemplate('🧜‍♀️', ['Пела песню про море.','Нашла новую вещь в комнате. Что это?','Мечтаю о принце.','Познакомилась с Рыбкой. Она милая.','Расчесала волосы ракушкой.','Смотрела на звёзды через окно.','Сегодня я — часть вашего мира.','Нашла вилку. Что это такое?!','Хочу узнать, что такое «дорога».','Пела весь день.']) },
+
+  { id:'seagull', name:'Чайка', defaultName:'Кеша', emoji:'🕊️', trait:'Озорная', sound:'bark', soundIcon:'🔊 ки-ки',
+    favFood:'fish', hunger:70, mood:92, price:1400, cartoon:true, position:'floor', walkable:true,
+    food:['fish','bread','worm'],
+    diary: diaryTemplate('🕊️', ['Пытался унести хлебушек.','Кричал на всех.','Села на стол. Мой!','Нашла рыбку. Счастье!','Летала по комнате. Ой.','Смотрела на улицу.','Сегодня я — самая громкая.','Позировала. Я красива.','Украла кружку. Хи-хи.','Ки-ки-ки!']) },
+
+  { id:'ratatouille', name:'Реми', defaultName:'Реми', emoji:'🐀', trait:'Гурман', sound:'meow', soundIcon:'🔊 пип',
+    favFood:'bread', hunger:75, mood:94, price:2000, cartoon:true, position:'on-desk', walkable:true,
+    food:['bread','meat','milk'],
+    diary: diaryTemplate('🐀', ['Попробовал хлебушек. Восхитительно!','Составил рецепт.','Нашёл сыр? Нет, но ищу.','Познакомился с кошкой. Напряжённо.','Пробовал рыбу. 7/10.','Сидел на столе. Думал о еде.','Сегодня готовил. Из ничего.','Понюхал кружку. Кофе!','Мечтаю о парижском ресторане.','Еда — это искусство!']) },
+
+  { id:'bagheera', name:'Багир', defaultName:'Багир', emoji:'🐆', trait:'Мудрый', sound:'bark', soundIcon:'🔊 рык',
+    favFood:'meat', hunger:75, mood:92, price:2600, cartoon:true, position:'floor', walkable:true,
+    food:['meat','bone','bread'],
+    diary: diaryTemplate('🐆', ['Смотрел на луну.','Прыгнул на стол. Бесшумно.','Наблюдал за комнатой.','Мечтаю о джунглях.','Обучил Грибочка мудрости.','Сидел в тени. Думал.','Сегодня я — молчаливый страж.','Прошёлся по комнате. Все заметили.','Рычал на пылесос. Победил.','Чёрная пантера — это стиль.']) },
+
+  { id:'pooh', name:'Пухлик', defaultName:'Пухлик', emoji:'🐻', trait:'Добрый', sound:'meow', soundIcon:'🔊 пых',
+    favFood:'bread', hunger:85, mood:96, price:2400, cartoon:true, position:'on-bed', walkable:true,
+    food:['bread','milk','fish'],
+    diary: diaryTemplate('🐻', ['Съел весь хлебушек. Не жалею.','Ходил по комнате в поисках мёда.','Пыхтел.','Обнял Пяту.','Нашёл мёд? Нет. Ещё ищу.','Сегодня был особенно добрым.','Спал на кровати. Уютно.','Мечтаю о горшочке мёда.','Думал о смысле жизни.','Пых-пых!']) },
+
+  { id:'piglet', name:'Пята', defaultName:'Пята', emoji:'🐷', trait:'Робкий', sound:'meow', soundIcon:'🔊 хрю',
+    favFood:'bread', hunger:70, mood:90, price:1800, cartoon:true, position:'floor', walkable:true,
+    food:['bread','grain','milk'],
+    diary: diaryTemplate('🐷', ['Прятался под кроватью. Немного.','Держал Пухлика за лапку.','Нашёл жёлудь. Маленький, но мой.','Хрюкнул.','Сегодня был храбрым: 3 минуты.','Мечтаю о большой поляне.','Смотрел на пчёл через окно.','Обнял подушку.','Хрю-хрю!','День прошёл спокойно.']) },
+
+  { id:'scrooge', name:'Скрудж', defaultName:'Скрудж', emoji:'🦆', trait:'Богатый', sound:'quack', soundIcon:'🔊 кря-кря',
+    favFood:'bread', hunger:60, mood:85, price:4000, cartoon:true, position:'on-desk', walkable:true,
+    food:['bread','grain','worm'],
+    diary: diaryTemplate('🦆', ['Пересчитал монеты. Всё на месте.','Нашёл монетку под ковром!','Сегодня я — на 1 монету богаче.','Смотрел в окно. Думал о процентах.','Спрятал монеты. В надёжном месте.','Мечтаю о хранилище.','Ходил по комнате. Экономно.','Купил хлебушек. По скидке!','Грабить? Нет. Зарабатывать — да!','Кря! Богатство — это святое.']) },
+
+  { id:'huggy', name:'Хаги Ваги', defaultName:'Хаги', emoji:'👹', trait:'Обнимающий', sound:'bark', soundIcon:'🔊 ррр',
+    favFood:'meat', hunger:80, mood:75, price:5000, cartoon:false, position:'floor', walkable:true,
+    food:['meat','bone','bread'],
+    diary: diaryTemplate('👹', ['Обнял подушку. Очень сильно.','Смотрел в окно. Ждал.','Порвал игрушку. Случайно.','Сегодня я — дружелюбный.','Обниму тебя. Обещаю — нежно.','Рычал. Мягко.','Хожу по комнате. Ищу друзей.','Мечтаю о хорошем объятии.','Хагги-хагги!','Обнимаю тебя через экран.']) },
+
+  /* === Sally Face: Салли и Ларри — оба парни === */
+  { id:'sally', name:'Салли Фишер', defaultName:'Салли', emoji:'🧑‍🎤', trait:'Загадочный', sound:'meow', soundIcon:'🔊 шёпот',
+    favFood:'fish', hunger:70, mood:88, price:4500, cartoon:false, position:'floor', walkable:true,
+    food:['fish','bread','milk'],
+    diary: diaryTemplate('🧑‍🎤', ['Сегодня приснился странный сон. Записал в блокнот.','Смотрел в зеркало. Протез на месте.','Ларри опять звал играть. Пошёл.','Тихо в комнате. Хорошо.','Прочитал письмо от мамы.','Проверил швы на лице. Всё заживает.','Слушал музыку в наушниках.','Вспоминал старых друзей.','Нарисовал в блокноте комнату. Похоже!','Ш-ш-ш. Всё будет хорошо.']) },
+
+  { id:'larry', name:'Ларри Джонсон', defaultName:'Ларри', emoji:'🧑‍🎤', trait:'Спокойный', sound:'bark', soundIcon:'🔊 привет',
+    favFood:'meat', hunger:75, mood:90, price:4200, cartoon:false, position:'on-bed', walkable:true,
+    food:['meat','bread','milk'],
+    diary: diaryTemplate('🧑‍🎤', ['Слушал кассеты весь вечер.','Обнял Салли. Хорошо.','Записал новую песню в голове.','Приготовил бутерброд. С сыром!','Поговорил с Реми. О еде, конечно.','Лежал на кровати. Думал о группе.','Надел футболку с логотипом. Стиль!','Посмотрел на монитор. Там аниме.','Мечтаю о большой сцене.','Привет, Салли.']) }
+];
+function getSpecies(id){ return PET_SPECIES.find(s=>s.id===id); }
+
+/* ============================================================
+   SHOP
+   ============================================================ */
+const SHOP_ITEMS = [
+  { id:'fish',  name:'Рыбка',    emoji:'🐟', price:20, desc:'Кошки, рыбки, Ари, Салли' },
+  { id:'milk',  name:'Молоко',   emoji:'🥛', price:15, desc:'Тёплое молочко для всех' },
+  { id:'bone',  name:'Косточка', emoji:'🦴', price:25, desc:'Для собаки, Лео, Багира' },
+  { id:'meat',  name:'Мясо',     emoji:'🍖', price:35, desc:'Для хищников' },
+  { id:'grain', name:'Зерно',    emoji:'🌾', price:15, desc:'Для утки, хомяка, Бэма' },
+  { id:'worm',  name:'Червячок', emoji:'🪱', price:20, desc:'Для рыбки, утки, жабки' },
+  { id:'bread', name:'Хлебушек', emoji:'🍞', price:12, desc:'Подходит всем' }
+];
+function getItem(id){ return SHOP_ITEMS.find(i=>i.id===id); }
+
+/* ============================================================
+   EMOTION
+   ============================================================ */
+function getEmotion(pet){
+  const h = new Date().getHours();
+  if(h >= 22 || h < 6) return { id:'sleepy', icon:'😴', label:'Сонный', cls:'emotion-sleepy', phrase:'Zzz...' };
+  if(pet.hunger < 25) return { id:'hungry', icon:'😫', label:'Голодный', cls:'emotion-hungry', phrase:'Я голоден!' };
+  if(pet.mood < 30)   return { id:'sad',    icon:'😢', label:'Грустный', cls:'emotion-sad',    phrase:'Мне грустно...' };
+  if(pet.hunger > 80 && pet.mood > 80) return { id:'happy', icon:'🤩', label:'Счастливый', cls:'emotion-happy', phrase:'Ура! Я счастлив!' };
+  return { id:'normal', icon:'🙂', label:'Обычный', cls:'', phrase:'' };
+}
+
+function getTimeClass(){
+  const h = new Date().getHours();
+  if(h >= 6 && h < 12) return 'time-morning';
+  if(h >= 12 && h < 18) return 'time-day';
+  if(h >= 18 && h < 22) return 'time-evening';
+  return 'time-night';
+}
+
+/* ============================================================
+   APP
+   ============================================================ */
+const App = (() => {
+  let currentScreen = 'home';
+  let pendingSpecies=null, pendingBuySpecies=null, pendingNameSpecies=null, pendingResetLogin=null;
+  let clockTimer=null, walkTimer=null, emotionTimer=null, currentGame=null;
+
+  const PROTECTED = ['rooms','room','minigames','shop','play','achievements'];
+  function go(screen){
+    const user = Auth.currentUser();
+    if(PROTECTED.includes(screen) && !user) screen = 'login';
+    if(screen === 'room' && user && (!user.pets || user.pets.length === 0)) screen = 'home';
+    if(currentGame && screen !== 'play'){ currentGame.stop(); currentGame = null; }
+    stopRoomTimers();
+
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const t = document.getElementById('screen-'+screen);
+    if(t) t.classList.add('active');
+    currentScreen = screen;
+    renderHeader();
+    window.scrollTo({ top:0, behavior:'smooth' });
+
+    if(screen === 'home')         renderHome();
+    if(screen === 'rooms')        renderHotel();
+    if(screen === 'room')         renderRoom();
+    if(screen === 'shop')         renderShop();
+    if(screen === 'minigames')    renderGamesHub();
+    if(screen === 'achievements') renderAchievements();
+    checkAchievements();
+  }
+
+  function stopRoomTimers(){
+    if(clockTimer)  { clearInterval(clockTimer); clockTimer = null; }
+    if(walkTimer)   { clearInterval(walkTimer); walkTimer = null; }
+    if(emotionTimer){ clearInterval(emotionTimer); emotionTimer = null; }
+  }
+
+  function renderHeader(){
+    const el = document.getElementById('header');
+    const user = Auth.currentUser();
+    const coins = user ? user.coins : 0;
+    const achCount = user ? (user.achievements||[]).length : 0;
+    el.innerHTML = `
+      <div class="header-logo" onclick="App.go('home')">🐣 Tamagotchi<span> World</span></div>
+      <div class="header-right">
+        <button class="btn btn-soft btn-sm" onclick="App.toggleSound()">${Sounds.isEnabled()?'🔊':'🔇'}</button>
+        ${user ? `
+          <button class="btn btn-soft btn-sm" onclick="App.go('rooms')" title="Отель">🏨</button>
+          <button class="btn btn-soft btn-sm" onclick="App.go('achievements')" title="Достижения" style="position:relative;">
+            🏆${achCount>0?`<span class="badge-num">${achCount}</span>`:''}
+          </button>
+          <div class="coins-pill">🪙 <span id="coinsHeader">${coins}</span></div>
+          <div class="user-pill"><span class="user-avatar">${user.login[0].toUpperCase()}</span><span>${user.login}</span></div>
+          <button class="btn btn-soft btn-sm" onclick="Auth.logout()">Выйти</button>
+        ` : `
+          <button class="btn btn-soft btn-sm" onclick="App.go('login')">Войти</button>
+          <button class="btn btn-primary btn-sm" onclick="App.go('register')">Регистрация</button>
+        `}
+      </div>
+    `;
+  }
+  function toggleSound(){ Sounds.toggle(); renderHeader(); }
+
+  /* ---------- ГЛАВНАЯ ---------- */
+  function renderHome(){
+    const grid = document.getElementById('petsGrid');
+    const heroSub = document.getElementById('heroSub');
+    const user = Auth.currentUser();
+    heroSub.textContent = user ? `С возвращением, ${user.login}! Питомцы ждут 🐾` : 'Выбери друга — и начни заботиться!';
+
+    const sorted = [...PET_SPECIES].sort((a,b) => {
+      const ao = a.cartoon?1:0, bo = b.cartoon?1:0;
+      if(ao !== bo) return ao - bo;
+      return a.price - b.price;
+    });
+
+    grid.innerHTML = sorted.map(sp => {
+      const owned = user && user.pets ? user.pets.some(p=>p.type===sp.id) : false;
+      const priceTag = sp.price === 0 ? 'Первый — бесплатно' : `🪙 ${sp.price}`;
+      const priceCls = sp.cartoon ? 'cartoon' : '';
+      const badgeCls = sp.cartoon ? 'cartoon' : '';
+      return `
+        <div class="pet-card">
+          <div class="pet-sound">${sp.soundIcon}</div>
+          <div class="pet-avatar">${sp.emoji}</div>
+          <h3>${sp.name}</h3>
+          <div class="pet-badge ${badgeCls}">${sp.trait}</div>
+          <div class="pet-price ${priceCls}">${priceTag}</div>
+          <button class="btn ${owned?'btn-mint':'btn-primary'} choose-btn" data-id="${sp.id}" ${owned?'disabled':''}>
+            ${owned?'✅ Уже есть':'Выбрать'}
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    grid.querySelectorAll('.pet-card').forEach(c => {
+      const sp = getSpecies(c.querySelector('.choose-btn').dataset.id);
+      c.addEventListener('mouseenter', () => Sounds.play(sp.sound));
+    });
+    grid.querySelectorAll('.choose-btn:not([disabled])').forEach(b => {
+      b.onclick = () => {
+        const sp = getSpecies(b.dataset.id);
+        Sounds.play(sp.sound);
+        if(!Auth.currentUser()){
+          if(confirm('Нужен аккаунт. Создать?')) go('register');
+          return;
+        }
+        const u = Auth.currentUser();
+        const has = u.pets && u.pets.length > 0;
+        if(sp.price > 0 && has){
+          pendingBuySpecies = sp;
+          document.getElementById('buyPetTitle').textContent = `Завести ${sp.defaultName}?`;
+          document.getElementById('buyPetImg').textContent = sp.emoji;
+          document.getElementById('buyPetPrice').textContent = `🪙 ${sp.price}`;
+          openModal('buyPetModal');
+        } else {
+          pendingSpecies = sp;
+          document.getElementById('modalTitle').textContent = `Выбрать ${sp.defaultName}?`;
+          document.getElementById('modalPetImg').textContent = sp.emoji;
+          openModal('chooseModal');
+        }
+      };
+    });
+  }
+
+  function openModal(id){ document.getElementById(id).classList.add('open'); }
+  function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+  /* ---------- ОТЕЛЬ ---------- */
+  function renderHotel(){
+    const user = Auth.currentUser(); if(!user) return go('login');
+    const grid = document.getElementById('hotelGrid');
+    const pets = user.pets || [];
+    document.getElementById('hotelSub').textContent = pets.length === 0
+      ? 'Заведи первого питомца на главной!'
+      : `У тебя ${pets.length} ${pets.length===1?'питомец':'питомцев'}. Кликни по комнате.`;
+
+    let html = pets.map(pet => {
+      const sp = getSpecies(pet.type);
+      const em = getEmotion(pet);
+      const isActive = pet.uid === user.activePetUid;
+      return `
+        <div class="hotel-card ${isActive?'active-room':''}" data-uid="${pet.uid}">
+          ${isActive?'<div class="hotel-badge-active">Активна</div>':''}
+          <div class="hotel-room-preview"><span>${sp.emoji}</span></div>
+          <div class="hotel-body">
+            <h3>${pet.name}</h3>
+            <div class="species">${sp.name} · ${sp.trait}</div>
+            <div class="hotel-emotion">${em.icon} ${em.label}</div>
+            <div class="hotel-stats"><span>🍖 ${pet.hunger}%</span><span>😊 ${pet.mood}%</span></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const available = PET_SPECIES.filter(sp => !pets.some(p => p.type === sp.id));
+    if(available.length > 0){
+      const next = available[0];
+      html += `
+        <div class="hotel-empty">
+          <div>
+            <div class="hotel-empty-icon">➕</div>
+            <h3>Завести ${next.name.toLowerCase()}?</h3>
+            <p>${next.emoji} ${next.defaultName} · 🪙 ${next.price}</p>
+            <button class="btn btn-primary" id="buySlotBtn" data-id="${next.id}">Купить комнату</button>
+          </div>
+        </div>
+      `;
+    }
+    grid.innerHTML = html;
+
+    grid.querySelectorAll('.hotel-card').forEach(c => {
+      c.onclick = () => {
+        Auth.updateUser(user.login, { activePetUid: c.dataset.uid });
+        Sounds.play('happy');
+        go('room');
+      };
+    });
+    const buyBtn = document.getElementById('buySlotBtn');
+    if(buyBtn){
+      buyBtn.onclick = () => {
+        const sp = getSpecies(buyBtn.dataset.id);
+        pendingBuySpecies = sp;
+        document.getElementById('buyPetTitle').textContent = `Завести ${sp.defaultName}?`;
+        document.getElementById('buyPetImg').textContent = sp.emoji;
+        document.getElementById('buyPetPrice').textContent = `🪙 ${sp.price}`;
+        openModal('buyPetModal');
+      };
+    }
+  }
+
+  /* ---------- КОМНАТА ---------- */
+  function renderRoom(){
+    const user = Auth.currentUser(); if(!user) return go('login');
+    if(!user.pets || user.pets.length === 0) return go('home');
+    let pet = user.pets.find(p => p.uid === user.activePetUid);
+    if(!pet){ pet = user.pets[0]; Auth.updateUser(user.login, { activePetUid: pet.uid }); }
+    const sp = getSpecies(pet.type);
+
+    maybeAddDiaryEntry(pet, sp);
+
+    const room = document.getElementById('roomStage');
+    const petBig = document.getElementById('petBig');
+    const petNameEl = document.getElementById('petName');
+    const bubble = document.getElementById('petBubble');
+    const emotionBadge = document.getElementById('emotionBadge');
+
+    function applyTimeClass(){
+      room.classList.remove('time-morning','time-day','time-evening','time-night');
+      room.classList.add(getTimeClass());
+    }
+    applyTimeClass();
+
+    petBig.textContent = sp.emoji;
+    petNameEl.textContent = pet.name;
+
+    petBig.style.left = sp.position === 'on-desk' ? '' : '30%';
+    petBig.style.right = sp.position === 'on-desk' ? '16%' : (sp.position === 'in-pool' ? '8%' : '');
+    petBig.style.bottom = sp.position === 'on-bed' ? '38%' : (sp.position === 'in-pool' ? '8%' : (sp.position === 'on-desk' ? '36%' : '30%'));
+
+    function updateClock(){
+      const el = document.getElementById('clockEl'); if(!el) return;
+      const d = new Date();
+      el.textContent = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+    updateClock();
+    clockTimer = setInterval(updateClock, 30000);
+
+    function applyEmotion(){
+      const em = getEmotion(pet);
+      petBig.className = 'pet-big ' + em.cls;
+      emotionBadge.textContent = `${em.icon} ${em.label}`;
+      if(em.phrase && !bubble.dataset.sticky) bubble.textContent = em.phrase;
+    }
+
+    function render(){
+      document.getElementById('hungerBar').style.width = pet.hunger + '%';
+      document.getElementById('moodBar').style.width = pet.mood + '%';
+      document.getElementById('hungerVal').textContent = pet.hunger + '%';
+      document.getElementById('moodVal').textContent = pet.mood + '%';
+      const inv = user.inventory || {};
+      const items = Object.entries(inv).filter(([,v])=>v>0);
+      document.getElementById('inventory').innerHTML = items.length
+        ? items.map(([k,v]) => { const it = getItem(k); return `<div class="inv-item">${it?it.emoji:'❓'} ${it?it.name:k} × ${v}</div>`; }).join('')
+        : '<div class="inv-item">🛒 Пусто — в магазин!</div>';
+      applyEmotion();
+    }
+
+    function say(text, sticky=false){
+      bubble.textContent = text;
+      bubble.dataset.sticky = sticky ? '1' : '';
+      if(!sticky) setTimeout(() => { bubble.dataset.sticky = ''; applyEmotion(); }, 3000);
+    }
+
+    function persist(){
+      const fresh = Auth.currentUser();
+      const idx = fresh.pets.findIndex(p => p.uid === pet.uid);
+      if(idx < 0) return;
+      fresh.pets[idx] = { ...pet, lastUpdate: Date.now() };
+      Auth.updateUser(fresh.login, { pets: fresh.pets, inventory: fresh.inventory });
+    }
+
+    function feed(){
+      const fresh = Auth.currentUser();
+      const inv = fresh.inventory || {};
+      const pref = sp.favFood;
+      if(inv[pref] > 0){
+        inv[pref]--; pet.hunger = Math.min(100, pet.hunger+30); pet.mood = Math.min(100, pet.mood+5);
+        Sounds.play('eat'); say(`${pet.name} обожает это! 💕`);
+      } else {
+        const alt = sp.food.find(f => f !== pref && inv[f] > 0);
+        if(alt){
+          inv[alt]--; pet.hunger = Math.min(100, pet.hunger+15);
+          Sounds.play('eat'); say(`${pet.name} покушал(а), но любит другое 🍽️`);
+        } else { say('Корм закончился. В магазин! 🛒'); return; }
+      }
+      const idx = fresh.pets.findIndex(p => p.uid === pet.uid);
+      fresh.pets[idx] = pet;
+      Auth.updateUser(fresh.login, { pets: fresh.pets, inventory: inv });
+      Auth.addStat('feeds');
+      render(); checkAchievements();
+    }
+
+    function playIt(){
+      pet.mood = Math.min(100, pet.mood+20);
+      pet.hunger = Math.max(0, pet.hunger-5);
+      Sounds.play(sp.sound); say(`${pet.name} прыгает от радости! 🎾`);
+      persist(); render();
+    }
+    function petPet(){
+      pet.mood = Math.min(100, pet.mood+10);
+      Sounds.play(sp.sound); say(`${pet.name} доволен 💖`);
+      persist(); render();
+      Auth.addStat('petsSum');
+      checkAchievements();
+    }
+
+    document.getElementById('feedBtn').onclick = feed;
+    document.getElementById('playBtn').onclick = playIt;
+    document.getElementById('petBtn').onclick = petPet;
+    document.getElementById('diaryBtn').onclick = () => openDiary(pet, sp);
+    petBig.onclick = () => { Sounds.play(sp.sound); say(`${pet.name}: ${sp.soundIcon.split(' ')[1]}!`); };
+
+    document.querySelector('.bed').onclick = () => say(`${pet.name} смотрит на кровать 🛏️`);
+    document.querySelector('.desk').onclick = () => say(`Стол с монитором 💻`);
+    document.querySelector('.window').onclick = () => say(`За окном ${getTimeClass().replace('time-','')} 🌆`);
+
+    // Ходьба
+    function startWalking(){
+      if(!sp.walkable) return;
+      const zones = sp.position === 'on-bed'
+        ? { leftMin: 6, leftMax: 48, bottomMin: 34, bottomMax: 42 }
+        : sp.position === 'on-desk'
+        ? { leftMin: 58, leftMax: 80, bottomMin: 32, bottomMax: 40 }
+        : sp.position === 'in-pool'
+        ? { leftMin: 70, leftMax: 88, bottomMin: 6, bottomMax: 16 }
+        : { leftMin: 8, leftMax: 55, bottomMin: 22, bottomMax: 38 };
+
+      walkTimer = setInterval(() => {
+        if(Math.random() < 0.4) return;
+        const l = zones.leftMin + Math.random()*(zones.leftMax - zones.leftMin);
+        const b = zones.bottomMin + Math.random()*(zones.bottomMax - zones.bottomMin);
+        petBig.classList.add('walking');
+        petBig.style.left = l + '%';
+        petBig.style.right = 'auto';
+        petBig.style.bottom = b + '%';
+        petNameEl.style.bottom = (b - 8) + '%';
+        setTimeout(() => petBig.classList.remove('walking'), 3000);
+      }, 8000);
+    }
+    startWalking();
+
+    emotionTimer = setInterval(applyEmotion, 5000);
+    render();
+  }
+
+  /* ---------- ДНЕВНИК ---------- */
+  function todayStr(){ const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+
+  function maybeAddDiaryEntry(pet, sp){
+    const today = todayStr();
+    if(pet.lastDiaryDate === today) return;
+    const diary = pet.diary || [];
+    const lines = sp.diary.lines;
+    const text = lines[Math.floor(Math.random()*lines.length)];
+    diary.unshift({ date: today, text, emoji: sp.diary.emoji });
+    const trimmed = diary.slice(0, 60);
+    const user = Auth.currentUser();
+    const idx = user.pets.findIndex(p => p.uid === pet.uid);
+    if(idx >= 0){
+      user.pets[idx] = { ...pet, diary: trimmed, lastDiaryDate: today };
+      Auth.updateUser(user.login, { pets: user.pets });
+    }
+  }
+
+  function openDiary(pet, sp){
+    const fresh = Auth.currentUser().pets.find(p => p.uid === pet.uid);
+    const diary = fresh.diary || [];
+    document.getElementById('diaryTitle').textContent = `📔 Дневник ${fresh.name}`;
+    document.getElementById('diaryEmoji').textContent = sp.emoji;
+    const listEl = document.getElementById('diaryList');
+    if(diary.length === 0){
+      listEl.innerHTML = '<div class="diary-empty">Записей пока нет. Заходи каждый день — появятся новые!</div>';
+    } else {
+      listEl.innerHTML = diary.map(e => `
+        <div class="diary-entry">
+          <div class="diary-date">${formatDate(e.date)} ${e.emoji}</div>
+          <div class="diary-text">«${e.text}»</div>
+        </div>
+      `).join('');
+    }
+    openModal('diaryModal');
+  }
+
+  function formatDate(str){
+    const [y,m,d] = str.split('-');
+    const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+    return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
+  }
+
+  /* ---------- МАГАЗИН ---------- */
+  function renderShop(){
+    const user = Auth.currentUser(); if(!user) return go('login');
+    const grid = document.getElementById('shopGrid');
+    const hint = document.getElementById('shopHint');
+    hint.textContent = '';
+    grid.innerHTML = SHOP_ITEMS.map(it => `
+      <div class="shop-item">
+        <div class="shop-item-icon">${it.emoji}</div>
+        <h3>${it.name}</h3>
+        <p class="desc">${it.desc}</p>
+        <div class="price">🪙 ${it.price}</div><br>
+        <button class="btn btn-primary buy-btn" data-id="${it.id}" data-price="${it.price}">Купить</button>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.buy-btn').forEach(b => b.onclick = () => {
+      const fresh = Auth.currentUser();
+      const price = Number(b.dataset.price);
+      if(fresh.coins < price){ hint.textContent = '💸 Не хватает монет!'; return; }
+      const inv = fresh.inventory || {};
+      inv[b.dataset.id] = (inv[b.dataset.id]||0) + 1;
+      Auth.updateUser(fresh.login, { coins: fresh.coins - price, inventory: inv });
+      Sounds.play('coin');
+      const it = getItem(b.dataset.id);
+      hint.textContent = `✅ Куплено: ${it.emoji} ${it.name}`;
+      const el = document.getElementById('coinsHeader'); if(el) el.textContent = fresh.coins - price;
+      checkAchievements();
+    });
+  }
+
+  /* ---------- ХАБ ИГР ---------- */
+  const GAMES = [
+    { id:'mario',  name:'Марио-прыжок', emoji:'🍄', desc:'Прыгай, собирай монетки, беги к флагу', reward:'до 200 монет' },
+    { id:'pacman', name:'Пак-пак',      emoji:'👻', desc:'Съешь точки и убеги от призраков', reward:'до 200 монет' },
+    { id:'race',   name:'Гонки',        emoji:'🏎️', desc:'Обгоняй машины, уворачивайся', reward:'до 250 монет' }
+  ];
+  function renderGamesHub(){
+    const grid = document.getElementById('gamesGrid');
+    grid.innerHTML = GAMES.map(g => `
+      <div class="game-card">
+        <span class="game-emoji">${g.emoji}</span>
+        <h3>${g.name}</h3>
+        <p>${g.desc}</p>
+        <div class="reward">${g.reward}</div><br>
+        <button class="btn btn-primary" onclick="App.startGame('${g.id}')">Играть</button>
+      </div>
+    `).join('');
+  }
+
+  /* ---------- ДОСТИЖЕНИЯ ЭКРАН ---------- */
+  function renderAchievements(){
+    const user = Auth.currentUser(); if(!user) return go('login');
+    const unlocked = user.achievements || [];
+    document.getElementById('achSub').textContent = `Открыто ${unlocked.length} из ${ACHIEVEMENTS.length}`;
+    document.getElementById('achGrid').innerHTML = ACHIEVEMENTS.map(a => {
+      const ok = unlocked.includes(a.id);
+      return `
+        <div class="ach-card ${ok?'unlocked':'locked'}">
+          <div class="ach-icon">${a.icon}</div>
+          <h3>${a.name}</h3>
+          <p>${a.desc}</p>
+          <div class="ach-status">${ok?'✅ Получено':'🔒 Закрыто'}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ---------- ЗАПУСК ИГР ---------- */
+  function startGame(id){
+    Auth.addStat('gamesPlayed');
+    go('play');
+    const canvas = document.getElementById('playCanvas');
+    const ctx = canvas.getContext('2d');
+    const params = { canvas, ctx,
+      title: document.getElementById('playTitle'),
+      hud: document.getElementById('playHud'),
+      actions: document.getElementById('playActions'),
+      help: document.getElementById('playHelp'),
+      onFinish: (earned, scoreText) => {
+        if(earned > 0) Auth.addCoins(earned);
+        Sounds.play('happy');
+        document.getElementById('playActions').innerHTML = `
+          <div style="font-weight:800;font-size:20px;">🎉 ${scoreText} Заработано: 🪙 ${earned}</div>
+          <button class="btn btn-primary" onclick="App.startGame('${id}')">Ещё раз</button>
+          <button class="btn btn-soft" onclick="App.go('minigames')">К играм</button>
+        `;
+        checkAchievements();
+      }
+    };
+    if(id === 'mario')  currentGame = MarioGame(params);
+    if(id === 'pacman') currentGame = PacmanGame(params);
+    if(id === 'race')   currentGame = RaceGame(params);
+    if(currentGame) currentGame.start();
+  }
+
+  /* ============================================================
+     МАРИО
+     ============================================================ */
+  function MarioGame({ canvas, ctx, title, hud, actions, help, onFinish }){
+    const W = canvas.width, H = canvas.height;
+    const GRAVITY = .7, JUMP = -13, SPEED = 4.2;
+    let player, platforms, coins, flag, keys, state, cameraX, done, tick;
+    function reset(){
+      player = { x:60, y:H-120, w:34, h:44, vx:0, vy:0, onGround:false, facing:1 };
+      platforms = [
+        {x:0,y:H-40,w:600,h:40},{x:640,y:H-80,w:140,h:20},{x:830,y:H-140,w:140,h:20},
+        {x:1020,y:H-200,w:140,h:20},{x:1210,y:H-40,w:800,h:40},
+        {x:1560,y:H-120,w:120,h:20},{x:1740,y:H-200,w:120,h:20},{x:1920,y:H-280,w:120,h:20}
+      ];
+      coins = [];
+      [700,760,820,880,900,960,1020,1300,1360,1650,1850,1980].forEach((x,i) => coins.push({ x, y:H-160-(i%4)*60, r:11, got:false }));
+      flag = { x:2120, y:H-160, w:40, h:160 };
+      keys = {}; cameraX = 0; done = false; tick = 0;
+      document.onkeydown = e => { keys[e.key]=true; if([' ','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault(); };
+      document.onkeyup = e => { keys[e.key]=false; };
+    }
+    function update(){
+      if(done) return;
+      if(keys['ArrowLeft']||keys['a']||keys['A']) { player.vx=-SPEED; player.facing=-1; }
+      else if(keys['ArrowRight']||keys['d']||keys['D']) { player.vx=SPEED; player.facing=1; }
+      else player.vx=0;
+      if((keys['ArrowUp']||keys['w']||keys['W']||keys[' ']) && player.onGround){ player.vy=JUMP; player.onGround=false; }
+      player.x += player.vx; player.vy += GRAVITY; player.y += player.vy; player.onGround=false;
+      for(const p of platforms){
+        if(player.x+player.w>p.x && player.x<p.x+p.w && player.y+player.h>p.y && player.y+player.h<p.y+p.h+24 && player.vy>=0){
+          player.y=p.y-player.h; player.vy=0; player.onGround=true;
+        }
+      }
+      if(player.y > H+200) reset();
+      for(const c of coins){
+        if(!c.got && Math.hypot((player.x+player.w/2)-c.x,(player.y+player.h/2)-c.y)<26){ c.got=true; Sounds.play('coin'); }
+      }
+      if(player.x+player.w>flag.x && player.y+player.h>flag.y){
+        done = true;
+        const got = coins.filter(c=>c.got).length;
+        Auth.addStat('marioCoins', got);
+        setTimeout(() => onFinish(got*10+50, `Собрано монет: ${got}.`), 200);
+      }
+      cameraX = Math.max(0, Math.min(player.x - W/3, 2300-W));
+      tick++;
+      const got = coins.filter(c=>c.got).length;
+      hud.innerHTML = `<div>🪙 <span>${got}</span></div><div>🏁 До финиша: <span>${Math.max(0,Math.round((flag.x-player.x)/20))}</span> м</div>`;
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      const sky = ctx.createLinearGradient(0,0,0,H);
+      sky.addColorStop(0,'#8ecdf3'); sky.addColorStop(.7,'#c8e9ff'); sky.addColorStop(1,'#f5e6c8');
+      ctx.fillStyle=sky; ctx.fillRect(0,0,W,H);
+      ctx.save(); ctx.translate(-cameraX,0);
+      platforms.forEach(p => { ctx.fillStyle='#7ac74f'; ctx.fillRect(p.x,p.y,p.w,10); ctx.fillStyle='#8a5a2b'; ctx.fillRect(p.x,p.y+10,p.w,p.h-10); });
+      coins.forEach(c => { if(c.got) return; ctx.fillStyle='#ffd93d'; ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,7); ctx.fill(); ctx.strokeStyle='#d4a017'; ctx.lineWidth=2; ctx.stroke(); });
+      ctx.fillStyle='#6b6b6b'; ctx.fillRect(flag.x,flag.y,6,flag.h);
+      ctx.fillStyle='#2ecc71'; ctx.beginPath(); ctx.moveTo(flag.x+6,flag.y+6); ctx.lineTo(flag.x+50,flag.y+20); ctx.lineTo(flag.x+6,flag.y+40); ctx.fill();
+      const px=player.x, py=player.y, pw=player.w, ph=player.h;
+      ctx.fillStyle='#5a2d0c'; ctx.fillRect(px,py+ph-6,pw,6);
+      ctx.fillStyle='#2d6cdf'; ctx.fillRect(px+3,py+ph-20,pw-6,14);
+      ctx.fillStyle='#e63946'; ctx.fillRect(px+2,py+14,pw-4,ph-32);
+      ctx.fillStyle='#ffd7b5'; ctx.fillRect(px+4,py+2,pw-8,14);
+      ctx.fillStyle='#e63946'; ctx.fillRect(px+2,py-2,pw-4,8);
+      ctx.fillRect(px+(player.facing>0?pw-6:-6),py+2,12,4);
+      ctx.fillStyle='#1a1a1a'; ctx.fillRect(px+(player.facing>0?pw-14:9),py+7,3,3);
+      ctx.restore();
+    }
+    function loop(){ if(!state) return; update(); draw(); requestAnimationFrame(loop); }
+    return {
+      start(){ title.textContent='🍄 Марио-прыжок'; help.textContent='← → двигаться, ↑/Пробел — прыжок. Собери монетки и добеги до флага!'; actions.innerHTML=`<button class="btn btn-soft" onclick="App.go('minigames')">← Назад</button>`; reset(); state=true; loop(); },
+      stop(){ state=false; document.onkeydown=null; document.onkeyup=null; }
+    };
+  }
+
+  /* ============================================================
+     ПАК-ПАК
+     ============================================================ */
+  function PacmanGame({ canvas, ctx, title, hud, actions, help, onFinish }){
+    const TILE=28, COLS=21, ROWS=17;
+    const W=COLS*TILE, H=ROWS*TILE;
+    canvas.width=W; canvas.height=H;
+    const MAP=[
+      "#####################","#.........#.........#","#.###.###.#.###.###.#","#.#...........#.....#",
+      "#.#.###.#####.###.#.#","#.....#...#...#.....#","#####.#.#.#.#.#.#####","    #.#.#.#.#.#.#    ",
+      "#####.#.#.#.#.#.#####","#.........#.........#","#.###.###.#.###.###.#","#.#...............#.#",
+      "#.#.#####.#.#####.#.#","#.....#...#...#.....#","#.###.#.#####.#.###.#","#.........#.........#","#####################"
+    ];
+    let pac, ghosts, dots, totalDots, eaten, state, tick, keys, score, timeLeft;
+    function reset(){
+      pac = { x:9.5*TILE, y:12.5*TILE, r:TILE*0.4, dx:-1, dy:0, nextDx:-1, nextDy:0, speed:2.1 };
+      ghosts = [
+        { x:9.5*TILE,y:6.5*TILE,dx:0,dy:-1,color:'#ff4d4d',speed:1.5 },
+        { x:8.5*TILE,y:6.5*TILE,dx:0,dy:-1,color:'#ff9ecb',speed:1.4 },
+        { x:10.5*TILE,y:6.5*TILE,dx:0,dy:-1,color:'#4dd2ff',speed:1.4 }
+      ];
+      dots=[];
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(MAP[r][c]==='.') dots.push({c,r,got:false});
+      totalDots=dots.length; eaten=0; score=0; timeLeft=60; state=true; tick=0; keys={};
+      document.onkeydown = e => { keys[e.key]=true; if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault(); };
+      document.onkeyup = e => { keys[e.key]=false; };
+    }
+    function isWall(px,py){ const c=Math.floor(px/TILE), r=Math.floor(py/TILE); if(r<0||r>=ROWS||c<0||c>=COLS) return true; return MAP[r][c]==='#'; }
+    function canMove(x,y){ const r=TILE*0.35; return !isWall(x-r,y-r)&&!isWall(x+r,y-r)&&!isWall(x-r,y+r)&&!isWall(x+r,y+r); }
+    function movePac(){
+      if(keys['ArrowLeft']||keys['a']||keys['A']) { pac.nextDx=-1; pac.nextDy=0; }
+      if(keys['ArrowRight']||keys['d']||keys['D']){ pac.nextDx=1; pac.nextDy=0; }
+      if(keys['ArrowUp']||keys['w']||keys['W']){ pac.nextDx=0; pac.nextDy=-1; }
+      if(keys['ArrowDown']||keys['s']||keys['S']){ pac.nextDx=0; pac.nextDy=1; }
+      const nx0 = pac.x + pac.nextDx*pac.speed, ny0 = pac.y + pac.nextDy*pac.speed;
+      if((pac.nextDx!==0||pac.nextDy!==0) && canMove(nx0,ny0)){ pac.dx=pac.nextDx; pac.dy=pac.nextDy; }
+      const nx = pac.x + pac.dx*pac.speed, ny = pac.y + pac.dy*pac.speed;
+      if(canMove(nx,ny)){ pac.x=nx; pac.y=ny; }
+    }
+    function eatDots(){
+      dots.forEach(d => {
+        if(d.got) return;
+        const dx=(d.c+.5)*TILE-pac.x, dy=(d.r+.5)*TILE-pac.y;
+        if(Math.hypot(dx,dy)<pac.r+4){
+          d.got=true; eaten++; score+=10; Sounds.play('coin');
+          if(eaten===totalDots){ Auth.addStat('pacmanWins'); done(`Победа! 🎉`, Math.min(200, score/2 + timeLeft*2)); }
+        }
+      });
+    }
+    function moveGhosts(){
+      ghosts.forEach(g => {
+        const dirs=[{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+        dirs.sort((a,b) => {
+          const ax=g.x+a.dx*TILE, ay=g.y+a.dy*TILE;
+          const bx=g.x+b.dx*TILE, by=g.y+b.dy*TILE;
+          return Math.hypot(ax-pac.x,ay-pac.y)-Math.hypot(bx-pac.x,by-pac.y);
+        });
+        const ok = dirs.filter(d => canMove(g.x+d.dx*g.speed, g.y+d.dy*g.speed) && !(d.dx===-g.dx && d.dy===-g.dy));
+        const choose = ok[Math.random()<0.85?0:Math.floor(Math.random()*ok.length)] || dirs[0];
+        const nx=g.x+choose.dx*g.speed, ny=g.y+choose.dy*g.speed;
+        if(canMove(nx,ny)){ g.x=nx; g.y=ny; g.dx=choose.dx; g.dy=choose.dy; }
+        if(Math.hypot(g.x-pac.x,g.y-pac.y)<TILE*0.7){ done('Поймали! 💀', 0); }
+      });
+    }
+    function done(text, earned){
+      if(!state) return; state=false; document.onkeydown=null; document.onkeyup=null;
+      onFinish(earned, text);
+    }
+    function update(){
+      if(!state) return; tick++;
+      if(tick%60===0){ timeLeft--; if(timeLeft<=0){ done('Время вышло! ⏰', 0); return; } }
+      movePac(); eatDots(); moveGhosts();
+      hud.innerHTML = `<div>🎯 Очки: ${score}</div><div>⚪ Точки: ${eaten}/${totalDots}</div><div>⏱ ${timeLeft} сек</div>`;
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='#0a0a1a'; ctx.fillRect(0,0,W,H);
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+        if(MAP[r][c]==='#'){
+          ctx.fillStyle='#1a1a5e'; ctx.fillRect(c*TILE,r*TILE,TILE,TILE);
+          ctx.strokeStyle='#4a4aff'; ctx.lineWidth=2; ctx.strokeRect(c*TILE+2,r*TILE+2,TILE-4,TILE-4);
+        }
+      }
+      dots.forEach(d => { if(d.got) return; ctx.fillStyle='#ffe066'; ctx.beginPath(); ctx.arc((d.c+.5)*TILE,(d.r+.5)*TILE,3,0,7); ctx.fill(); });
+      ghosts.forEach(g => {
+        ctx.fillStyle=g.color;
+        ctx.beginPath(); ctx.arc(g.x,g.y,TILE*0.4,Math.PI,0);
+        ctx.lineTo(g.x+TILE*0.4,g.y+TILE*0.4); ctx.lineTo(g.x+TILE*0.2,g.y+TILE*0.25); ctx.lineTo(g.x,g.y+TILE*0.4);
+        ctx.lineTo(g.x-TILE*0.2,g.y+TILE*0.25); ctx.lineTo(g.x-TILE*0.4,g.y+TILE*0.4);
+        ctx.fill();
+        ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(g.x-5,g.y-4,4,0,7); ctx.arc(g.x+5,g.y-4,4,0,7); ctx.fill();
+        ctx.fillStyle='#1a1a1a'; ctx.beginPath(); ctx.arc(g.x-5+g.dx*2,g.y-4+g.dy*2,2,0,7); ctx.arc(g.x+5+g.dx*2,g.y-4+g.dy*2,2,0,7); ctx.fill();
+      });
+      const mouth=Math.abs(Math.sin(tick*0.15))*0.5;
+      const angle=Math.atan2(pac.dy,pac.dx);
+      ctx.fillStyle='#ffe600'; ctx.beginPath(); ctx.moveTo(pac.x,pac.y);
+      ctx.arc(pac.x,pac.y,pac.r,angle+mouth,angle-mouth+Math.PI*2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle='#1a1a1a';
+      const ex=pac.x+Math.cos(angle-Math.PI/2)*pac.r*0.4, ey=pac.y+Math.sin(angle-Math.PI/2)*pac.r*0.4;
+      ctx.beginPath(); ctx.arc(ex,ey,2.5,0,7); ctx.fill();
+    }
+    function loop(){ if(!state) return; update(); draw(); requestAnimationFrame(loop); }
+    return {
+      start(){ title.textContent='👻 Пак-пак'; help.textContent='← → ↑ ↓ или WASD. Съешь все точки и не дай призракам поймать!'; actions.innerHTML=`<button class="btn btn-soft" onclick="App.go('minigames')">← Назад</button>`; reset(); loop(); },
+      stop(){ state=false; document.onkeydown=null; document.onkeyup=null; }
+    };
+  }
+
+  /* ============================================================
+     ГОНКИ
+     ============================================================ */
+  function RaceGame({ canvas, ctx, title, hud, actions, help, onFinish }){
+    const W=canvas.width, H=canvas.height;
+    const ROAD_LEFT=W*0.15, ROAD_RIGHT=W*0.85;
+    let player, obstacles, bonuses, speed, distance, keys, state, tick, gameTime;
+    function reset(){
+      player={ x:W/2, y:H-90, w:46, h:80 };
+      obstacles=[]; bonuses=[]; speed=3.2; distance=0; tick=0; gameTime=45; keys={}; state=true;
+      document.onkeydown = e => { keys[e.key]=true; if(['ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault(); };
+      document.onkeyup = e => { keys[e.key]=false; };
+      actions.innerHTML = `
+        <button class="btn btn-soft" id="leftBtn">◀</button>
+        <button class="btn btn-soft" id="rightBtn">▶</button>
+        <button class="btn btn-primary" id="boostBtn">⚡</button>
+        <button class="btn btn-soft" onclick="App.go('minigames')">← Назад</button>
+      `;
+      const press = (key, el) => { el.onpointerdown = () => keys[key]=true; el.onpointerup = () => keys[key]=false; el.onpointerleave = () => keys[key]=false; };
+      press('ArrowLeft', document.getElementById('leftBtn'));
+      press('ArrowRight', document.getElementById('rightBtn'));
+      press(' ', document.getElementById('boostBtn'));
+    }
+    function update(){
+      if(!state) return; tick++;
+      if(tick%60===0){ gameTime--; if(gameTime<=0){ finish(distance); return; } }
+      const ms = 6;
+      if(keys['ArrowLeft']||keys['a']||keys['A']) player.x-=ms;
+      if(keys['ArrowRight']||keys['d']||keys['D']) player.x+=ms;
+      player.x = Math.max(ROAD_LEFT+player.w/2, Math.min(ROAD_RIGHT-player.w/2, player.x));
+      const boosting = keys[' ']||keys['Shift'];
+      const base = 3.2 + distance/1500;
+      speed = boosting ? base*1.7 : base;
+      distance += speed;
+      if(tick % Math.max(18, 40-Math.floor(distance/200)) === 0){
+        const type = Math.random()<0.7 ? 'cone' : 'car';
+        obstacles.push({ x:ROAD_LEFT+Math.random()*(ROAD_RIGHT-ROAD_LEFT-50)+25, y:-60, w:46, h:type==='car'?80:40, type,
+          color:type==='car'?['#e63946','#4d9eff','#2ecc71','#f39c12'][Math.floor(Math.random()*4)]:'#ff8c42' });
+      }
+      if(tick%90===0) bonuses.push({ x:ROAD_LEFT+Math.random()*(ROAD_RIGHT-ROAD_LEFT-30)+15, y:-30, r:14, got:false });
+      obstacles.forEach(o => o.y += speed*1.4);
+      obstacles = obstacles.filter(o => o.y < H+100);
+      bonuses.forEach(b => b.y += speed*1.4);
+      bonuses = bonuses.filter(b => b.y < H+50);
+      for(const o of obstacles){
+        if(player.x+player.w/2>o.x-o.w/2 && player.x-player.w/2<o.x+o.w/2 && player.y+player.h/2>o.y-o.h/2 && player.y-player.h/2<o.y+o.h/2){ finish(distance, true); return; }
+      }
+      bonuses.forEach(b => { if(!b.got && Math.hypot(player.x-b.x,player.y-b.y)<30){ b.got=true; distance+=200; Sounds.play('coin'); } });
+      hud.innerHTML = `<div>🛣️ ${Math.floor(distance/10)} м</div><div>⏱ ${gameTime} сек</div><div>⚡ ${Math.round(speed*10)}</div>`;
+    }
+    function drawRoad(){
+      ctx.fillStyle='#2e7d32'; ctx.fillRect(0,0,ROAD_LEFT,H); ctx.fillRect(ROAD_RIGHT,0,W,H);
+      ctx.fillStyle='#3a3a3a'; ctx.fillRect(ROAD_LEFT,0,ROAD_RIGHT-ROAD_LEFT,H);
+      ctx.fillStyle='#f5e6a3';
+      const dash=60, offset=(distance*1.4)%(dash*2);
+      for(let y=-dash*2+offset; y<H; y+=dash*2){
+        ctx.fillRect(W/2-3,y,6,dash); ctx.fillRect(ROAD_LEFT+10,y,4,dash); ctx.fillRect(ROAD_RIGHT-14,y,4,dash);
+      }
+    }
+    function drawPlayerCar(){
+      const x=player.x, y=player.y, w=player.w, h=player.h;
+      ctx.fillStyle='rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(x,y+h/2,w/2*1.1,h/3,0,0,7); ctx.fill();
+      ctx.fillStyle='#e63946'; ctx.beginPath(); ctx.roundRect(x-w/2,y-h/2,w,h,10); ctx.fill();
+      ctx.fillStyle='#b3202c'; ctx.beginPath(); ctx.roundRect(x-w/2+4,y-h/2+6,w-8,h*0.35,6); ctx.fill();
+      ctx.fillStyle='#a5d8ff'; ctx.beginPath(); ctx.roundRect(x-w/2+6,y-h/4,w-12,h*0.28,4); ctx.fill();
+      ctx.fillStyle='#111';
+      ctx.fillRect(x-w/2-4,y-h/3,8,16); ctx.fillRect(x+w/2-4,y-h/3,8,16);
+      ctx.fillRect(x-w/2-4,y+h/3-16,8,16); ctx.fillRect(x+w/2-4,y+h/3-16,8,16);
+      ctx.fillStyle='#fff8b0'; ctx.beginPath(); ctx.arc(x-w/4,y-h/2+4,4,0,7); ctx.arc(x+w/4,y-h/2+4,4,0,7); ctx.fill();
+    }
+    function drawObstacles(){
+      obstacles.forEach(o => {
+        if(o.type==='cone'){
+          ctx.fillStyle='#ff8c42'; ctx.beginPath(); ctx.moveTo(o.x,o.y-o.h/2); ctx.lineTo(o.x-o.w/2,o.y+o.h/2); ctx.lineTo(o.x+o.w/2,o.y+o.h/2); ctx.closePath(); ctx.fill();
+          ctx.fillStyle='#fff'; ctx.fillRect(o.x-6,o.y-2,12,6);
+        } else {
+          ctx.fillStyle=o.color; ctx.beginPath(); ctx.roundRect(o.x-o.w/2,o.y-o.h/2,o.w,o.h,8); ctx.fill();
+          ctx.fillStyle='rgba(255,255,255,.4)'; ctx.beginPath(); ctx.roundRect(o.x-o.w/2+5,o.y-o.h/3,o.w-10,o.h*0.3,4); ctx.fill();
+        }
+      });
+    }
+    function drawBonuses(){
+      bonuses.forEach(b => { if(b.got) return; ctx.fillStyle='#ffd93d'; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7); ctx.fill(); ctx.strokeStyle='#d4a017'; ctx.lineWidth=2; ctx.stroke(); });
+    }
+    function draw(){ ctx.clearRect(0,0,W,H); drawRoad(); drawObstacles(); drawBonuses(); drawPlayerCar(); }
+    function finish(dist, crash){
+      if(!state) return; state=false;
+      document.onkeydown=null; document.onkeyup=null;
+      const earned = crash ? Math.floor(dist/30) : Math.min(250, Math.floor(dist/15));
+      if(!crash) Auth.addStat('raceWins', earned);
+      onFinish(earned, crash ? `💥 Авария! Дистанция: ${Math.floor(dist/10)} м.` : `Финиш! Дистанция: ${Math.floor(dist/10)} м.`);
+    }
+    function loop(){ if(!state) return; update(); draw(); requestAnimationFrame(loop); }
+    return {
+      start(){ title.textContent='🏎️ Гонки'; help.textContent='← → двигаться, Пробел — ускорение. Уворачивайся!'; reset(); loop(); },
+      stop(){ state=false; document.onkeydown=null; document.onkeyup=null; }
+    };
+  }
+
+  /* ---------- ФОРМЫ ---------- */
+  function initForms(){
+    document.getElementById('registerForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const err = Auth.register(
+        document.getElementById('regEmail').value,
+        document.getElementById('regLogin').value,
+        document.getElementById('regPassword').value,
+        document.getElementById('regPassword2').value
+      );
+      if(err){ document.getElementById('regError').textContent = err; return; }
+      document.getElementById('regError').textContent='';
+      e.target.reset(); Sounds.play('happy'); go('home');
+    });
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const err = Auth.tryLogin(document.getElementById('logLogin').value, document.getElementById('logPassword').value);
+      if(err){ document.getElementById('logError').textContent=err; return; }
+      document.getElementById('logError').textContent='';
+      e.target.reset(); Sounds.play('happy'); go('home');
+    });
+    document.getElementById('forgotForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const res = Auth.requestReset(document.getElementById('forgotEmail').value);
+      const errEl = document.getElementById('forgotError');
+      if(res.error){ errEl.textContent=res.error; return; }
+      errEl.textContent=''; pendingResetLogin = res.login;
+      document.getElementById('resetHint').textContent = `Демо: код ${res.code}`;
+      alert(`📨 Демо-письмо!\nКод: ${res.code}`);
+      e.target.reset(); go('reset');
+    });
+    document.getElementById('resetForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const err = Auth.confirmReset(pendingResetLogin, document.getElementById('resetCode').value, document.getElementById('resetPassword').value);
+      if(err){ document.getElementById('resetError').textContent=err; return; }
+      document.getElementById('resetError').textContent='';
+      e.target.reset(); alert('✅ Пароль изменён!'); pendingResetLogin=null; go('login');
+    });
+
+    document.getElementById('modalCancel').onclick = () => closeModal('chooseModal');
+    document.getElementById('chooseModal').addEventListener('click', e => { if(e.target.id==='chooseModal') closeModal('chooseModal'); });
+    document.getElementById('modalConfirm').onclick = () => {
+      if(!pendingSpecies) return;
+      closeModal('chooseModal');
+      pendingNameSpecies = pendingSpecies;
+      document.getElementById('namePetImg').textContent = pendingSpecies.emoji;
+      document.getElementById('namePetInput').value = pendingSpecies.defaultName;
+      openModal('namePetModal');
+    };
+
+    document.getElementById('namePetCancel').onclick = () => { closeModal('namePetModal'); pendingNameSpecies=null; };
+    document.getElementById('namePetConfirm').onclick = () => {
+      if(!pendingNameSpecies) return;
+      const name = (document.getElementById('namePetInput').value||'').trim() || pendingNameSpecies.defaultName;
+      const user = Auth.currentUser();
+      const newPet = {
+        uid: Auth.uid(pendingNameSpecies.id),
+        type: pendingNameSpecies.id,
+        name,
+        hunger: pendingNameSpecies.hunger,
+        mood: pendingNameSpecies.mood,
+        diary: [],
+        lastDiaryDate: null,
+        createdAt: Date.now()
+      };
+      Auth.updateUser(user.login, { pets: [...(user.pets||[]), newPet], activePetUid: newPet.uid });
+      Auth.addStat('petsCount');
+      closeModal('namePetModal');
+      Sounds.play('happy');
+      pendingNameSpecies=null;
+      checkAchievements();
+      go('room');
+    };
+
+    document.getElementById('buyPetCancel').onclick = () => { closeModal('buyPetModal'); pendingBuySpecies=null; };
+    document.getElementById('buyPetConfirm').onclick = () => {
+      if(!pendingBuySpecies) return;
+      const user = Auth.currentUser();
+      if(user.coins < pendingBuySpecies.price){ alert('💸 Не хватает монет!'); return; }
+      Auth.updateUser(user.login, { coins: user.coins - pendingBuySpecies.price });
+      closeModal('buyPetModal');
+      pendingNameSpecies = pendingBuySpecies;
+      pendingBuySpecies = null;
+      document.getElementById('namePetImg').textContent = pendingNameSpecies.emoji;
+      document.getElementById('namePetInput').value = pendingNameSpecies.defaultName;
+      openModal('namePetModal');
+      Sounds.play('coin');
+    };
+  }
+
+  function init(){
+    initForms();
+    renderHeader();
+    renderHome();
+
+    setInterval(() => {
+      const user = Auth.currentUser(); if(!user || !user.pets || user.pets.length===0) return;
+      let changed = false;
+      user.pets.forEach(p => {
+        if(p.hunger > 0){ p.hunger = Math.max(0, p.hunger-1); changed = true; }
+        if(p.mood > 0 && p.hunger > 30){ p.mood = Math.max(0, p.mood-1); changed = true; }
+      });
+      if(changed){
+        Auth.updateUser(user.login, { pets: user.pets });
+        if(currentScreen === 'room')  renderRoom();
+        if(currentScreen === 'rooms') renderHotel();
+      }
+    }, 60000);
+
+    setInterval(() => {
+      if(currentScreen === 'room'){
+        const room = document.getElementById('roomStage'); if(!room) return;
+        room.classList.remove('time-morning','time-day','time-evening','time-night');
+        room.classList.add(getTimeClass());
+      }
+    }, 5*60*1000);
+  }
+
+  return { go, init, toggleSound, startGame };
+})();
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+</body>
+</html>
