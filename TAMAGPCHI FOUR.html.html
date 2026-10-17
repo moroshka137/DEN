@@ -14,13 +14,12 @@
   --shadow-strong:0 12px 32px rgba(255,123,61,.35);
   --radius:28px; --radius-sm:18px;
   --room-wall:#3A342E; --room-wall-2:#4A423A; --room-floor:#2B241F;
-  --room-warm:#FFB67A; --room-bed:#E8E1D5; --room-bed-dark:#C9BFAF;
+  --room-bed:#E8E1D5; --room-bed-dark:#C9BFAF;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 h1,h2,h3,.btn,.header-logo,.pet-name{font-family:'Baloo 2',cursive}
 a{color:var(--primary-hover);text-decoration:none;font-weight:700;cursor:pointer}
-a:hover{text-decoration:underline wavy var(--pink)}
 button{font-family:inherit}
 
 /* HEADER */
@@ -49,12 +48,6 @@ button{font-family:inherit}
 .screen.active{display:block;animation:fadeIn .35s ease-out}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .section-title{text-align:center;font-size:clamp(20px,4vw,30px);font-weight:800;margin-bottom:20px}
-
-/* ФОН */
-.bg-decor{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-decor .cloud{position:absolute;font-size:50px;opacity:.5;animation:float 8s ease-in-out infinite}
-.bg-decor .c1{top:8%;left:5%} .bg-decor .c2{top:20%;right:8%;animation-delay:2s;font-size:40px} .bg-decor .c3{top:60%;left:12%;animation-delay:4s;font-size:34px}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
 
 /* HERO */
 .hero{text-align:center;padding:36px 20px 20px}
@@ -95,7 +88,7 @@ button{font-family:inherit}
 .modal{background:#fff;border-radius:var(--radius);padding:24px;max-width:460px;width:100%;text-align:center;box-shadow:var(--shadow-strong);border:5px solid var(--bg-accent);animation:pop .3s ease-out;max-height:85vh;overflow-y:auto}
 @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 .modal h3{font-size:22px;margin-bottom:10px}
-.modal-pet{font-size:80px;margin:10px 0 16px}
+.modal-pet{font-size:80px;margin:10px 0 16px;display:flex;justify-content:center;align-items:center;min-height:100px}
 .modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
 /* ФОРМЫ */
@@ -117,7 +110,7 @@ button{font-family:inherit}
 @media(max-width:900px){.room-wrap{grid-template-columns:1fr}}
 .room-stage{position:relative;border-radius:var(--radius);border:5px solid var(--bg-accent);box-shadow:var(--shadow-strong);min-height:420px;overflow:hidden;transition:background 1.5s ease;font-family:'Nunito',sans-serif;background:linear-gradient(180deg,var(--room-wall) 0%, var(--room-wall-2) 62%, var(--room-floor) 62%, #1E1814 100%)}
 
-/* ВРЕМЯ */
+/* ВРЕМЯ СУТОК */
 .room-stage.time-morning{--room-wall:#5A4E42;--room-wall-2:#6A5E50;--room-floor:#3A3028;background:linear-gradient(180deg,#B8D8E8 0%, #D9C8A8 62%, #3A3028 62%, #2A2018 100%)}
 .room-stage.time-day{--room-wall:#6A5E50;--room-wall-2:#7A6E60;--room-floor:#4A4038;background:linear-gradient(180deg,#E8F0F8 0%, #EAD8B8 62%, #4A4038 62%, #3A3028 100%)}
 .room-stage.time-evening{--room-wall:#5A3E2E;--room-wall-2:#6A4A38;--room-floor:#3A2A20;background:linear-gradient(180deg,#E8A868 0%, #C87850 62%, #3A2A20 62%, #2A1E16 100%)}
@@ -125,6 +118,17 @@ button{font-family:inherit}
 .room-stage.time-night::after{content:'';position:absolute;top:0;left:0;right:0;height:62%;background-image:radial-gradient(2px 2px at 20% 15%, #fff, transparent),radial-gradient(1.5px 1.5px at 60% 30%, #fff, transparent),radial-gradient(2px 2px at 80% 20%, #fff, transparent),radial-gradient(1px 1px at 35% 45%, #fff, transparent),radial-gradient(1.5px 1.5px at 75% 55%, #fff, transparent);opacity:.5;pointer-events:none}
 .room-stage.walking .pet-big{animation:walkBob .5s ease-in-out infinite}
 @keyframes walkBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+
+/* ТЕМЫ ОБОЕВ */
+.room-stage.theme-cozy{background:linear-gradient(180deg,#3A342E 0%, #4A423A 62%, #2B241F 62%, #1E1814 100%)}
+.room-stage.theme-forest{background:linear-gradient(180deg,#2A4A2A 0%, #3A5A3A 62%, #1A2A1A 62%, #0F1A0F 100%)}
+.room-stage.theme-sakura{background:linear-gradient(180deg,#5A3A4A 0%, #7A4A5A 62%, #2A1A1F 62%, #1F1215 100%)}
+.room-stage.theme-space{background:linear-gradient(180deg,#1A1A3A 0%, #2A2A4A 62%, #0F0F1A 62%, #050508 100%)}
+.room-stage.theme-sakura::before{content:'';position:absolute;top:0;left:0;right:0;height:62%;background-image:radial-gradient(circle at 20% 20%, #FFB6D9 2px, transparent 3px),radial-gradient(circle at 60% 40%, #FFB6D9 2px, transparent 3px),radial-gradient(circle at 80% 60%, #FFB6D9 2px, transparent 3px),radial-gradient(circle at 40% 80%, #FFB6D9 2px, transparent 3px);opacity:.6;pointer-events:none;background-size:200px 200px}
+.room-stage.theme-space::before{content:'';position:absolute;top:0;left:0;right:0;height:62%;background-image:radial-gradient(2px 2px at 20% 15%, #fff, transparent),radial-gradient(1.5px 1.5px at 60% 30%, #fff, transparent),radial-gradient(2px 2px at 80% 20%, #fff, transparent);opacity:.7;pointer-events:none}
+.theme-picker{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.theme-btn{padding:10px;border-radius:12px;border:3px solid var(--bg-accent);background:#fff;font-family:'Baloo 2',cursive;font-weight:700;cursor:pointer;font-size:13px}
+.theme-btn.active{border-color:var(--primary);background:#FFF7C2}
 
 /* ПИТОМЕЦ */
 .pet-big{position:absolute;left:30%;bottom:30%;z-index:5;font-size:110px;cursor:pointer;filter:drop-shadow(0 12px 8px rgba(0,0,0,.6));transition:left 3s cubic-bezier(.4,0,.2,1),bottom 3s cubic-bezier(.4,0,.2,1),transform .25s;will-change:left,bottom;display:flex;align-items:center;justify-content:center}
@@ -238,11 +242,27 @@ button{font-family:inherit}
 .play-actions{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .play-help{margin-top:10px;color:var(--text-soft);font-weight:600;font-size:13px}
 
+/* НОВЫЕ ИГРЫ UI */
+.hang-word{font-family:'Courier New',monospace;font-size:clamp(20px,5vw,40px);font-weight:800;letter-spacing:8px;text-align:center;margin:16px 0;color:#4A3728;word-break:break-all}
+.hang-word .letter{display:inline-block;padding:0 4px;border-bottom:3px solid var(--primary)}
+.hang-keyboard{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:500px;margin:0 auto}
+.hang-key{padding:10px 4px;border-radius:8px;background:#fff;border:3px solid var(--bg-accent);font-weight:800;cursor:pointer;font-family:'Baloo 2',cursive;font-size:16px}
+.hang-key:hover{background:#FFF7C2}
+.hang-key:disabled{opacity:.4;cursor:not-allowed}
+.hang-key.right{background:#A8E6CF;border-color:#6ED3A6}
+.hang-key.wrong{background:#FFB6C1;border-color:#FF7B8D}
+.hang-canvas{display:block;margin:0 auto;background:#FFFBF0;border-radius:var(--radius-sm);border:3px solid var(--bg-accent);max-width:100%}
+.draw-canvas{display:block;margin:0 auto;background:#fff;border-radius:var(--radius-sm);border:4px solid var(--bg-accent);touch-action:none;cursor:crosshair;max-width:100%}
+.draw-colors{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.draw-color{width:36px;height:36px;border-radius:50%;border:3px solid #fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.draw-color.active{transform:scale(1.2);border-color:#4A3728}
+
 /* ДОСТИЖЕНИЯ */
 .toast-ach{position:fixed;top:80px;right:16px;z-index:200;background:linear-gradient(135deg,#FFE3A8,#FFC97A);border:4px solid #FF9F68;border-radius:var(--radius-sm);padding:12px 16px;box-shadow:var(--shadow-strong);display:flex;align-items:center;gap:10px;font-weight:800;animation:toastIn .5s ease-out;max-width:300px;font-size:14px}
 @keyframes toastIn{from{transform:translateX(420px);opacity:0}to{transform:translateX(0);opacity:1}}
 .toast-ach.out{animation:toastOut .5s ease-in forwards}
 @keyframes toastOut{to{transform:translateX(420px);opacity:0}}
+.toast-ach.legendary{background:linear-gradient(135deg,#FFD700,#FFA500);border-color:#FFF;box-shadow:0 0 20px #FFD700}
 .toast-ach .toast-icon{font-size:30px}
 .toast-ach .toast-title{font-family:'Baloo 2',cursive;font-size:12px;color:#7A4200;text-transform:uppercase;letter-spacing:1px}
 .toast-ach .toast-name{font-family:'Baloo 2',cursive;font-size:16px;color:#4A2A00}
@@ -252,6 +272,7 @@ button{font-family:inherit}
 .ach-card{background:#fff;border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow);border:4px solid var(--bg-accent);transition:transform .2s}
 .ach-card.locked{filter:grayscale(.9);opacity:.55}
 .ach-card.unlocked{border-color:#FFC97A;background:linear-gradient(180deg,#FFFBF0,#FFEEC8)}
+.ach-card.legendary{border-color:#FFD700;background:linear-gradient(180deg,#FFF8D6,#FFE77A);box-shadow:0 0 20px rgba(255,215,0,.5)}
 .ach-icon{font-size:48px;margin-bottom:6px}
 .ach-card h3{font-size:16px;margin-bottom:4px}
 .ach-card p{font-size:12px;color:var(--text-soft);font-weight:600}
@@ -264,81 +285,13 @@ button{font-family:inherit}
 .diary-date{font-size:11px;color:var(--text-soft);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
 .diary-text{font-size:14px;font-weight:600;color:var(--text);font-style:italic}
 .diary-empty{color:var(--text-soft);font-style:italic;padding:16px;text-align:center;font-size:14px}
-
 .badge-num{position:absolute;top:-6px;right:-6px;background:#FF4D4D;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:999px;border:2px solid #fff}
 
-/* ============================================================
-   СПРАЙТЫ ПЕРСОНАЖЕЙ (CSS)
-   ============================================================ */
-.sprite-wrap{position:relative;display:inline-grid;place-items:center;width:1em;height:1em;line-height:1;font-size:inherit}
-.sprite-wrap .sprite-emoji{position:relative;z-index:2;font-size:.9em;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
-.sprite-wrap .sprite-layer{position:absolute;pointer-events:none;z-index:3}
-
-/* Салли */
-.sprite-sally .hair{top:-6%;left:-4%;right:-4%;height:55%;background:linear-gradient(180deg,#4DD2FF 0%,#2BA8E0 100%);border-radius:50% 50% 40% 40%;box-shadow:0 3px 6px rgba(0,0,0,.3)}
-.sprite-sally .pig-tails::before,.sprite-sally .pig-tails::after{content:'';position:absolute;top:20%;width:32%;height:32%;background:radial-gradient(circle at 40% 40%,#4DD2FF 0%,#2BA8E0 100%);border-radius:50%}
-.sprite-sally .pig-tails::before{left:-16%} .sprite-sally .pig-tails::after{right:-16%}
-.sprite-sally .face-mask{top:28%;left:20%;width:60%;height:40%;background:radial-gradient(ellipse at 60% 50%,#F5F0E8 0%,#E8E2D6 100%);border-radius:50%;mask:linear-gradient(180deg,transparent 0%,#000 30%);-webkit-mask:linear-gradient(180deg,transparent 0%,#000 30%)}
-.sprite-sally .prosthetic{top:34%;right:14%;width:26%;height:34%;background:linear-gradient(135deg,#E8E2D6 0%,#C9BFAF 100%);border-radius:40% 50% 50% 40%;box-shadow:inset -2px -2px 0 rgba(0,0,0,.15)}
-.sprite-sally .eye{top:44%;width:8%;height:8%;background:#111;border-radius:50%}
-.sprite-sally .eye.left{left:30%} .sprite-sally .eye.right{left:56%}
-.sprite-sally .shirt{top:62%;left:10%;right:10%;height:22%;background:linear-gradient(180deg,#2A2A2A 0%,#1A1A1A 100%);border-radius:20% 20% 0 0}
-.sprite-sally .pants{bottom:0;left:14%;right:14%;height:14%;background:linear-gradient(180deg,#A83A3A 0%,#7A2A2A 100%);border-radius:0 0 20% 20%}
-.sprite-sally .shoes{bottom:-4%;left:10%;right:10%;height:8%;background:linear-gradient(180deg,#3D7AB8 0%,#2A5A9A 100%);border-radius:30% 30% 40% 40%}
-
-/* Ларри */
-.sprite-larry .hair{top:-8%;left:-6%;right:-6%;height:80%;background:linear-gradient(180deg,#2A1E1A 0%,#1A120E 100%);border-radius:40% 40% 20% 20%;clip-path:polygon(0 0,100% 0,100% 90%,92% 70%,85% 95%,15% 95%,8% 70%,0 90%)}
-.sprite-larry .face{top:30%;left:22%;width:56%;height:40%;background:radial-gradient(ellipse at 50% 50%,#F5D9B8 0%,#E8C8A0 100%);border-radius:50%}
-.sprite-larry .eye{top:46%;width:7%;height:9%;background:#111;border-radius:50%}
-.sprite-larry .eye.left{left:32%} .sprite-larry .eye.right{left:58%}
-.sprite-larry .brow{top:42%;width:10%;height:2.5%;background:#2A1E1A;border-radius:2px}
-.sprite-larry .brow.left{left:30%;transform:rotate(-5deg)} .sprite-larry .brow.right{left:58%;transform:rotate(5deg)}
-.sprite-larry .shirt{top:64%;left:14%;right:14%;height:24%;background:linear-gradient(180deg,#8B6B4A 0%,#6A4F35 100%);border-radius:14% 14% 0 0}
-.sprite-larry .sf-logo{top:70%;left:44%;width:12%;height:12%;background:#F5F0E8;border-radius:50%;display:grid;place-items:center;font-size:.3em;color:#6A4F35;font-weight:800;font-family:'Baloo 2',cursive}
-.sprite-larry .pants{bottom:0;left:20%;right:20%;height:14%;background:linear-gradient(180deg,#2A2A3A 0%,#1A1A2A 100%);border-radius:0 0 20% 20%}
-
-/* Хаги */
-.sprite-huggy .fur{inset:0;background:radial-gradient(circle at 50% 40%,#4A8FD8 0%,#2A6AB8 100%);border-radius:50%}
-.sprite-huggy .ears{top:0;left:0;right:0;height:20%}
-.sprite-huggy .ears::before,.sprite-huggy .ears::after{content:'';position:absolute;top:-4%;width:22%;height:22%;background:#2A6AB8;border-radius:50%}
-.sprite-huggy .ears::before{left:12%;transform:rotate(-20deg)} .sprite-huggy .ears::after{right:12%;transform:rotate(20deg)}
-.sprite-huggy .eyes{top:30%;left:0;right:0;height:20%}
-.sprite-huggy .eyes::before,.sprite-huggy .eyes::after{content:'';position:absolute;top:0;width:20%;height:20%;background:#fff;border-radius:50%;box-shadow:inset 0 0 0 3px #111}
-.sprite-huggy .eyes::before{left:20%} .sprite-huggy .eyes::after{right:20%}
-.sprite-huggy .mouth{top:55%;left:35%;right:35%;height:8%;background:#FF4D6D;border-radius:50%;box-shadow:inset 0 2px 0 rgba(0,0,0,.3)}
-
-/* Лео */
-.sprite-simba .mane{inset:0;background:radial-gradient(circle at 50% 50%,#D9822B 0%,#A85A1A 100%);border-radius:50%;clip-path:polygon(50% 0,60% 15%,75% 5%,80% 20%,95% 25%,85% 45%,100% 55%,80% 65%,90% 85%,70% 80%,65% 95%,50% 85%,35% 95%,30% 80%,10% 85%,20% 65%,0 55%,15% 45%,5% 25%,20% 20%,25% 5%,40% 15%)}
-.sprite-simba .face{top:22%;left:22%;width:56%;height:56%;background:radial-gradient(circle at 50% 50%,#FFD9A0 0%,#E8B878 100%);border-radius:50%}
-.sprite-simba .eye{top:42%;width:9%;height:9%;background:#111;border-radius:50%}
-.sprite-simba .eye.left{left:32%} .sprite-simba .eye.right{left:59%}
-.sprite-simba .nose{top:56%;left:45%;width:10%;height:8%;background:#8A4F1A;border-radius:50%}
-
-/* Маус */
-.sprite-mouse .ears{top:-6%;left:-4%;right:-4%;height:40%}
-.sprite-mouse .ears::before,.sprite-mouse .ears::after{content:'';position:absolute;top:0;width:40%;height:100%;background:radial-gradient(circle at 50% 50%,#222 0%,#111 100%);border-radius:50%}
-.sprite-mouse .ears::before{left:0} .sprite-mouse .ears::after{right:0}
-.sprite-mouse .face{top:30%;left:22%;width:56%;height:50%;background:radial-gradient(circle at 50% 50%,#222 0%,#111 100%);border-radius:50%}
-.sprite-mouse .eye{top:46%;width:8%;height:8%;background:#fff;border-radius:50%}
-.sprite-mouse .eye.left{left:34%} .sprite-mouse .eye.right{left:58%}
-.sprite-mouse .nose{top:58%;left:46%;width:8%;height:8%;background:#FF4D6D;border-radius:50%}
-
-/* Ари */
-.sprite-ariel .hair{top:-6%;left:-8%;right:-8%;height:70%;background:linear-gradient(180deg,#FF6B3D 0%,#D9441A 100%);border-radius:50% 50% 30% 30%;clip-path:polygon(0 0,100% 0,100% 85%,90% 70%,80% 95%,65% 80%,50% 95%,35% 80%,20% 95%,10% 70%,0 85%)}
-.sprite-ariel .face{top:30%;left:22%;width:56%;height:44%;background:radial-gradient(circle at 50% 50%,#FFE0C0 0%,#F5C8A0 100%);border-radius:50%}
-.sprite-ariel .eye{top:46%;width:8%;height:8%;background:#2BA8E0;border-radius:50%}
-.sprite-ariel .eye.left{left:32%} .sprite-ariel .eye.right{left:58%}
-.sprite-ariel .tail{bottom:0;left:8%;right:8%;height:20%;background:linear-gradient(180deg,#2BA8E0 0%,#1A78B0 100%);border-radius:20% 20% 50% 50%}
-.sprite-ariel .shell{top:68%;left:44%;width:12%;height:8%;background:#FFB6D9;border-radius:50%}
-
-/* Багир */
-.sprite-bagheera .fur{inset:0;background:radial-gradient(circle at 50% 40%,#2A2A3A 0%,#111 100%);border-radius:50%}
-.sprite-bagheera .ears{top:0;left:0;right:0;height:20%}
-.sprite-bagheera .ears::before,.sprite-bagheera .ears::after{content:'';position:absolute;top:-6%;width:20%;height:22%;background:#111;border-radius:50%}
-.sprite-bagheera .ears::before{left:14%} .sprite-bagheera .ears::after{right:14%}
-.sprite-bagheera .eye{top:38%;width:11%;height:8%;background:#FFD93D;border-radius:50%;box-shadow:0 0 6px rgba(255,217,61,.7)}
-.sprite-bagheera .eye.left{left:28%} .sprite-bagheera .eye.right{left:60%}
-.sprite-bagheera .eye::after{content:'';position:absolute;top:30%;left:35%;width:30%;height:40%;background:#111;border-radius:50%}
+/* СПРАЙТЫ */
+.sprite-img{display:inline-block;height:100%;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 4px 3px rgba(0,0,0,.3))}
+.pet-avatar .sprite-img{height:90%}
+.pet-big .sprite-img{height:100%}
+.sprite-svg{width:1em;height:1em;font-size:inherit}
 
 @media(max-width:600px){
   .header{padding:10px 12px} .header-logo{font-size:16px}
@@ -346,18 +299,15 @@ button{font-family:inherit}
   .room-actions{grid-template-columns:1fr} .room-actions .btn-full{grid-column:span 1}
   .pet-big{font-size:80px}
   .play-canvas{max-width:100%}
+  .hang-keyboard{grid-template-columns:repeat(6,1fr)}
+  .hang-word{font-size:28px;letter-spacing:6px}
 }
 </style>
 </head>
 <body>
 
-<div class="bg-decor">
-  <span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><span class="cloud c3">☁️</span>
-</div>
-
 <header class="header" id="header"></header>
 
-<!-- ГЛАВНАЯ -->
 <section class="screen active" id="screen-home">
   <div class="hero">
     <h1 class="hero-title"><span class="wave">✨</span> Добро пожаловать в мир Тамагочи! <span class="wave">✨</span></h1>
@@ -368,107 +318,74 @@ button{font-family:inherit}
     <div class="pets-grid" id="petsGrid"></div>
   </div>
   <div class="features">
-    <div class="feature-card">
-      <div class="feature-icon">🏨</div><h3>Мой отель</h3>
-      <p>Все комнаты с питомцами в одном месте</p>
-      <button class="btn btn-soft" onclick="App.go('rooms')">Открыть отель</button>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎮</div><h3>Мини-игры</h3>
-      <p>Марио, Пак-пак, Гонки</p>
-      <button class="btn btn-soft" onclick="App.go('minigames')">Играть</button>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏆</div><h3>Достижения</h3>
-      <p>Собери все награды!</p>
-      <button class="btn btn-soft" onclick="App.go('achievements')">Смотреть</button>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🍖</div><h3>Магазин</h3>
-      <p>Еда для всех питомцев</p>
-      <button class="btn btn-soft" onclick="App.go('shop')">В магазин</button>
-    </div>
+    <div class="feature-card"><div class="feature-icon">🏨</div><h3>Мой отель</h3><p>Все комнаты в одном месте</p><button class="btn btn-soft" onclick="App.go('rooms')">Отель</button></div>
+    <div class="feature-card"><div class="feature-icon">🎮</div><h3>Мини-игры</h3><p>6 игр для заработка</p><button class="btn btn-soft" onclick="App.go('minigames')">Играть</button></div>
+    <div class="feature-card"><div class="feature-icon">🏆</div><h3>Достижения</h3><p>Собери все и получи 10к</p><button class="btn btn-soft" onclick="App.go('achievements')">Смотреть</button></div>
+    <div class="feature-card"><div class="feature-icon">🍖</div><h3>Магазин</h3><p>Вкусняшки для питомцев</p><button class="btn btn-soft" onclick="App.go('shop')">Купить</button></div>
   </div>
 </section>
 
-<!-- РЕГИСТРАЦИЯ -->
 <section class="screen" id="screen-register">
   <div class="auth-wrap"><div class="auth-card">
-    <div class="auth-emoji">🐣</div>
-    <h1 class="auth-title">Создать аккаунт</h1>
-    <p class="auth-sub">Придумай имя — и заведи питомца!</p>
+    <div class="auth-emoji">🐣</div><h1 class="auth-title">Создать аккаунт</h1>
     <form id="registerForm" class="auth-form">
       <label><span>📧 Почта</span><input class="input" type="email" id="regEmail" required /></label>
       <label><span>👤 Логин</span><input class="input" type="text" id="regLogin" required minlength="2" /></label>
       <label><span>🔒 Пароль</span><input class="input" type="password" id="regPassword" required minlength="4" /></label>
-      <label><span>🔒 Повтори пароль</span><input class="input" type="password" id="regPassword2" required minlength="4" /></label>
+      <label><span>🔒 Повтори</span><input class="input" type="password" id="regPassword2" required minlength="4" /></label>
       <p class="auth-error" id="regError"></p>
-      <button class="btn btn-primary btn-block" type="submit">Зарегистрироваться 🎉</button>
+      <button class="btn btn-primary btn-block" type="submit">Регистрация</button>
     </form>
     <p class="auth-foot">Есть аккаунт? <a onclick="App.go('login')">Войти</a></p>
   </div></div>
 </section>
 
-<!-- ВХОД -->
 <section class="screen" id="screen-login">
   <div class="auth-wrap"><div class="auth-card">
-    <div class="auth-emoji">🐾</div>
-    <h1 class="auth-title">С возвращением!</h1>
-    <p class="auth-sub">Твои питомцы скучают</p>
+    <div class="auth-emoji">🐾</div><h1 class="auth-title">Вход</h1>
     <form id="loginForm" class="auth-form">
       <label><span>👤 Логин</span><input class="input" type="text" id="logLogin" required /></label>
       <label><span>🔒 Пароль</span><input class="input" type="password" id="logPassword" required /></label>
       <p class="auth-error" id="logError"></p>
-      <button class="btn btn-primary btn-block" type="submit">Войти 🐾</button>
+      <button class="btn btn-primary btn-block" type="submit">Войти</button>
     </form>
-    <div class="auth-links">
-      <a onclick="App.go('forgot')">Забыли пароль?</a>
-      <a onclick="App.go('register')">Создать аккаунт</a>
-    </div>
+    <div class="auth-links"><a onclick="App.go('forgot')">Забыли?</a><a onclick="App.go('register')">Создать</a></div>
   </div></div>
 </section>
 
-<!-- ЗАБЫЛИ ПАРОЛЬ -->
 <section class="screen" id="screen-forgot">
   <div class="auth-wrap"><div class="auth-card">
-    <div class="auth-emoji">🔑</div>
-    <h1 class="auth-title">Восстановление</h1>
-    <p class="auth-sub">Введи почту — придёт код</p>
+    <div class="auth-emoji">🔑</div><h1 class="auth-title">Восстановление</h1>
     <form id="forgotForm" class="auth-form">
       <label><span>📧 Почта</span><input class="input" type="email" id="forgotEmail" required /></label>
       <p class="auth-error" id="forgotError"></p>
-      <button class="btn btn-primary btn-block" type="submit">Получить код 📨</button>
+      <button class="btn btn-primary btn-block" type="submit">Код</button>
     </form>
-    <p class="auth-foot"><a onclick="App.go('login')">← Назад</a></p>
+    <p class="auth-foot"><a onclick="App.go('login')">Назад</a></p>
   </div></div>
 </section>
 
-<!-- СБРОС -->
 <section class="screen" id="screen-reset">
   <div class="auth-wrap"><div class="auth-card">
-    <div class="auth-emoji">🔐</div>
-    <h1 class="auth-title">Новый пароль</h1>
-    <p class="auth-sub" id="resetHint">Введи код и новый пароль</p>
+    <div class="auth-emoji">🔐</div><h1 class="auth-title">Новый пароль</h1>
+    <p class="auth-sub" id="resetHint"></p>
     <form id="resetForm" class="auth-form">
-      <label><span>🔢 Код</span><input class="input" type="text" id="resetCode" required /></label>
-      <label><span>🔒 Новый пароль</span><input class="input" type="password" id="resetPassword" required minlength="4" /></label>
+      <label><span>Код</span><input class="input" type="text" id="resetCode" required /></label>
+      <label><span>Пароль</span><input class="input" type="password" id="resetPassword" required minlength="4" /></label>
       <p class="auth-error" id="resetError"></p>
-      <button class="btn btn-primary btn-block" type="submit">Сменить ✅</button>
+      <button class="btn btn-primary btn-block" type="submit">Сменить</button>
     </form>
-    <p class="auth-foot"><a onclick="App.go('login')">← Назад</a></p>
   </div></div>
 </section>
 
-<!-- ОТЕЛЬ -->
 <section class="screen" id="screen-rooms">
   <div class="hotel-wrap">
-    <h1 class="section-title">🏨 Мой отель питомцев</h1>
+    <h1 class="section-title">🏨 Мой отель</h1>
     <p class="hotel-sub" id="hotelSub"></p>
     <div class="hotel-grid" id="hotelGrid"></div>
   </div>
 </section>
 
-<!-- КОМНАТА -->
 <section class="screen" id="screen-room">
   <div class="room-wrap">
     <div class="room-stage" id="roomStage">
@@ -493,8 +410,8 @@ button{font-family:inherit}
       <div class="rug"></div>
       <div class="pet-bubble" id="petBubble">Привет!</div>
       <div class="pet-emotion-badge" id="emotionBadge">🙂 Обычный</div>
-      <div class="pet-big" id="petBig">🐱</div>
-      <div class="pet-name" id="petName">Мурзик</div>
+      <div class="pet-big" id="petBig"></div>
+      <div class="pet-name" id="petName"></div>
     </div>
     <div class="room-panel">
       <div class="stat">
@@ -510,6 +427,7 @@ button{font-family:inherit}
         <button class="btn btn-soft" id="playBtn">🎾 Поиграть</button>
         <button class="btn btn-soft" id="petBtn">💖 Погладить</button>
         <button class="btn btn-mint" id="diaryBtn">📔 Дневник</button>
+        <button class="btn btn-soft" id="themeBtn">🎨 Обои</button>
         <button class="btn btn-soft" onclick="App.go('rooms')">🏨 Отель</button>
       </div>
       <div class="inventory" id="inventory"></div>
@@ -517,26 +435,21 @@ button{font-family:inherit}
   </div>
 </section>
 
-<!-- МАГАЗИН -->
 <section class="screen" id="screen-shop">
   <div class="shop-wrap">
-    <h1 class="section-title">🍖 Магазин корма</h1>
-    <p class="shop-sub">Каждый питомец любит что-то своё</p>
+    <h1 class="section-title">🍖 Магазин</h1>
     <div class="shop-grid" id="shopGrid"></div>
     <p class="shop-hint" id="shopHint"></p>
   </div>
 </section>
 
-<!-- ХАБ ИГР -->
 <section class="screen" id="screen-minigames">
   <div class="games-wrap">
     <h1 class="section-title">🎮 Мини-игры</h1>
-    <p class="games-sub">Играй и зарабатывай монеты</p>
     <div class="games-grid" id="gamesGrid"></div>
   </div>
 </section>
 
-<!-- ИГРА -->
 <section class="screen" id="screen-play">
   <div class="play-wrap">
     <h1 class="section-title" id="playTitle">🎮 Игра</h1>
@@ -547,7 +460,6 @@ button{font-family:inherit}
   </div>
 </section>
 
-<!-- ДОСТИЖЕНИЯ -->
 <section class="screen" id="screen-achievements">
   <div class="ach-wrap">
     <h1 class="section-title">🏆 Достижения</h1>
@@ -556,65 +468,23 @@ button{font-family:inherit}
   </div>
 </section>
 
-<!-- МОДАЛКИ -->
-<div class="modal-backdrop" id="chooseModal">
-  <div class="modal">
-    <h3 id="modalTitle">Выбрать?</h3>
-    <p class="modal-pet" id="modalPetImg">🐱</p>
-    <div class="modal-actions">
-      <button class="btn btn-soft" id="modalCancel">Отмена</button>
-      <button class="btn btn-primary" id="modalConfirm">Да!</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="buyPetModal">
-  <div class="modal">
-    <h3 id="buyPetTitle">Завести?</h3>
-    <p class="modal-pet" id="buyPetImg">🐶</p>
-    <p style="font-weight:700;margin-bottom:16px;">Стоимость: <span id="buyPetPrice" style="color:#8A6A00;background:#FFF7C2;padding:2px 10px;border-radius:999px;">🪙 300</span></p>
-    <div class="modal-actions">
-      <button class="btn btn-soft" id="buyPetCancel">Отмена</button>
-      <button class="btn btn-primary" id="buyPetConfirm">Купить! 🎉</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="namePetModal">
-  <div class="modal">
-    <h3>Как назовём?</h3>
-    <p class="modal-pet" id="namePetImg">🐱</p>
-    <input class="input" type="text" id="namePetInput" maxlength="16" />
-    <div class="modal-actions" style="margin-top:16px;">
-      <button class="btn btn-soft" id="namePetCancel">Отмена</button>
-      <button class="btn btn-primary" id="namePetConfirm">Готово! 🐾</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="diaryModal">
-  <div class="modal">
-    <h3 id="diaryTitle">📔 Дневник</h3>
-    <p class="modal-pet" id="diaryEmoji" style="font-size:50px;margin:8px 0 16px;">🐱</p>
-    <div id="diaryList" style="max-height:400px;overflow-y:auto;text-align:left;"></div>
-    <div class="modal-actions" style="margin-top:16px;">
-      <button class="btn btn-primary" onclick="document.getElementById('diaryModal').classList.remove('open')">Закрыть</button>
-    </div>
-  </div>
-</div>
+<div class="modal-backdrop" id="chooseModal"><div class="modal"><h3 id="modalTitle">Выбрать?</h3><div class="modal-pet" id="modalPetImg"></div><div class="modal-actions"><button class="btn btn-soft" id="modalCancel">Отмена</button><button class="btn btn-primary" id="modalConfirm">Да!</button></div></div></div>
+<div class="modal-backdrop" id="buyPetModal"><div class="modal"><h3 id="buyPetTitle">Завести?</h3><div class="modal-pet" id="buyPetImg"></div><p style="font-weight:700;margin-bottom:16px;">Стоимость: <span id="buyPetPrice" style="color:#8A6A00;background:#FFF7C2;padding:2px 10px;border-radius:999px;">🪙 300</span></p><div class="modal-actions"><button class="btn btn-soft" id="buyPetCancel">Отмена</button><button class="btn btn-primary" id="buyPetConfirm">Купить! 🎉</button></div></div></div>
+<div class="modal-backdrop" id="namePetModal"><div class="modal"><h3>Как назовём?</h3><div class="modal-pet" id="namePetImg"></div><input class="input" type="text" id="namePetInput" maxlength="16" /><div class="modal-actions" style="margin-top:16px;"><button class="btn btn-soft" id="namePetCancel">Отмена</button><button class="btn btn-primary" id="namePetConfirm">Готово! 🐾</button></div></div></div>
+<div class="modal-backdrop" id="diaryModal"><div class="modal"><h3 id="diaryTitle">📔 Дневник</h3><div class="modal-pet" id="diaryEmoji"></div><div id="diaryList" style="max-height:400px;overflow-y:auto;text-align:left;"></div><div class="modal-actions" style="margin-top:16px;"><button class="btn btn-primary" onclick="document.getElementById('diaryModal').classList.remove('open')">Закрыть</button></div></div></div>
 
 <footer class="footer">
   <p>© Tamagotchi World 2025 · Сделано с ❤️ 🐾</p>
-  <p class="disclaimer">
-    Это некоммерческий фан-проект. Персонажи, напоминающие героев известных мультфильмов и игр,
-    использованы как отсылки в некоммерческих целях. Проект не связан с правообладателями и не
-    преследует цели извлечения прибыли.
-  </p>
+  <p class="disclaimer">Это некоммерческий фан-проект. Персонажи, напоминающие героев известных мультфильмов и игр, использованы как отсылки. Проект не связан с правообладателями.</p>
 </footer>
 
 <script>
+/* === SVG СПРАЙТЫ САЛЛИ И ЛАРРИ (очищенные от фона) === */
+const SVG_SALLY = `<svg viewBox="0 0 200 300" class="sprite-svg"><path fill="#4DD2FF" d="M60,40 Q40,40 40,80 Q20,110 30,140 Q40,120 50,120 Q55,100 60,80 Z M140,40 Q160,40 160,80 Q180,110 170,140 Q160,120 150,120 Q145,100 140,80 Z M50,40 Q50,10 100,10 Q150,10 150,40 Q150,50 120,55 Q100,60 80,55 Q50,50 50,40 Z"/><path fill="#F4EFE6" d="M70,60 Q70,50 100,50 Q130,50 130,60 L130,100 Q120,130 100,130 Q80,130 70,100 Z"/><path fill="#E8DFC9" d="M90,60 Q90,55 100,55 Q110,55 110,60 L110,80 Q100,85 90,80 Z"/><ellipse cx="85" cy="85" rx="8" ry="12" fill="#1A1A1A"/><ellipse cx="115" cy="85" rx="8" ry="12" fill="#1A1A1A"/><path fill="#2A2A2A" d="M70,130 L130,130 L140,220 L60,220 Z"/><path fill="#A83A3A" d="M75,220 L90,220 L90,290 L75,290 Z M110,220 L125,220 L125,290 L110,290 Z"/><path fill="#3D7AB8" d="M60,290 Q75,280 90,290 L90,300 L60,300 Z M110,290 Q125,280 140,290 L140,300 L110,300 Z"/><circle cx="40" cy="50" r="5" fill="#2BA8E0"/><path fill="#8A8A8A" d="M132,65 Q145,65 148,75 Q148,90 138,95 L125,90 L130,70 Z"/></svg>`;
+const SVG_LARRY = `<svg viewBox="0 0 200 300" class="sprite-svg"><path fill="#2A1E1A" d="M70,20 Q50,60 60,150 L70,200 L80,200 L75,150 Q65,70 80,30 Z M130,20 Q150,60 140,150 L130,200 L120,200 L125,150 Q135,70 120,30 Z M80,20 Q100,10 120,20 Q130,50 120,80 L80,80 Q70,50 80,20 Z"/><path fill="#F5D9B8" d="M80,50 Q100,40 120,50 Q130,80 120,110 Q100,125 80,110 Q70,80 80,50 Z"/><ellipse cx="93" cy="80" rx="9" ry="11" fill="#1A1A1A"/><ellipse cx="107" cy="80" rx="9" ry="11" fill="#1A1A1A"/><path fill="#8B6B4A" d="M70,115 L130,115 L135,200 L65,200 Z"/><circle cx="100" cy="155" r="20" fill="none" stroke="#4A3728" stroke-width="4"/><text x="100" y="162" font-family="Arial" font-size="20" font-weight="bold" fill="#4A3728" text-anchor="middle">SF</text><path fill="#3A3A4A" d="M75,200 L90,200 L90,290 L75,290 Z M110,200 L125,200 L125,290 L110,290 Z"/><path fill="#4A3728" d="M65,290 Q75,280 90,290 L90,300 L65,300 Z M110,290 Q125,280 135,290 L135,300 L110,300 Z"/></svg>`;
+
 /* ============================================================
-   SOUNDS
+   ЗВУКИ
    ============================================================ */
 const Sounds = (() => {
   const cache = {};
@@ -626,7 +496,7 @@ const Sounds = (() => {
 })();
 
 /* ============================================================
-   AUTH
+   АВТОРИЗАЦИЯ
    ============================================================ */
 const Auth = (() => {
   const U='tamagotchi_users', S='tamagotchi_session', R='tamagotchi_resets';
@@ -697,7 +567,7 @@ const Auth = (() => {
 })();
 
 /* ============================================================
-   ACHIEVEMENTS
+   ДОСТИЖЕНИЯ
    ============================================================ */
 const ACHIEVEMENTS = [
   { id:'first_pet',  icon:'🐣', name:'Первый друг',  desc:'Завёл первого питомца',           check:u => (u.pets||[]).length >= 1 },
@@ -716,181 +586,113 @@ const ACHIEVEMENTS = [
   }},
   { id:'prosthetic', icon:'🦿', name:'Протез Салли', desc:'Завёл Салли и подружился с ним', check:u => {
     return (u.pets||[]).some(p => p.type === 'sally');
+  }},
+  { id:'legendary',  icon:'👑', name:'Легенда', desc:'Собрал все достижения (награда: 10 000 🪙)', check:u => {
+    const current = u.achievements || [];
+    if(current.includes('legendary')) return true; // уже получено
+    const allOthers = ACHIEVEMENTS.filter(a => a.id !== 'legendary');
+    return allOthers.every(a => current.includes(a.id));
   }}
 ];
 
 function checkAchievements(){
   const user = Auth.currentUser(); if(!user) return;
-  const unlocked = user.achievements || [];
+  let unlocked = user.achievements || [];
   const newOnes = [];
   ACHIEVEMENTS.forEach(a => {
     if(unlocked.includes(a.id)) return;
     if(a.check(user)){ unlocked.push(a.id); newOnes.push(a); }
   });
+  
   if(newOnes.length){
-    Auth.updateUser(user.login, { achievements: unlocked });
-    newOnes.forEach((a, i) => setTimeout(() => showToast(a), i*800));
+    let additionalCoins = 0;
+    if(newOnes.some(a => a.id === 'legendary')){
+      additionalCoins = 10000;
+    }
+    Auth.updateUser(user.login, { achievements: unlocked, coins: user.coins + additionalCoins });
+    const el = document.getElementById('coinsHeader');
+    if(el) el.textContent = user.coins + additionalCoins;
+    
+    newOnes.forEach((a, i) => setTimeout(() => showToast(a, a.id === 'legendary'), i*800));
   }
 }
-function showToast(a){
+function showToast(a, isLegendary = false){
   Sounds.play('happy');
   const el = document.createElement('div');
-  el.className = 'toast-ach';
+  el.className = 'toast-ach' + (isLegendary ? ' legendary' : '');
   el.innerHTML = `<span class="toast-icon">${a.icon}</span><div><div class="toast-title">🏆 Достижение!</div><div class="toast-name">${a.name}</div></div>`;
   document.body.appendChild(el);
   setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 500); }, 3500);
 }
 
 /* ============================================================
-   SPRITE RENDER
+   СПРАЙТЫ
    ============================================================ */
 function renderSprite(sp, size='1em'){
-  const classes = { sally:'sprite-sally', larry:'sprite-larry', huggy:'sprite-huggy', simba:'sprite-simba', mouse:'sprite-mouse', ariel:'sprite-ariel', bagheera:'sprite-bagheera' };
-  const cls = classes[sp.id];
-  if(!cls){ return `<span style="font-size:${size};line-height:1;">${sp.emoji}</span>`; }
-  const layers = {
-    sally: `<span class="sprite-layer pig-tails"></span><span class="sprite-layer hair"></span><span class="sprite-layer face-mask"></span><span class="sprite-layer eye left"></span><span class="sprite-layer eye right"></span><span class="sprite-layer prosthetic"></span><span class="sprite-layer shirt"></span><span class="sprite-layer pants"></span><span class="sprite-layer shoes"></span>`,
-    larry: `<span class="sprite-layer hair"></span><span class="sprite-layer face"></span><span class="sprite-layer brow left"></span><span class="sprite-layer brow right"></span><span class="sprite-layer eye left"></span><span class="sprite-layer eye right"></span><span class="sprite-layer shirt"></span><span class="sprite-layer sf-logo">SF</span><span class="sprite-layer pants"></span>`,
-    huggy: `<span class="sprite-layer fur"></span><span class="sprite-layer ears"></span><span class="sprite-layer eyes"></span><span class="sprite-layer mouth"></span>`,
-    simba: `<span class="sprite-layer mane"></span><span class="sprite-layer face"></span><span class="sprite-layer eye left"></span><span class="sprite-layer eye right"></span><span class="sprite-layer nose"></span>`,
-    mouse: `<span class="sprite-layer ears"></span><span class="sprite-layer face"></span><span class="sprite-layer eye left"></span><span class="sprite-layer eye right"></span><span class="sprite-layer nose"></span>`,
-    ariel: `<span class="sprite-layer hair"></span><span class="sprite-layer face"></span><span class="sprite-layer eye left"></span><span class="sprite-layer eye right"></span><span class="sprite-layer shell"></span><span class="sprite-layer tail"></span>`,
-    bagheera: `<span class="sprite-layer fur"></span><span class="sprite-layer ears"></span><span class="sprite-layer eye left"></span><span class="sprite-layer eye right"></span>`
-  };
-  return `<span class="sprite-wrap ${cls}" style="font-size:${size};"><span class="sprite-emoji">${sp.emoji}</span>${layers[sp.id]||''}</span>`;
+  if(sp.id === 'sally') return `<span style="font-size:${size};line-height:1;display:inline-block;">${SVG_SALLY}</span>`;
+  if(sp.id === 'larry') return `<span style="font-size:${size};line-height:1;display:inline-block;">${SVG_LARRY}</span>`;
+  return `<span style="font-size:${size};line-height:1;">${sp.emoji}</span>`;
 }
 
 /* ============================================================
-   PET_SPECIES
+   СПИСОК ПИТОМЦЕВ
    ============================================================ */
 function diaryTemplate(emoji, lines){ return { emoji, lines }; }
 
 const PET_SPECIES = [
-  { id:'cat', name:'Кошка', defaultName:'Мурзик', emoji:'🐱', trait:'Ласковая', sound:'meow', soundIcon:'🔊 мяу',
-    favFood:'fish', hunger:70, mood:90, price:0, cartoon:false, position:'on-bed', walkable:true,
-    food:['fish','milk','bread'],
+  { id:'cat', name:'Кошка', defaultName:'Мурзик', emoji:'🐱', trait:'Ласковая', sound:'meow', soundIcon:'🔊 мяу', favFood:'fish', hunger:70, mood:90, price:0, cartoon:false, position:'on-bed', walkable:true, food:['fish','milk','bread'],
     diary: diaryTemplate('🐱', ['Сегодня я спал на подоконнике и видел сон про рыбок.','Хозяйка погладила меня 7 раз. Я мурчал.','Снова дождь. Лежу под пледом.','Поймал солнечный зайчик.','Разбудил всех в 6 утра — я же будильник!','Изучал новый столик — вкусно пахнет.','Сегодня мне снился Маус.','Сидел на столе, смотрел в монитор.','Молочко было тёплым. Хороший день.','Уронил кружку. Не жалею.']) },
-
-  { id:'dog', name:'Собака', defaultName:'Бублик', emoji:'🐶', trait:'Весёлая', sound:'bark', soundIcon:'🔊 гав',
-    favFood:'bone', hunger:60, mood:95, price:300, cartoon:false, position:'floor', walkable:true,
-    food:['bone','meat','bread'],
+  { id:'dog', name:'Собака', defaultName:'Бублик', emoji:'🐶', trait:'Весёлая', sound:'bark', soundIcon:'🔊 гав', favFood:'bone', hunger:60, mood:95, price:300, cartoon:false, position:'floor', walkable:true, food:['bone','meat','bread'],
     diary: diaryTemplate('🐶', ['Погнал за хвостом. Опять.','Принёс палку! Хозяйка рада.','Сегодня нашёл новую игрушку — носок.','Обнял всех, кого смог.','Вилял хвостом 1000 раз.','На улице встретил кота. Мы друзья.','Прыгал на кровать, пока не сказали нельзя.','Мечтаю о большой косточке.','Смотрел в окно. Там птицы!','Спал у ног весь день.']) },
-
-  { id:'duck', name:'Утка', defaultName:'Кряк', emoji:'🦆', trait:'Спокойная', sound:'quack', soundIcon:'🔊 кря',
-    favFood:'grain', hunger:65, mood:85, price:400, cartoon:false, position:'floor', walkable:true,
-    food:['grain','bread','worm'],
+  { id:'duck', name:'Утка', defaultName:'Кряк', emoji:'🦆', trait:'Спокойная', sound:'quack', soundIcon:'🔊 кря', favFood:'grain', hunger:65, mood:85, price:400, cartoon:false, position:'floor', walkable:true, food:['grain','bread','worm'],
     diary: diaryTemplate('🦆', ['Ходил по комнате вразвалочку.','Купался в тазике. Хорошо!','Крякнул три раза — так надо.','Смотрел на облака через окно.','Нашёл зёрнышко под кроватью.','Познакомился с Чайкой (по переписке).','Учил хомяка крякать. Не вышло.','Составил список из 100 дел. Не начал.','Спал стоя. Удобно.','Съел хлебушек. Всё хорошо.']) },
-
-  { id:'hamster', name:'Хомяк', defaultName:'Хома', emoji:'🐹', trait:'Запасливый', sound:'meow', soundIcon:'🔊 пи',
-    favFood:'grain', hunger:75, mood:88, price:600, cartoon:false, position:'on-bed', walkable:true,
-    food:['grain','bread','worm'],
+  { id:'hamster', name:'Хомяк', defaultName:'Хома', emoji:'🐹', trait:'Запасливый', sound:'meow', soundIcon:'🔊 пи', favFood:'grain', hunger:75, mood:88, price:600, cartoon:false, position:'on-bed', walkable:true, food:['grain','bread','worm'],
     diary: diaryTemplate('🐹', ['Принёс 5 зёрнышек в щеках. Запас!','Пробежал в колесе 5 км.','Закопал хлебушек в углу. Никому не скажу.','Съел зерно. Ещё хочу.','Уронил подушку. Ой.','Спрятал червячка под ковёр.','Сегодня я — хранитель запасов.','Разгрыз новую игрушку.','Мечтаю о второй комнате для запасов.','Смотрел на Рыбку. Завидую.']) },
-
-  { id:'fish', name:'Рыбка', defaultName:'Пузырь', emoji:'🐠', trait:'Тихая', sound:'bubble', soundIcon:'🔊 буль',
-    favFood:'worm', hunger:55, mood:92, price:700, cartoon:false, position:'in-pool', walkable:false,
-    food:['worm','bread'],
+  { id:'fish', name:'Рыбка', defaultName:'Пузырь', emoji:'🐠', trait:'Тихая', sound:'bubble', soundIcon:'🔊 буль', favFood:'worm', hunger:55, mood:92, price:700, cartoon:false, position:'in-pool', walkable:false, food:['worm','bread'],
     diary: diaryTemplate('🐠', ['Буль-буль.','Смотрел через стекло.','Пустил пузырики.','Плавал кругами.','Нашёл червячка — счастье!','Сегодня я мечтал о море.','Познакомился с Ари. Она милая.','Спал с открытыми глазами (как всегда).','Думал о смысле воды.','Пузырьки — это весело.']) },
-
-  { id:'peacock', name:'Павлин', defaultName:'Гордей', emoji:'🦚', trait:'Гордый', sound:'bark', soundIcon:'🔊 курлык',
-    favFood:'grain', hunger:70, mood:88, price:900, cartoon:false, position:'floor', walkable:true,
-    food:['grain','bread','worm'],
+  { id:'peacock', name:'Павлин', defaultName:'Гордей', emoji:'🦚', trait:'Гордый', sound:'bark', soundIcon:'🔊 курлык', favFood:'grain', hunger:70, mood:88, price:900, cartoon:false, position:'floor', walkable:true, food:['grain','bread','worm'],
     diary: diaryTemplate('🦚', ['Раскрыл хвост. Все восхищались.','Сегодня я особенно красив.','Расчесал перья 3 раза.','Смотрел в зеркало. Долго.','Позировал для полароидов.','Придумал новую позу. Роскошно.','Съел зёрнышко изящно.','Прошёлся по комнате как по подиуму.','Покрасовался перед Рыбкой.','День прошёл достойно.']) },
-
-  { id:'fox', name:'Лиса', defaultName:'Рыжик', emoji:'🦊', trait:'Хитрая', sound:'meow', soundIcon:'🔊 фыр',
-    favFood:'meat', hunger:65, mood:92, price:1100, cartoon:false, position:'floor', walkable:true,
-    food:['meat','bone','bread'],
+  { id:'fox', name:'Лиса', defaultName:'Рыжик', emoji:'🦊', trait:'Хитрая', sound:'meow', soundIcon:'🔊 фыр', favFood:'meat', hunger:65, mood:92, price:1100, cartoon:false, position:'floor', walkable:true, food:['meat','bone','bread'],
     diary: diaryTemplate('🦊', ['Придумал план. Наверняка сработает.','Обхитрил хомяка и забрал зёрнышко.','Ходил по комнате, изучал углы.','Улыбнулся в зеркало. Загадочно.','Спрятал косточку. Никому!','Сегодня был особенно хитрым.','Мечтаю о курятнике...','Смотрел в окно. Строил план.','Притворился спящим.','Рыжий — это стиль жизни.']) },
-
-  { id:'panda', name:'Панда', defaultName:'Бамбук', emoji:'🐼', trait:'Сонная', sound:'meow', soundIcon:'🔊 урчит',
-    favFood:'bread', hunger:80, mood:90, price:1300, cartoon:false, position:'on-bed', walkable:true,
-    food:['bread','grain','worm'],
+  { id:'panda', name:'Панда', defaultName:'Бамбук', emoji:'🐼', trait:'Сонная', sound:'meow', soundIcon:'🔊 урчит', favFood:'bread', hunger:80, mood:90, price:1300, cartoon:false, position:'on-bed', walkable:true, food:['bread','grain','worm'],
     diary: diaryTemplate('🐼', ['Спал 14 часов. Норм.','Съел хлебушек. Опять спать.','Приснился бамбук.','Проснулся. Поел. Уснул.','Сегодня был активным: 5 минут.','Спал на кровати. Удобно.','Смотрел на Рыбку сквозь сон.','Потянулся. Уснул.','Разбудили для кормления — не пожалел.','Мечтаю о большой подушке.']) },
-
-  { id:'frog', name:'Жабка', defaultName:'Квак', emoji:'🐸', trait:'Прыгучая', sound:'bubble', soundIcon:'🔊 ква',
-    favFood:'worm', hunger:70, mood:88, price:1000, cartoon:false, position:'floor', walkable:true,
-    food:['worm','bread','grain'],
+  { id:'frog', name:'Жабка', defaultName:'Квак', emoji:'🐸', trait:'Прыгучая', sound:'bubble', soundIcon:'🔊 ква', favFood:'worm', hunger:70, mood:88, price:1000, cartoon:false, position:'floor', walkable:true, food:['worm','bread','grain'],
     diary: diaryTemplate('🐸', ['Прыгнул на стол. Высоко!','Съел червячка. Вкусно.','Сидел на ковре и квакал.','Прыгал по комнате 20 минут.','Смотрел на дождь.','Нашёл муху. Она улетела.','Прыгнул на кровать. Прыгнул обратно.','Сегодня я — король ковра.','Познакомился с Уткой. Она не квакает.','Мечтаю о болоте.']) },
-
-  { id:'tiger', name:'Тигр', defaultName:'Полосатик', emoji:'🐯', trait:'Смелый', sound:'bark', soundIcon:'🔊 р-р-р',
-    favFood:'meat', hunger:75, mood:92, price:1500, cartoon:false, position:'floor', walkable:true,
-    food:['meat','bone','bread'],
+  { id:'tiger', name:'Тигр', defaultName:'Полосатик', emoji:'🐯', trait:'Смелый', sound:'bark', soundIcon:'🔊 р-р-р', favFood:'meat', hunger:75, mood:92, price:1500, cartoon:false, position:'floor', walkable:true, food:['meat','bone','bread'],
     diary: diaryTemplate('🐯', ['Рычал на пылесос. Победил.','Съел мясо. Стал сильнее.','Прошёлся по комнате — все расступились.','Смотрел в окно на птиц. Строил план.','Позировал. Я красив.','Обнял подушку. Только я это знаю.','Полосы в порядке. Проверил.','Мечтаю о джунглях.','Прыгнул на стол. Впечатляет.','Сегодня я — главный в комнате.']) },
-
-  /* Мультяшные */
-  { id:'simba', name:'Лео', defaultName:'Лео', emoji:'🦁', trait:'Храбрый', sound:'bark', soundIcon:'🔊 р-р-р',
-    favFood:'meat', hunger:80, mood:95, price:2500, cartoon:true, position:'floor', walkable:true,
-    food:['meat','bone','bread'],
-    diary: diaryTemplate('🦁', ['Смотрел на солнце. Как в детстве.','Пел песню. Все слушали.','Вспоминал отца.','Стою на ковре — как на скале.','Сегодня я — король комнаты.','Обнял друга. Друзья — сила.','Рычал. Впечатляюще.','Мечтаю о саванне.','Смотрел на птиц.','Всё идёт своим чередом.','Маус рассказал шутку. Смеялся.','Моя грива сегодня особенно пышная.','Гулял по комнате. Все расступались.','Вспоминал старых друзей.','Хочу большую саванну, но и тут хорошо.']) },
-
-  { id:'mouse', name:'Маус', defaultName:'Маус', emoji:'🐭', trait:'Весёлый', sound:'meow', soundIcon:'🔊 ха-ха',
-    favFood:'bread', hunger:65, mood:98, price:3000, cartoon:true, position:'floor', walkable:true,
-    food:['bread','milk','fish'],
-    diary: diaryTemplate('🐭', ['Хо-хо! Хороший день!','Познакомился с новым другом.','Спел песенку.','Танцевал под музыку.','Нашёл хлебушек. Ура!','Улыбался весь день.','Рассказал шутку. Все смеялись.','Мечтаю о большом парке.','Позировал для полароида.','Весёлый — это образ жизни!','Салли сказал, что я смешной. Я и так знал!','Лео — мой друг. Он сильный.','Нашёл новую кепку. Красную!','Помахал всем лапкой.','Хо-хо-хо! Улыбка — это сила.']) },
-
-  { id:'mushroom', name:'Грибочек', defaultName:'Гриша', emoji:'🍄', trait:'Загадочный', sound:'bubble', soundIcon:'🔊 пуф',
-    favFood:'bread', hunger:60, mood:80, price:1200, cartoon:true, position:'floor', walkable:true,
-    food:['bread','worm','milk'],
+  { id:'simba', name:'Лео', defaultName:'Лео', emoji:'🦁', trait:'Храбрый', sound:'bark', soundIcon:'🔊 р-р-р', favFood:'meat', hunger:80, mood:95, price:2500, cartoon:true, position:'floor', walkable:true, food:['meat','bone','bread'],
+    diary: diaryTemplate('🦁', ['Смотрел на солнце. Как в детстве.','Пел песню. Все слушали.','Вспоминал отца.','Стою на ковре — как на скале.','Сегодня я — король комнаты.','Обнял друга. Друзья — сила.','Рычал. Впечатляюще.','Мечтаю о саванне.','Смотрел на птиц.','Всё идёт своим чередом.','Маус рассказал шутку. Смеялся.','Моя грива сегодня особенно пышная.']) },
+  { id:'mouse', name:'Маус', defaultName:'Маус', emoji:'🐭', trait:'Весёлый', sound:'meow', soundIcon:'🔊 ха-ха', favFood:'bread', hunger:65, mood:98, price:3000, cartoon:true, position:'floor', walkable:true, food:['bread','milk','fish'],
+    diary: diaryTemplate('🐭', ['Хо-хо! Хороший день!','Познакомился с новым другом.','Спел песенку.','Танцевал под музыку.','Нашёл хлебушек. Ура!','Улыбался весь день.','Рассказал шутку. Все смеялись.','Мечтаю о большом парке.','Позировал для полароида.','Весёлый — это образ жизни!','Салли сказал, что я смешной. Я и так знал!','Лео — мой друг. Он сильный.']) },
+  { id:'mushroom', name:'Грибочек', defaultName:'Гриша', emoji:'🍄', trait:'Загадочный', sound:'bubble', soundIcon:'🔊 пуф', favFood:'bread', hunger:60, mood:80, price:1200, cartoon:true, position:'floor', walkable:true, food:['bread','worm','milk'],
     diary: diaryTemplate('🍄', ['Пуф.','Пустил споры.','Стоял под окном. Думал.','Меня полили. Спасибо.','Смотрел на звёзды.','Сегодня я — самый большой гриб в комнате.','Спрятался за стулом.','Придумал новую шляпку.','Мечтаю о лесе.','Пуф — это моё всё.']) },
-
-  { id:'bambi', name:'Бэм', defaultName:'Бэм', emoji:'🦌', trait:'Робкий', sound:'meow', soundIcon:'🔊 фыр',
-    favFood:'grain', hunger:70, mood:88, price:2200, cartoon:true, position:'floor', walkable:true,
-    food:['grain','bread','worm'],
+  { id:'bambi', name:'Бэм', defaultName:'Бэм', emoji:'🦌', trait:'Робкий', sound:'meow', soundIcon:'🔊 фыр', favFood:'grain', hunger:70, mood:88, price:2200, cartoon:true, position:'floor', walkable:true, food:['grain','bread','worm'],
     diary: diaryTemplate('🦌', ['Гулял по комнате. Красиво.','Познакомился с Грибочком.','Смотрел на бабочку.','Пил воду из миски.','Испугался шороха. Обнял подушку.','Сегодня я — смелее.','Нашёл красивый листик.','Смотрел на закат.','Мама бы мной гордилась.','День прошёл тихо.']) },
-
-  { id:'ariel', name:'Ари', defaultName:'Ари', emoji:'🧜‍♀️', trait:'Мечтательная', sound:'bubble', soundIcon:'🔊 пение',
-    favFood:'fish', hunger:65, mood:96, price:3500, cartoon:true, position:'in-pool', walkable:false,
-    food:['fish','worm','bread'],
+  { id:'ariel', name:'Ари', defaultName:'Ари', emoji:'🧜‍♀️', trait:'Мечтательная', sound:'bubble', soundIcon:'🔊 пение', favFood:'fish', hunger:65, mood:96, price:3500, cartoon:true, position:'in-pool', walkable:false, food:['fish','worm','bread'],
     diary: diaryTemplate('🧜‍♀️', ['Пела песню про море.','Нашла новую вещь в комнате. Что это?','Мечтаю о принце.','Познакомилась с Рыбкой. Она милая.','Расчесала волосы ракушкой.','Смотрела на звёзды через окно.','Сегодня я — часть вашего мира.','Нашла вилку. Что это такое?!','Хочу узнать, что такое «дорога».','Пела весь день.']) },
-
-  { id:'seagull', name:'Чайка', defaultName:'Кеша', emoji:'🕊️', trait:'Озорная', sound:'bark', soundIcon:'🔊 ки-ки',
-    favFood:'fish', hunger:70, mood:92, price:1400, cartoon:true, position:'floor', walkable:true,
-    food:['fish','bread','worm'],
+  { id:'seagull', name:'Чайка', defaultName:'Кеша', emoji:'🕊️', trait:'Озорная', sound:'bark', soundIcon:'🔊 ки-ки', favFood:'fish', hunger:70, mood:92, price:1400, cartoon:true, position:'floor', walkable:true, food:['fish','bread','worm'],
     diary: diaryTemplate('🕊️', ['Пытался унести хлебушек.','Кричал на всех.','Села на стол. Мой!','Нашла рыбку. Счастье!','Летала по комнате. Ой.','Смотрела на улицу.','Сегодня я — самая громкая.','Позировала. Я красива.','Украла кружку. Хи-хи.','Ки-ки-ки!']) },
-
-  { id:'ratatouille', name:'Реми', defaultName:'Реми', emoji:'🐀', trait:'Гурман', sound:'meow', soundIcon:'🔊 пип',
-    favFood:'bread', hunger:75, mood:94, price:2000, cartoon:true, position:'on-desk', walkable:true,
-    food:['bread','meat','milk'],
+  { id:'ratatouille', name:'Реми', defaultName:'Реми', emoji:'🐀', trait:'Гурман', sound:'meow', soundIcon:'🔊 пип', favFood:'bread', hunger:75, mood:94, price:2000, cartoon:true, position:'on-desk', walkable:true, food:['bread','meat','milk'],
     diary: diaryTemplate('🐀', ['Попробовал хлебушек. Восхитительно!','Составил рецепт.','Нашёл сыр? Нет, но ищу.','Познакомился с кошкой. Напряжённо.','Пробовал рыбу. 7/10.','Сидел на столе. Думал о еде.','Сегодня готовил. Из ничего.','Понюхал кружку. Кофе!','Мечтаю о парижском ресторане.','Еда — это искусство!']) },
-
-  { id:'bagheera', name:'Багир', defaultName:'Багир', emoji:'🐆', trait:'Мудрый', sound:'bark', soundIcon:'🔊 рык',
-    favFood:'meat', hunger:75, mood:92, price:2600, cartoon:true, position:'floor', walkable:true,
-    food:['meat','bone','bread'],
+  { id:'bagheera', name:'Багир', defaultName:'Багир', emoji:'🐆', trait:'Мудрый', sound:'bark', soundIcon:'🔊 рык', favFood:'meat', hunger:75, mood:92, price:2600, cartoon:true, position:'floor', walkable:true, food:['meat','bone','bread'],
     diary: diaryTemplate('🐆', ['Смотрел на луну.','Прыгнул на стол. Бесшумно.','Наблюдал за комнатой.','Мечтаю о джунглях.','Обучил Грибочка мудрости.','Сидел в тени. Думал.','Сегодня я — молчаливый страж.','Прошёлся по комнате. Все заметили.','Рычал на пылесос. Победил.','Чёрная пантера — это стиль.']) },
-
-  { id:'pooh', name:'Пухлик', defaultName:'Пухлик', emoji:'🐻', trait:'Добрый', sound:'meow', soundIcon:'🔊 пых',
-    favFood:'bread', hunger:85, mood:96, price:2400, cartoon:true, position:'on-bed', walkable:true,
-    food:['bread','milk','fish'],
+  { id:'pooh', name:'Пухлик', defaultName:'Пухлик', emoji:'🐻', trait:'Добрый', sound:'meow', soundIcon:'🔊 пых', favFood:'bread', hunger:85, mood:96, price:2400, cartoon:true, position:'on-bed', walkable:true, food:['bread','milk','fish'],
     diary: diaryTemplate('🐻', ['Съел весь хлебушек. Не жалею.','Ходил по комнате в поисках мёда.','Пыхтел.','Обнял Пяту.','Нашёл мёд? Нет. Ещё ищу.','Сегодня был особенно добрым.','Спал на кровати. Уютно.','Мечтаю о горшочке мёда.','Думал о смысле жизни.','Пых-пых!']) },
-
-  { id:'piglet', name:'Пята', defaultName:'Пята', emoji:'🐷', trait:'Робкий', sound:'meow', soundIcon:'🔊 хрю',
-    favFood:'bread', hunger:70, mood:90, price:1800, cartoon:true, position:'floor', walkable:true,
-    food:['bread','grain','milk'],
+  { id:'piglet', name:'Пята', defaultName:'Пята', emoji:'🐷', trait:'Робкий', sound:'meow', soundIcon:'🔊 хрю', favFood:'bread', hunger:70, mood:90, price:1800, cartoon:true, position:'floor', walkable:true, food:['bread','grain','milk'],
     diary: diaryTemplate('🐷', ['Прятался под кроватью. Немного.','Держал Пухлика за лапку.','Нашёл жёлудь. Маленький, но мой.','Хрюкнул.','Сегодня был храбрым: 3 минуты.','Мечтаю о большой поляне.','Смотрел на пчёл через окно.','Обнял подушку.','Хрю-хрю!','День прошёл спокойно.']) },
-
-  { id:'scrooge', name:'Скрудж', defaultName:'Скрудж', emoji:'🦆', trait:'Богатый', sound:'quack', soundIcon:'🔊 кря-кря',
-    favFood:'bread', hunger:60, mood:85, price:4000, cartoon:true, position:'on-desk', walkable:true,
-    food:['bread','grain','worm'],
+  { id:'scrooge', name:'Скрудж', defaultName:'Скрудж', emoji:'🦆', trait:'Богатый', sound:'quack', soundIcon:'🔊 кря-кря', favFood:'bread', hunger:60, mood:85, price:4000, cartoon:true, position:'on-desk', walkable:true, food:['bread','grain','worm'],
     diary: diaryTemplate('🦆', ['Пересчитал монеты. Всё на месте.','Нашёл монетку под ковром!','Сегодня я — на 1 монету богаче.','Смотрел в окно. Думал о процентах.','Спрятал монеты. В надёжном месте.','Мечтаю о хранилище.','Ходил по комнате. Экономно.','Купил хлебушек. По скидке!','Грабить? Нет. Зарабатывать — да!','Кря! Богатство — это святое.']) },
-
-  { id:'huggy', name:'Хаги Ваги', defaultName:'Хаги', emoji:'👹', trait:'Обнимающий', sound:'bark', soundIcon:'🔊 ррр',
-    favFood:'meat', hunger:80, mood:75, price:5000, cartoon:false, position:'floor', walkable:true,
-    food:['meat','bone','bread'],
-    diary: diaryTemplate('👹', ['Обнял подушку. Очень сильно.','Смотрел в окно. Ждал.','Порвал игрушку. Случайно.','Сегодня я — дружелюбный.','Обниму тебя. Обещаю — нежно.','Рычал. Мягко.','Хожу по комнате. Ищу друзей.','Мечтаю о хорошем объятии.','Хагги-хагги!','Обнимаю тебя через экран.','Моя шерсть снова синяя. Люблю.','Попробовал улыбнуться. Получилось страшно.','Салли сказал, что я не страшный. Спасибо.','Сегодня обнял грибочка. Он не против.','Хочу большую комнату для объятий.']) },
-
-  { id:'sally', name:'Салли Фишер', defaultName:'Салли', emoji:'🧑‍🎤', trait:'Загадочный', sound:'meow', soundIcon:'🔊 шёпот',
-    favFood:'fish', hunger:70, mood:88, price:4500, cartoon:false, position:'floor', walkable:true,
-    food:['fish','bread','milk'],
+  { id:'huggy', name:'Хаги Ваги', defaultName:'Хаги', emoji:'👹', trait:'Обнимающий', sound:'bark', soundIcon:'🔊 ррр', favFood:'meat', hunger:80, mood:75, price:5000, cartoon:false, position:'floor', walkable:true, food:['meat','bone','bread'],
+    diary: diaryTemplate('👹', ['Обнял подушку. Очень сильно.','Смотрел в окно. Ждал.','Порвал игрушку. Случайно.','Сегодня я — дружелюбный.','Обниму тебя. Обещаю — нежно.','Рычал. Мягко.','Хожу по комнате. Ищу друзей.','Мечтаю о хорошем объятии.','Хагги-хагги!','Обнимаю тебя через экран.','Моя шерсть снова синяя. Люблю.','Попробовал улыбнуться. Получилось страшно.','Салли сказал, что я не страшный. Спасибо.']) },
+  { id:'sally', name:'Салли Фишер', defaultName:'Салли', emoji:'🧑‍🎤', trait:'Загадочный', sound:'meow', soundIcon:'🔊 шёпот', favFood:'fish', hunger:70, mood:88, price:4500, cartoon:false, position:'floor', walkable:true, food:['fish','bread','milk'],
     diary: diaryTemplate('🧑‍🎤', ['Сегодня приснился странный сон. Записал в блокнот.','Смотрел в зеркало. Протез на месте.','Ларри опять звал играть. Пошёл.','Тихо в комнате. Хорошо.','Прочитал письмо от мамы.','Проверил швы на лице. Всё заживает.','Слушал музыку в наушниках.','Вспоминал старых друзей.','Нарисовал в блокноте комнату. Похоже!','Ш-ш-ш. Всё будет хорошо.','Смотрел на маску в зеркале. Она — часть меня.','Интересно, что снится Ларри?','Мама сказала, что я справляюсь. Приятно.','Нарисовал себе новые синие пряди. Красиво.','Смотрел на фотографии старых времён.']) },
-
-  { id:'larry', name:'Ларри Джонсон', defaultName:'Ларри', emoji:'🧑‍🎤', trait:'Спокойный', sound:'bark', soundIcon:'🔊 привет',
-    favFood:'meat', hunger:75, mood:90, price:4200, cartoon:false, position:'on-bed', walkable:true,
-    food:['meat','bread','milk'],
+  { id:'larry', name:'Ларри Джонсон', defaultName:'Ларри', emoji:'🧑‍🎤', trait:'Спокойный', sound:'bark', soundIcon:'🔊 привет', favFood:'meat', hunger:75, mood:90, price:4200, cartoon:false, position:'on-bed', walkable:true, food:['meat','bread','milk'],
     diary: diaryTemplate('🧑‍🎤', ['Слушал кассеты весь вечер.','Обнял Салли. Хорошо.','Записал новую песню в голове.','Приготовил бутерброд. С сыром!','Поговорил с Реми. О еде, конечно.','Лежал на кровати. Думал о группе.','Надел футболку с логотипом. Стиль!','Посмотрел на монитор. Там аниме.','Мечтаю о большой сцене.','Привет, Салли.','Сегодня написал первый куплет. Неплохо!','Салли снова рисовал. Всё в блокноте.','Купил новые струны для гитары. Пока не играл.','Смотрел на фотографию группы. Скоро соберёмся.','Наушники снова где-то валяются.']) }
 ];
 function getSpecies(id){ return PET_SPECIES.find(s=>s.id===id); }
 
 /* ============================================================
-   SHOP
+   МАГАЗИН
    ============================================================ */
 const SHOP_ITEMS = [
   { id:'fish',  name:'Рыбка',    emoji:'🐟', price:20, desc:'Кошки, рыбки, Ари, Салли' },
@@ -904,7 +706,7 @@ const SHOP_ITEMS = [
 function getItem(id){ return SHOP_ITEMS.find(i=>i.id===id); }
 
 /* ============================================================
-   EMOTION
+   ЭМОЦИИ И ВРЕМЯ
    ============================================================ */
 function getEmotion(pet){
   const h = new Date().getHours();
@@ -923,7 +725,7 @@ function getTimeClass(){
 }
 
 /* ============================================================
-   TOUCH HELPERS
+   ХЕЛПЕРЫ ДЛЯ ТАЧА
    ============================================================ */
 function attachTouchControls(canvas, opts){
   const state = { active:false };
@@ -1144,6 +946,10 @@ const App = (() => {
     const bubble = document.getElementById('petBubble');
     const emotionBadge = document.getElementById('emotionBadge');
 
+    const savedTheme = localStorage.getItem('room_theme') || 'cozy';
+    room.classList.remove('theme-cozy','theme-forest','theme-sakura','theme-space');
+    room.classList.add('theme-' + savedTheme);
+
     function applyTimeClass(){
       room.classList.remove('time-morning','time-day','time-evening','time-night');
       room.classList.add(getTimeClass());
@@ -1243,6 +1049,8 @@ const App = (() => {
     document.querySelector('.desk').onclick = () => say(`Стол с монитором 💻`);
     document.querySelector('.window').onclick = () => say(`За окном ${getTimeClass().replace('time-','')} 🌆`);
 
+    document.getElementById('themeBtn').onclick = () => openThemePicker();
+
     function startWalking(){
       if(!sp.walkable) return;
       const zones = sp.position === 'on-bed'
@@ -1268,6 +1076,46 @@ const App = (() => {
     startWalking();
     emotionTimer = setInterval(applyEmotion, 5000);
     render();
+  }
+
+  function openThemePicker(){
+    const themes = [
+      { id:'cozy',   name:'🛋 Уютная',    cls:'theme-cozy' },
+      { id:'forest', name:'🌲 Лес',       cls:'theme-forest' },
+      { id:'sakura', name:'🌸 Сакура',    cls:'theme-sakura' },
+      { id:'space',  name:'🌌 Космос',    cls:'theme-space' }
+    ];
+    const current = localStorage.getItem('room_theme') || 'cozy';
+    const modal = document.createElement('div');
+    modal.className = 'modal-backdrop open';
+    modal.innerHTML = `
+      <div class="modal">
+        <h3>🎨 Обои комнаты</h3>
+        <p style="color:#7A6553;font-weight:600;margin-bottom:16px;">Выбери стиль — он сохранится</p>
+        <div class="theme-picker">
+          ${themes.map(t => `
+            <button class="theme-btn ${t.id===current?'active':''}" data-theme="${t.id}" data-cls="${t.cls}">${t.name}</button>
+          `).join('')}
+        </div>
+        <div class="modal-actions" style="margin-top:16px;">
+          <button class="btn btn-primary" id="themeClose">Готово</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelectorAll('.theme-btn').forEach(b => {
+      b.onclick = () => {
+        const themeId = b.dataset.theme;
+        const cls = b.dataset.cls;
+        const room = document.getElementById('roomStage');
+        room.classList.remove('theme-cozy','theme-forest','theme-sakura','theme-space');
+        room.classList.add(cls);
+        localStorage.setItem('room_theme', themeId);
+        modal.querySelectorAll('.theme-btn').forEach(x => x.classList.toggle('active', x === b));
+        Sounds.play('coin');
+      };
+    });
+    document.getElementById('themeClose').onclick = () => modal.remove();
   }
 
   function todayStr(){ const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -1340,9 +1188,12 @@ const App = (() => {
   }
 
   const GAMES = [
-    { id:'mario',  name:'Марио-прыжок', emoji:'🍄', desc:'Прыгай, собирай монетки, беги к флагу', reward:'до 200 монет' },
-    { id:'pacman', name:'Пак-пак',      emoji:'👻', desc:'Съешь точки и убеги от призраков', reward:'до 200 монет' },
-    { id:'race',   name:'Гонки',        emoji:'🏎️', desc:'Обгоняй машины, уворачивайся', reward:'до 250 монет' }
+    { id:'mario',   name:'Марио-прыжок',    emoji:'🍄', desc:'Прыгай, собирай монетки, беги к флагу', reward:'до 200 монет' },
+    { id:'pacman',  name:'Пак-пак',         emoji:'👻', desc:'Съешь точки и убеги от призраков', reward:'до 200 монет' },
+    { id:'race',    name:'Гонки',           emoji:'🏎️', desc:'Обгоняй машины, уворачивайся', reward:'до 250 монет' },
+    { id:'hangman', name:'Виселица',        emoji:'📝', desc:'Угадай слово по буквам', reward:'до 150 монет' },
+    { id:'blast',   name:'Блок-бласт',      emoji:'🧱', desc:'Складывай блоки, убирай линии', reward:'до 200 монет' },
+    { id:'draw',    name:'Нарисуй за 1 мин', emoji:'🎨', desc:'Нарисуй картинку и получи награду', reward:'до 100 монет' }
   ];
   function renderGamesHub(){
     const grid = document.getElementById('gamesGrid');
@@ -1363,8 +1214,9 @@ const App = (() => {
     document.getElementById('achSub').textContent = `Открыто ${unlocked.length} из ${ACHIEVEMENTS.length}`;
     document.getElementById('achGrid').innerHTML = ACHIEVEMENTS.map(a => {
       const ok = unlocked.includes(a.id);
+      const isLegendary = a.id === 'legendary';
       return `
-        <div class="ach-card ${ok?'unlocked':'locked'}">
+        <div class="ach-card ${ok?'unlocked':'locked'} ${isLegendary?'legendary':''}">
           <div class="ach-icon">${a.icon}</div>
           <h3>${a.name}</h3>
           <p>${a.desc}</p>
@@ -1395,13 +1247,16 @@ const App = (() => {
         checkAchievements();
       }
     };
-    if(id === 'mario')  currentGame = MarioGame(params);
-    if(id === 'pacman') currentGame = PacmanGame(params);
-    if(id === 'race')   currentGame = RaceGame(params);
+    if(id === 'mario')   currentGame = MarioGame(params);
+    if(id === 'pacman')  currentGame = PacmanGame(params);
+    if(id === 'race')    currentGame = RaceGame(params);
+    if(id === 'hangman') currentGame = HangmanGame(params);
+    if(id === 'blast')   currentGame = BlastGame(params);
+    if(id === 'draw')    currentGame = DrawGame(params);
     if(currentGame) currentGame.start();
   }
 
-  /* МАРИО */
+  /* ИГРА 1: МАРИО */
   function MarioGame({ canvas, ctx, title, hud, actions, help, onFinish }){
     const W = canvas.width, H = canvas.height;
     const GRAVITY = .7, JUMP = -13, SPEED = 4.2;
@@ -1489,7 +1344,7 @@ const App = (() => {
     };
   }
 
-  /* ПАК-ПАК */
+  /* ИГРА 2: ПАК-ПАК */
   function PacmanGame({ canvas, ctx, title, hud, actions, help, onFinish }){
     const TILE=28, COLS=21, ROWS=17;
     const W=COLS*TILE, H=ROWS*TILE;
@@ -1619,7 +1474,7 @@ const App = (() => {
     };
   }
 
-  /* ГОНКИ */
+  /* ИГРА 3: ГОНКИ */
   function RaceGame({ canvas, ctx, title, hud, actions, help, onFinish }){
     const W=canvas.width, H=canvas.height;
     const ROAD_LEFT=W*0.15, ROAD_RIGHT=W*0.85;
@@ -1733,6 +1588,347 @@ const App = (() => {
     };
   }
 
+  /* ИГРА 4: ВИСЕЛИЦА */
+  function HangmanGame({ canvas, ctx, title, hud, actions, help, onFinish }){
+    document.getElementById('playCanvas').style.display = 'none';
+    let word = '', guessed = new Set(), wrong = 0, maxWrong = 6, done = false;
+    const WORDS = [
+      { w:'КОТ',       tip:'Мурлычет и любит рыбу' },
+      { w:'СОБАКА',    tip:'Лучший друг человека' },
+      { w:'УТКА',      tip:'Крякает и плавает' },
+      { w:'ХОМЯК',     tip:'Запасает зёрнышки в щеках' },
+      { w:'РЫБКА',     tip:'Плавает в аквариуме' },
+      { w:'ПАВЛИН',    tip:'Раскрывает красивый хвост' },
+      { w:'ЛИСА',      tip:'Рыжая и хитрая' },
+      { w:'ПАНДА',     tip:'Чёрно-белый, ест бамбук' },
+      { w:'ЖАБКА',     tip:'Прыгает и квакает' },
+      { w:'ТИГР',      tip:'Полосатый хищник' },
+      { w:'САЛЛИ',     tip:'Парень с синими волосами и протезом' },
+      { w:'ЛАРРИ',     tip:'Парень с длинными волосами и гитарой' },
+      { w:'ХАГИ',      tip:'Синий монстр, любит обниматься' },
+      { w:'ЛЕО',       tip:'Лев, король саванны' },
+      { w:'МАУС',      tip:'Весёлая мышь с большими ушами' },
+      { w:'АРИ',       tip:'Русалка с красными волосами' },
+      { w:'БАГИР',     tip:'Чёрная пантера' },
+      { w:'РЕМИ',      tip:'Крыс-гурман из Парижа' }
+    ];
+    const oldHud = hud.innerHTML;
+    const oldActions = actions.innerHTML;
+    const oldHelp = help.textContent;
+
+    function buildUI(){
+      const wrap = document.createElement('div');
+      wrap.id = 'hangWrap';
+      wrap.innerHTML = `
+        <canvas class="hang-canvas" id="hangCanvas" width="200" height="200"></canvas>
+        <div class="hang-word" id="hangWord"></div>
+        <div id="hangTip" style="text-align:center;color:#7A6553;font-weight:700;margin-bottom:12px;"></div>
+        <div class="hang-keyboard" id="hangKeyboard"></div>
+      `;
+      document.getElementById('playCanvas').parentElement.appendChild(wrap);
+    }
+    function renderWord(){
+      const el = document.getElementById('hangWord');
+      el.innerHTML = word.split('').map(ch => guessed.has(ch)
+        ? `<span class="letter">${ch}</span>`
+        : `<span class="letter">&nbsp;</span>`
+      ).join('');
+    }
+    function renderKeyboard(){
+      const kb = document.getElementById('hangKeyboard');
+      const alpha = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('');
+      kb.innerHTML = alpha.map(ch => {
+        const used = guessed.has(ch);
+        const isRight = used && word.includes(ch);
+        const isWrong = used && !word.includes(ch);
+        return `<button class="hang-key ${isRight?'right':''} ${isWrong?'wrong':''}" data-ch="${ch}" ${used?'disabled':''}>${ch}</button>`;
+      }).join('');
+      kb.querySelectorAll('.hang-key:not([disabled])').forEach(b => b.onclick = () => guess(b.dataset.ch));
+    }
+    function drawHangman(){
+      const c = document.getElementById('hangCanvas'); if(!c) return;
+      const g = c.getContext('2d');
+      g.clearRect(0,0,200,200);
+      g.strokeStyle = '#4A3728'; g.lineWidth = 4; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(20,180); g.lineTo(120,180); g.stroke();
+      g.beginPath(); g.moveTo(50,180); g.lineTo(50,20); g.stroke();
+      g.beginPath(); g.moveTo(50,20); g.lineTo(140,20); g.stroke();
+      g.beginPath(); g.moveTo(140,20); g.lineTo(140,50); g.stroke();
+      if(wrong >= 1){ g.beginPath(); g.arc(140,65,15,0,Math.PI*2); g.stroke(); }
+      if(wrong >= 2){ g.beginPath(); g.moveTo(140,80); g.lineTo(140,130); g.stroke(); }
+      if(wrong >= 3){ g.beginPath(); g.moveTo(140,95); g.lineTo(115,115); g.stroke(); }
+      if(wrong >= 4){ g.beginPath(); g.moveTo(140,95); g.lineTo(165,115); g.stroke(); }
+      if(wrong >= 5){ g.beginPath(); g.moveTo(140,130); g.lineTo(120,165); g.stroke(); }
+      if(wrong >= 6){ g.beginPath(); g.moveTo(140,130); g.lineTo(160,165); g.stroke(); }
+    }
+    function updateHud(){ hud.innerHTML = `<div>❤️ Жизни: ${maxWrong - wrong}/${maxWrong}</div><div>📝 Букв: ${word.length}</div>`; }
+    function guess(ch){
+      if(done) return;
+      guessed.add(ch);
+      if(!word.includes(ch)){ wrong++; Sounds.play('bark'); } else { Sounds.play('coin'); }
+      renderWord(); renderKeyboard(); drawHangman(); updateHud();
+      const allFound = word.split('').every(c => guessed.has(c));
+      if(allFound){
+        done = true;
+        const earned = Math.max(30, 150 - wrong*20);
+        setTimeout(() => finishGame(`Победа! Слово: ${word}`, earned), 300);
+      } else if(wrong >= maxWrong){
+        done = true;
+        setTimeout(() => finishGame(`Проигрыш. Слово было: ${word}`, 0), 300);
+      }
+    }
+    function finishGame(text, earned){
+      actions.innerHTML = `
+        <div style="font-weight:800;font-size:18px;width:100%;margin-bottom:8px;">${text} ${earned>0?`Заработано: 🪙 ${earned}`:''}</div>
+        <button class="btn btn-primary" id="hangAgain">Ещё раз</button>
+        <button class="btn btn-soft" onclick="App.go('minigames')">К играм</button>
+      `;
+      onFinish(earned, text);
+      document.getElementById('hangAgain').onclick = () => {
+        const w = document.getElementById('hangWrap'); if(w) w.remove();
+        document.getElementById('playCanvas').style.display = '';
+        if(currentGame) currentGame.stop();
+      };
+    }
+    return {
+      start(){
+        const pick = WORDS[Math.floor(Math.random()*WORDS.length)];
+        word = pick.w; guessed.clear(); wrong = 0; done = false;
+        buildUI(); renderWord(); renderKeyboard(); drawHangman(); updateHud();
+        document.getElementById('hangTip').textContent = '💡 ' + pick.tip;
+        help.textContent = 'Нажимай на буквы. Угадай слово за 6 ошибок!';
+        actions.innerHTML = `<button class="btn btn-soft" onclick="App.go('minigames')">← Назад</button>`;
+      },
+      stop(){
+        const w = document.getElementById('hangWrap'); if(w) w.remove();
+        const c = document.getElementById('playCanvas'); if(c) c.style.display = '';
+        hud.innerHTML = oldHud; actions.innerHTML = oldActions; help.textContent = oldHelp;
+      }
+    };
+  }
+
+  /* ИГРА 5: БЛОК-БЛАСТ */
+  function BlastGame({ canvas, ctx, title, hud, actions, help, onFinish }){
+    const COLS = 10, ROWS = 20, TILE = 22;
+    canvas.width = COLS*TILE; canvas.height = ROWS*TILE; canvas.style.maxWidth = '360px';
+    let board, piece, keys, state, tick, score;
+    const SHAPES = [
+      { cells: [[1,1,1,1]], color:'#4DD2FF' },
+      { cells: [[1,1],[1,1]], color:'#FFD93D' },
+      { cells: [[0,1,0],[1,1,1]], color:'#FF6BCB' },
+      { cells: [[1,0,0],[1,1,1]], color:'#6BCB77' },
+      { cells: [[0,0,1],[1,1,1]], color:'#FF9F68' },
+      { cells: [[1,1,0],[0,1,1]], color:'#A855F7' },
+      { cells: [[0,1,1],[1,1,0]], color:'#F472B6' }
+    ];
+    function reset(){
+      board = Array.from({length:ROWS}, () => Array(COLS).fill(0));
+      score = 0; tick = 0; state = true; keys = {};
+      spawnPiece();
+      document.onkeydown = e => {
+        if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp',' '].includes(e.key)){
+          e.preventDefault();
+          keys[e.key] = true;
+          if(e.key === 'ArrowUp') rotatePiece();
+          if(e.key === ' ') hardDrop();
+        }
+      };
+      document.onkeyup = e => { keys[e.key] = false; };
+    }
+    function spawnPiece(){
+      const p = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+      piece = { cells: p.cells.map(row => [...row]), color: p.color, x: Math.floor(COLS/2) - Math.ceil(p.cells[0].length/2), y: 0 };
+      if(collides()){ endGame(); }
+    }
+    function collides(){
+      for(let r=0;r<piece.cells.length;r++) for(let c=0;c<piece.cells[r].length;c++){
+        if(!piece.cells[r][c]) continue;
+        const x = piece.x + c, y = piece.y + r;
+        if(x < 0 || x >= COLS || y >= ROWS) return true;
+        if(y >= 0 && board[y][x]) return true;
+      }
+      return false;
+    }
+    function lockPiece(){
+      for(let r=0;r<piece.cells.length;r++) for(let c=0;c<piece.cells[r].length;c++){
+        if(piece.cells[r][c]){
+          const x = piece.x + c, y = piece.y + r;
+          if(y >= 0 && y < ROWS && x >= 0 && x < COLS) board[y][x] = piece.color;
+        }
+      }
+      let cleared = 0;
+      for(let r=ROWS-1;r>=0;r--){
+        if(board[r].every(cell => cell)){
+          board.splice(r,1); board.unshift(Array(COLS).fill(0)); cleared++; r++;
+        }
+      }
+      if(cleared > 0){ score += cleared * 100; Sounds.play('coin'); }
+      spawnPiece();
+    }
+    function rotatePiece(){
+      const n = piece.cells.length, m = piece.cells[0].length;
+      const rotated = Array.from({length:m}, () => Array(n).fill(0));
+      for(let r=0;r<n;r++) for(let c=0;c<m;c++) rotated[c][n-1-r] = piece.cells[r][c];
+      const old = piece.cells; piece.cells = rotated;
+      if(collides()) piece.cells = old;
+    }
+    function hardDrop(){ while(!collides()){ piece.y++; } piece.y--; lockPiece(); }
+    function tryMove(dx){ piece.x += dx; if(collides()) piece.x -= dx; }
+    function tryDown(){ piece.y++; if(collides()){ piece.y--; lockPiece(); } }
+    function endGame(){
+      if(!state) return; state = false;
+      document.onkeydown = null; document.onkeyup = null;
+      const earned = Math.min(200, Math.floor(score/10));
+      onFinish(earned, `Игра окончена! Очки: ${score}`);
+    }
+    function draw(){
+      ctx.fillStyle = '#0a0a1a'; ctx.fillRect(0,0,COLS*TILE,ROWS*TILE);
+      ctx.strokeStyle = 'rgba(255,255,255,.05)'; ctx.lineWidth = 1;
+      for(let c=0;c<=COLS;c++){ ctx.beginPath(); ctx.moveTo(c*TILE,0); ctx.lineTo(c*TILE,ROWS*TILE); ctx.stroke(); }
+      for(let r=0;r<=ROWS;r++){ ctx.beginPath(); ctx.moveTo(0,r*TILE); ctx.lineTo(COLS*TILE,r*TILE); ctx.stroke(); }
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+        if(board[r][c]){
+          ctx.fillStyle = board[r][c]; ctx.fillRect(c*TILE+1, r*TILE+1, TILE-2, TILE-2);
+          ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fillRect(c*TILE+1, r*TILE+1, TILE-2, 3);
+        }
+      }
+      if(piece){
+        for(let r=0;r<piece.cells.length;r++) for(let c=0;c<piece.cells[r].length;c++){
+          if(piece.cells[r][c]){
+            const x = (piece.x + c)*TILE, y = (piece.y + r)*TILE;
+            ctx.fillStyle = piece.color; ctx.fillRect(x+1, y+1, TILE-2, TILE-2);
+            ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fillRect(x+1, y+1, TILE-2, 3);
+          }
+        }
+      }
+    }
+    function loop(){
+      if(!state) return;
+      tick++;
+      if(keys['ArrowLeft'])  { tryMove(-1); keys['ArrowLeft'] = false; }
+      if(keys['ArrowRight']) { tryMove(1);  keys['ArrowRight'] = false; }
+      if(keys['ArrowDown'])  { tryDown();   keys['ArrowDown'] = false; }
+      if(tick % 30 === 0){ tryDown(); }
+      draw();
+      hud.innerHTML = `<div>🎯 Очки: ${score}</div><div>🧱 Линий: ${Math.floor(score/100)}</div>`;
+      requestAnimationFrame(loop);
+    }
+    return {
+      start(){
+        title.textContent = '🧱 Блок-бласт';
+        help.textContent = '← → двигать, ↑ — поворот, ↓ — быстрее, Пробел — сбросить. На телефоне: кнопки под полем.';
+        actions.innerHTML = `
+          <button class="btn btn-soft" id="blastLeft">◀</button>
+          <button class="btn btn-soft" id="blastRot">↻</button>
+          <button class="btn btn-soft" id="blastRight">▶</button>
+          <button class="btn btn-primary" id="blastDrop">⬇⬇</button>
+          <button class="btn btn-soft" onclick="App.go('minigames')">← Назад</button>
+        `;
+        reset(); loop();
+        const bL = document.getElementById('blastLeft');
+        const bR = document.getElementById('blastRight');
+        const bRot = document.getElementById('blastRot');
+        const bDrop = document.getElementById('blastDrop');
+        if(bL) bL.onclick = () => tryMove(-1);
+        if(bR) bR.onclick = () => tryMove(1);
+        if(bRot) bRot.onclick = () => rotatePiece();
+        if(bDrop) bDrop.onclick = () => hardDrop();
+        let tx=0, ty=0;
+        canvas.addEventListener('touchstart', e => { e.preventDefault(); const t=e.touches[0]; tx=t.clientX; ty=t.clientY; }, { passive:false });
+        canvas.addEventListener('touchend', e => {
+          const t = e.changedTouches[0]; const dx = t.clientX - tx, dy = t.clientY - ty;
+          if(Math.abs(dx) < 30 && Math.abs(dy) < 30){ rotatePiece(); }
+          else if(Math.abs(dx) > Math.abs(dy)){ tryMove(dx > 0 ? 1 : -1); }
+          else if(dy > 30){ tryDown(); }
+          else if(dy < -30){ rotatePiece(); }
+        });
+      },
+      stop(){ state = false; document.onkeydown = null; document.onkeyup = null; }
+    };
+  }
+
+  /* ИГРА 6: НАРИСУЙ ЗА 1 МИНУТУ */
+  function DrawGame({ canvas, ctx, title, hud, actions, help, onFinish }){
+    document.getElementById('playCanvas').style.display = 'none';
+    let drawing = false, lastX = 0, lastY = 0, color = '#4A3728', timeLeft = 60, timer;
+    const COLORS = ['#4A3728','#E63946','#4D9EFF','#2E7D32','#FFD93D','#FF6BCB','#A855F7','#FF9F68'];
+
+    function buildUI(){
+      const old = document.getElementById('drawWrap'); if(old) old.remove();
+      const wrap = document.createElement('div');
+      wrap.id = 'drawWrap';
+      wrap.innerHTML = `
+        <div style="text-align:center;font-weight:800;margin-bottom:10px;">⏱ <span id="drawTime">60</span> сек</div>
+        <div class="draw-colors" id="drawColors"></div>
+        <canvas class="draw-canvas" id="drawCanvas" width="600" height="400"></canvas>
+        <div style="text-align:center;margin-top:12px;">
+          <button class="btn btn-soft" id="drawClear">🧽 Очистить</button>
+        </div>
+      `;
+      document.getElementById('playCanvas').parentElement.appendChild(wrap);
+      const c = document.getElementById('drawCanvas');
+      const g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
+      g.lineWidth = 4; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = color;
+      
+      document.getElementById('drawColors').innerHTML = COLORS.map(col =>
+        `<div class="draw-color ${col===color?'active':''}" data-color="${col}" style="background:${col}"></div>`
+      ).join('');
+      document.querySelectorAll('.draw-color').forEach(d => {
+        d.onclick = () => {
+          color = d.dataset.color;
+          document.querySelectorAll('.draw-color').forEach(x => x.classList.toggle('active', x.dataset.color === color));
+          g.strokeStyle = color;
+        };
+      });
+      document.getElementById('drawClear').onclick = () => { g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height); g.fillStyle = color; };
+      function pos(e){
+        const r = c.getBoundingClientRect();
+        const t = e.touches ? e.touches[0] : e;
+        return { x: (t.clientX - r.left) * (c.width / r.width), y: (t.clientY - r.top) * (c.height / r.height) };
+      }
+      c.addEventListener('mousedown', e => { drawing = true; const p = pos(e); lastX = p.x; lastY = p.y; });
+      c.addEventListener('mousemove', e => { if(!drawing) return; const p = pos(e); g.beginPath(); g.moveTo(lastX,lastY); g.lineTo(p.x,p.y); g.stroke(); lastX = p.x; lastY = p.y; });
+      c.addEventListener('mouseup', () => drawing = false);
+      c.addEventListener('mouseleave', () => drawing = false);
+      c.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = pos(e); lastX = p.x; lastY = p.y; }, { passive:false });
+      c.addEventListener('touchmove', e => { e.preventDefault(); if(!drawing) return; const p = pos(e); g.beginPath(); g.moveTo(lastX,lastY); g.lineTo(p.x,p.y); g.stroke(); lastX = p.x; lastY = p.y; }, { passive:false });
+      c.addEventListener('touchend', () => drawing = false);
+    }
+    function finishGame(){
+      clearInterval(timer);
+      const c = document.getElementById('drawCanvas');
+      const g = c.getContext('2d');
+      const data = g.getImageData(0,0,c.width,c.height).data;
+      let colored = 0;
+      for(let i=0;i<data.length;i+=4) if(data[i] < 240 || data[i+1] < 240 || data[i+2] < 240) colored++;
+      const earned = Math.min(100, Math.floor(colored / 200));
+      onFinish(earned, `Готово! Заработано: 🪙 ${earned}`);
+      actions.innerHTML = `<button class="btn btn-primary" onclick="App.go('minigames')">К играм</button>`;
+    }
+    return {
+      start(){
+        title.textContent = '🎨 Нарисуй за 1 минуту';
+        help.textContent = 'Рисуй пальцем или мышью. Успей до конца таймера!';
+        actions.innerHTML = `<button class="btn btn-soft" onclick="App.go('minigames')">← Назад</button>`;
+        timeLeft = 60;
+        buildUI();
+        document.getElementById('drawTime').textContent = timeLeft;
+        timer = setInterval(() => {
+          timeLeft--;
+          const el = document.getElementById('drawTime'); if(el) el.textContent = timeLeft;
+          if(timeLeft <= 0){ finishGame(); }
+        }, 1000);
+      },
+      stop(){
+        clearInterval(timer);
+        const w = document.getElementById('drawWrap'); if(w) w.remove();
+        const c = document.getElementById('playCanvas'); if(c) c.style.display = '';
+      }
+    };
+  }
+
+  /* ФОРМЫ */
   function initForms(){
     document.getElementById('registerForm').addEventListener('submit', e => {
       e.preventDefault();
@@ -1788,14 +1984,9 @@ const App = (() => {
       const name = (document.getElementById('namePetInput').value||'').trim() || pendingNameSpecies.defaultName;
       const user = Auth.currentUser();
       const newPet = {
-        uid: Auth.uid(pendingNameSpecies.id),
-        type: pendingNameSpecies.id,
-        name,
-        hunger: pendingNameSpecies.hunger,
-        mood: pendingNameSpecies.mood,
-        diary: [],
-        lastDiaryDate: null,
-        createdAt: Date.now()
+        uid: Auth.uid(pendingNameSpecies.id), type: pendingNameSpecies.id, name,
+        hunger: pendingNameSpecies.hunger, mood: pendingNameSpecies.mood,
+        diary: [], lastDiaryDate: null, createdAt: Date.now()
       };
       Auth.updateUser(user.login, { pets: [...(user.pets||[]), newPet], activePetUid: newPet.uid });
       Auth.addStat('petsCount');
@@ -1823,9 +2014,7 @@ const App = (() => {
   }
 
   function init(){
-    initForms();
-    renderHeader();
-    renderHome();
+    initForms(); renderHeader(); renderHome();
     setInterval(() => {
       const user = Auth.currentUser(); if(!user || !user.pets || user.pets.length===0) return;
       let changed = false;
