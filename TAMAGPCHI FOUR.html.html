@@ -288,10 +288,7 @@ button{font-family:inherit}
 .badge-num{position:absolute;top:-6px;right:-6px;background:#FF4D4D;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:999px;border:2px solid #fff}
 
 /* СПРАЙТЫ */
-.sprite-img{display:inline-block;height:100%;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 4px 3px rgba(0,0,0,.3))}
-.pet-avatar .sprite-img{height:90%}
-.pet-big .sprite-img{height:100%}
-.sprite-svg{width:1em;height:1em;font-size:inherit}
+.pet-avatar svg, .pet-big svg, .modal-pet svg { width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
 
 @media(max-width:600px){
   .header{padding:10px 12px} .header-logo{font-size:16px}
@@ -479,9 +476,66 @@ button{font-family:inherit}
 </footer>
 
 <script>
-/* === SVG СПРАЙТЫ САЛЛИ И ЛАРРИ (очищенные от фона) === */
-const SVG_SALLY = `<svg viewBox="0 0 200 300" class="sprite-svg"><path fill="#4DD2FF" d="M60,40 Q40,40 40,80 Q20,110 30,140 Q40,120 50,120 Q55,100 60,80 Z M140,40 Q160,40 160,80 Q180,110 170,140 Q160,120 150,120 Q145,100 140,80 Z M50,40 Q50,10 100,10 Q150,10 150,40 Q150,50 120,55 Q100,60 80,55 Q50,50 50,40 Z"/><path fill="#F4EFE6" d="M70,60 Q70,50 100,50 Q130,50 130,60 L130,100 Q120,130 100,130 Q80,130 70,100 Z"/><path fill="#E8DFC9" d="M90,60 Q90,55 100,55 Q110,55 110,60 L110,80 Q100,85 90,80 Z"/><ellipse cx="85" cy="85" rx="8" ry="12" fill="#1A1A1A"/><ellipse cx="115" cy="85" rx="8" ry="12" fill="#1A1A1A"/><path fill="#2A2A2A" d="M70,130 L130,130 L140,220 L60,220 Z"/><path fill="#A83A3A" d="M75,220 L90,220 L90,290 L75,290 Z M110,220 L125,220 L125,290 L110,290 Z"/><path fill="#3D7AB8" d="M60,290 Q75,280 90,290 L90,300 L60,300 Z M110,290 Q125,280 140,290 L140,300 L110,300 Z"/><circle cx="40" cy="50" r="5" fill="#2BA8E0"/><path fill="#8A8A8A" d="M132,65 Q145,65 148,75 Q148,90 138,95 L125,90 L130,70 Z"/></svg>`;
-const SVG_LARRY = `<svg viewBox="0 0 200 300" class="sprite-svg"><path fill="#2A1E1A" d="M70,20 Q50,60 60,150 L70,200 L80,200 L75,150 Q65,70 80,30 Z M130,20 Q150,60 140,150 L130,200 L120,200 L125,150 Q135,70 120,30 Z M80,20 Q100,10 120,20 Q130,50 120,80 L80,80 Q70,50 80,20 Z"/><path fill="#F5D9B8" d="M80,50 Q100,40 120,50 Q130,80 120,110 Q100,125 80,110 Q70,80 80,50 Z"/><ellipse cx="93" cy="80" rx="9" ry="11" fill="#1A1A1A"/><ellipse cx="107" cy="80" rx="9" ry="11" fill="#1A1A1A"/><path fill="#8B6B4A" d="M70,115 L130,115 L135,200 L65,200 Z"/><circle cx="100" cy="155" r="20" fill="none" stroke="#4A3728" stroke-width="4"/><text x="100" y="162" font-family="Arial" font-size="20" font-weight="bold" fill="#4A3728" text-anchor="middle">SF</text><path fill="#3A3A4A" d="M75,200 L90,200 L90,290 L75,290 Z M110,200 L125,200 L125,290 L110,290 Z"/><path fill="#4A3728" d="M65,290 Q75,280 90,290 L90,300 L65,300 Z M110,290 Q125,280 135,290 L135,300 L110,300 Z"/></svg>`;
+/* ============================================================
+   ДЕТАЛИЗИРОВАННЫЕ SVG СПРАЙТЫ САЛЛИ И ЛАРРИ
+   ============================================================ */
+const SVG_SALLY = `<svg viewBox="0 0 100 180" style="height:100%;width:auto;filter:drop-shadow(0 4px 2px rgba(0,0,0,.3));">
+  <path d="M30,25 C10,30 5,60 15,85 C20,70 25,60 35,55 Z" fill="#4DD2FF"/>
+  <path d="M70,25 C90,30 95,60 85,85 C80,70 75,60 65,55 Z" fill="#4DD2FF"/>
+  <rect x="28" y="25" width="8" height="12" fill="#2A5A9A" transform="rotate(-20 32 31)"/>
+  <rect x="64" y="25" width="8" height="12" fill="#2A5A9A" transform="rotate(20 68 31)"/>
+  <path d="M30,45 C30,10 70,10 70,45 C75,55 60,60 50,60 C40,60 25,55 30,45 Z" fill="#4DD2FF"/>
+  <path d="M35,45 L65,45 L68,80 C65,95 50,100 50,100 C50,100 35,95 32,80 Z" fill="#F2EDE4"/>
+  <path d="M35,45 L48,45 L48,85 C42,88 36,80 32,80 Z" fill="#F4C2D7"/>
+  <line x1="48" y1="50" x2="48" y2="80" stroke="#A88A96" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="36" y1="60" x2="46" y2="60" stroke="#A88A96" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="34" y1="70" x2="46" y2="70" stroke="#A88A96" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <ellipse cx="42" cy="65" rx="5" ry="8" fill="#1A1A1A"/>
+  <ellipse cx="58" cy="65" rx="5" ry="8" fill="#1A1A1A"/>
+  <path d="M48,75 L52,75 L50,80 Z" fill="#C9BFAF"/>
+  <path d="M45,87 Q50,90 55,87" fill="none" stroke="#4A3728" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="45" y="98" width="10" height="8" fill="#F2EDE4"/>
+  <path d="M28,110 L72,110 L75,160 L25,160 Z" fill="#2A2A2A"/>
+  <path d="M28,110 L20,145 L28,150 L35,120 Z" fill="#2A2A2A"/>
+  <path d="M72,110 L80,145 L72,150 L65,120 Z" fill="#2A2A2A"/>
+  <circle cx="22" cy="150" r="6" fill="#D9CEB5"/>
+  <circle cx="78" cy="150" r="6" fill="#D9CEB5"/>
+  <path d="M35,160 L48,160 L48,175 L35,175 Z" fill="#A83A3A"/>
+  <path d="M52,160 L65,160 L65,175 L52,175 Z" fill="#A83A3A"/>
+  <ellipse cx="40" cy="168" rx="4" ry="3" fill="#F2EDE4"/>
+  <ellipse cx="60" cy="168" rx="4" ry="3" fill="#F2EDE4"/>
+  <path d="M30,175 C30,170 50,170 50,175 L50,180 L30,180 Z" fill="#3D7AB8"/>
+  <path d="M50,175 C50,170 70,170 70,175 L70,180 L50,180 Z" fill="#3D7AB8"/>
+  <rect x="28" y="175" width="24" height="2" fill="#FFF"/>
+  <rect x="48" y="175" width="24" height="2" fill="#FFF"/>
+</svg>`;
+
+const SVG_LARRY = `<svg viewBox="0 0 100 180" style="height:100%;width:auto;filter:drop-shadow(0 4px 2px rgba(0,0,0,.3));">
+  <path d="M25,20 C25,-5 75,-5 75,20 L78,120 L70,120 C70,80 65,50 50,50 C35,50 30,80 30,120 L22,120 Z" fill="#2A1E1A"/>
+  <path d="M30,40 C30,25 70,25 70,40 L72,95 C70,110 55,115 50,115 C45,115 30,110 28,95 Z" fill="#E8C8A0"/>
+  <path d="M32,50 Q42,45 48,52" fill="none" stroke="#2A1E1A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M52,52 Q58,45 68,50" fill="none" stroke="#2A1E1A" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="42" cy="65" rx="6" ry="8" fill="#F5F5F5"/>
+  <ellipse cx="58" cy="65" rx="6" ry="8" fill="#F5F5F5"/>
+  <circle cx="43" cy="65" r="4" fill="#6BB8FF"/>
+  <circle cx="57" cy="65" r="4" fill="#6BB8FF"/>
+  <circle cx="43" cy="65" r="2" fill="#1A1A1A"/>
+  <circle cx="57" cy="65" r="2" fill="#1A1A1A"/>
+  <path d="M50,68 L48,90 L55,90 Z" fill="#D4B088"/>
+  <circle cx="62" cy="85" r="1.5" fill="#4A3728"/>
+  <path d="M45,100 Q50,102 55,100" fill="none" stroke="#4A3728" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="44" y="110" width="12" height="8" fill="#E8C8A0"/>
+  <path d="M30,120 L70,120 L75,160 L25,160 Z" fill="#8B6B4A"/>
+  <path d="M30,120 L18,145 L25,150 L32,130 Z" fill="#8B6B4A"/>
+  <path d="M70,120 L82,145 L75,150 L68,130 Z" fill="#8B6B4A"/>
+  <circle cx="50" cy="140" r="12" fill="none" stroke="#5A3A1A" stroke-width="2"/>
+  <text x="50" y="146" font-family="Arial" font-size="14" font-weight="bold" fill="#5A3A1A" text-anchor="middle">SF</text>
+  <path d="M50,152 L50,160" stroke="#5A3A1A" stroke-width="2"/>
+  <path d="M35,160 L48,160 L48,178 L35,178 Z" fill="#3A3A4A"/>
+  <path d="M52,160 L65,160 L65,178 L52,178 Z" fill="#3A3A4A"/>
+  <path d="M32,178 C32,172 50,172 50,178 L50,180 L32,180 Z" fill="#3A2A20"/>
+  <path d="M50,178 C50,172 68,172 68,178 L68,180 L50,180 Z" fill="#3A2A20"/>
+</svg>`;
 
 /* ============================================================
    ЗВУКИ
@@ -589,7 +643,7 @@ const ACHIEVEMENTS = [
   }},
   { id:'legendary',  icon:'👑', name:'Легенда', desc:'Собрал все достижения (награда: 10 000 🪙)', check:u => {
     const current = u.achievements || [];
-    if(current.includes('legendary')) return true; // уже получено
+    if(current.includes('legendary')) return true;
     const allOthers = ACHIEVEMENTS.filter(a => a.id !== 'legendary');
     return allOthers.every(a => current.includes(a.id));
   }}
@@ -603,7 +657,7 @@ function checkAchievements(){
     if(unlocked.includes(a.id)) return;
     if(a.check(user)){ unlocked.push(a.id); newOnes.push(a); }
   });
-  
+
   if(newOnes.length){
     let additionalCoins = 0;
     if(newOnes.some(a => a.id === 'legendary')){
@@ -612,7 +666,7 @@ function checkAchievements(){
     Auth.updateUser(user.login, { achievements: unlocked, coins: user.coins + additionalCoins });
     const el = document.getElementById('coinsHeader');
     if(el) el.textContent = user.coins + additionalCoins;
-    
+
     newOnes.forEach((a, i) => setTimeout(() => showToast(a, a.id === 'legendary'), i*800));
   }
 }
@@ -629,8 +683,8 @@ function showToast(a, isLegendary = false){
    СПРАЙТЫ
    ============================================================ */
 function renderSprite(sp, size='1em'){
-  if(sp.id === 'sally') return `<span style="font-size:${size};line-height:1;display:inline-block;">${SVG_SALLY}</span>`;
-  if(sp.id === 'larry') return `<span style="font-size:${size};line-height:1;display:inline-block;">${SVG_LARRY}</span>`;
+  if(sp.id === 'sally') return `<span style="display:inline-flex;width:${size};height:${size};align-items:center;justify-content:center;">${SVG_SALLY}</span>`;
+  if(sp.id === 'larry') return `<span style="display:inline-flex;width:${size};height:${size};align-items:center;justify-content:center;">${SVG_LARRY}</span>`;
   return `<span style="font-size:${size};line-height:1;">${sp.emoji}</span>`;
 }
 
@@ -1870,7 +1924,7 @@ const App = (() => {
       const g = c.getContext('2d');
       g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
       g.lineWidth = 4; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = color;
-      
+
       document.getElementById('drawColors').innerHTML = COLORS.map(col =>
         `<div class="draw-color ${col===color?'active':''}" data-color="${col}" style="background:${col}"></div>`
       ).join('');
