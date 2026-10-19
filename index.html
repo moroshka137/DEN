@@ -91,6 +91,12 @@ button{font-family:inherit}
 .modal-pet{font-size:80px;margin:10px 0 16px;display:flex;justify-content:center;align-items:center;min-height:100px}
 .modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
+/* ПОМОЩНИК */
+.helper-rat{position:fixed;bottom:20px;right:20px;z-index:90;width:80px;height:80px;cursor:pointer;transition:transform .3s;filter:drop-shadow(0 6px 8px rgba(0,0,0,.3))}
+.helper-rat:hover{transform:scale(1.1) rotate(-5deg)}
+.helper-bubble{position:fixed;bottom:110px;right:20px;z-index:89;background:#fff;border-radius:var(--radius-sm);padding:12px 16px;font-weight:700;color:var(--text-soft);box-shadow:var(--shadow-strong);border:3px solid var(--bg-accent);max-width:220px;font-size:13px;animation:pop .3s ease-out;display:none}
+.helper-bubble.show{display:block}
+
 /* ФОРМЫ */
 .auth-wrap{display:grid;place-items:center;min-height:calc(100vh - 65px);padding:16px}
 .auth-card{background:#fff;border-radius:var(--radius);padding:32px 24px;max-width:420px;width:100%;box-shadow:var(--shadow-strong);border:5px solid var(--bg-accent);text-align:center}
@@ -298,6 +304,8 @@ button{font-family:inherit}
   .play-canvas{max-width:100%}
   .hang-keyboard{grid-template-columns:repeat(6,1fr)}
   .hang-word{font-size:28px;letter-spacing:6px}
+  .helper-rat{width:60px;height:60px;bottom:10px;right:10px}
+  .helper-bubble{bottom:80px;right:10px;font-size:12px}
 }
 </style>
 </head>
@@ -469,15 +477,31 @@ button{font-family:inherit}
 <div class="modal-backdrop" id="buyPetModal"><div class="modal"><h3 id="buyPetTitle">Завести?</h3><div class="modal-pet" id="buyPetImg"></div><p style="font-weight:700;margin-bottom:16px;">Стоимость: <span id="buyPetPrice" style="color:#8A6A00;background:#FFF7C2;padding:2px 10px;border-radius:999px;">🪙 300</span></p><div class="modal-actions"><button class="btn btn-soft" id="buyPetCancel">Отмена</button><button class="btn btn-primary" id="buyPetConfirm">Купить! 🎉</button></div></div></div>
 <div class="modal-backdrop" id="namePetModal"><div class="modal"><h3>Как назовём?</h3><div class="modal-pet" id="namePetImg"></div><input class="input" type="text" id="namePetInput" maxlength="16" /><div class="modal-actions" style="margin-top:16px;"><button class="btn btn-soft" id="namePetCancel">Отмена</button><button class="btn btn-primary" id="namePetConfirm">Готово! 🐾</button></div></div></div>
 <div class="modal-backdrop" id="diaryModal"><div class="modal"><h3 id="diaryTitle">📔 Дневник</h3><div class="modal-pet" id="diaryEmoji"></div><div id="diaryList" style="max-height:400px;overflow-y:auto;text-align:left;"></div><div class="modal-actions" style="margin-top:16px;"><button class="btn btn-primary" onclick="document.getElementById('diaryModal').classList.remove('open')">Закрыть</button></div></div></div>
+<div class="modal-backdrop" id="helperModal"><div class="modal"><h3>🐀 Привет, я Крыс-учитель!</h3><div class="modal-pet"><svg viewBox="0 0 100 100" style="width:80px;height:80px;"><circle cx="50" cy="50" r="40" fill="#888"/><circle cx="30" cy="30" r="15" fill="#888"/><circle cx="70" cy="30" r="15" fill="#888"/><circle cx="30" cy="30" r="8" fill="#FFB6C1"/><circle cx="70" cy="30" r="8" fill="#FFB6C1"/><circle cx="35" cy="45" r="5" fill="#111"/><circle cx="65" cy="45" r="5" fill="#111"/><ellipse cx="50" cy="60" rx="6" ry="4" fill="#FFB6C1"/><path d="M40,65 Q50,75 60,65" fill="none" stroke="#111" stroke-width="2"/></svg></div><p style="color:#7A6553;font-weight:600;margin-bottom:16px;text-align:left;line-height:1.5;">Я помогу тебе освоиться!<br><br>1. Заведи первого питомца (он бесплатный).<br>2. Покорми его из магазина.<br>3. Играй в мини-игры, чтобы заработать монеты.<br>4. Покупай новых питомцев и обои для комнаты.<br>5. Собирай все достижения, чтобы получить 10 000 монет!</p><div class="modal-actions"><button class="btn btn-primary" onclick="document.getElementById('helperModal').classList.remove('open')">Понятно!</button></div></div></div>
+
+<div class="helper-rat" id="helperRat" onclick="document.getElementById('helperModal').classList.add('open')">
+  <svg viewBox="0 0 100 100" style="width:100%;height:100%;">
+    <circle cx="50" cy="50" r="40" fill="#888"/>
+    <circle cx="30" cy="30" r="15" fill="#888"/>
+    <circle cx="70" cy="30" r="15" fill="#888"/>
+    <circle cx="30" cy="30" r="8" fill="#FFB6C1"/>
+    <circle cx="70" cy="30" r="8" fill="#FFB6C1"/>
+    <circle cx="35" cy="45" r="5" fill="#111"/>
+    <circle cx="65" cy="45" r="5" fill="#111"/>
+    <ellipse cx="50" cy="60" rx="6" ry="4" fill="#FFB6C1"/>
+    <path d="M40,65 Q50,75 60,65" fill="none" stroke="#111" stroke-width="2"/>
+    <path d="M80,40 Q90,40 90,50 Q90,60 80,60" fill="none" stroke="#888" stroke-width="6" stroke-linecap="round"/>
+  </svg>
+</div>
 
 <footer class="footer">
   <p>© Tamagotchi World 2025 · Сделано с ❤️ 🐾</p>
-  <p class="disclaimer">Это некоммерческий фан-проект. Персонажи, напоминающие героев известных мультфильмов и игр, использованы как отсылки. Проект не связан с правообладателями.</p>
+  <p class="disclaimer">Это некоммерческий фан-проект. Персонажи использованы как отсылки. Проект не связан с правообладателями.</p>
 </footer>
 
 <script>
 /* ============================================================
-   ДЕТАЛИЗИРОВАННЫЕ SVG СПРАЙТЫ САЛЛИ И ЛАРРИ
+   ДЕТАЛИЗИРОВАННЫЕ SVG СПРАЙТЫ
    ============================================================ */
 const SVG_SALLY = `<svg viewBox="0 0 100 180" style="height:100%;width:auto;filter:drop-shadow(0 4px 2px rgba(0,0,0,.3));">
   <path d="M30,25 C10,30 5,60 15,85 C20,70 25,60 35,55 Z" fill="#4DD2FF"/>
@@ -535,6 +559,32 @@ const SVG_LARRY = `<svg viewBox="0 0 100 180" style="height:100%;width:auto;filt
   <path d="M52,160 L65,160 L65,178 L52,178 Z" fill="#3A3A4A"/>
   <path d="M32,178 C32,172 50,172 50,178 L50,180 L32,180 Z" fill="#3A2A20"/>
   <path d="M50,178 C50,172 68,172 68,178 L68,180 L50,180 Z" fill="#3A2A20"/>
+</svg>`;
+
+const SVG_HUGGY = `<svg viewBox="0 0 100 180" style="height:100%;width:auto;filter:drop-shadow(0 4px 2px rgba(0,0,0,.3));">
+  <rect x="40" y="100" width="8" height="60" fill="#2A6AB8"/>
+  <rect x="52" y="100" width="8" height="60" fill="#2A6AB8"/>
+  <path d="M25,160 Q40,155 48,160 L48,165 Q40,170 25,170 Z" fill="#C9BFAF"/>
+  <path d="M52,160 Q60,155 75,160 L75,170 Q60,170 52,165 Z" fill="#C9BFAF"/>
+  <path d="M25,170 Q40,175 48,170 L48,165 Q40,168 25,168 Z" fill="#B8AE9A"/>
+  <path d="M52,170 Q60,175 75,170 L75,165 Q60,168 52,168 Z" fill="#B8AE9A"/>
+  <path d="M30,60 Q50,50 70,60 L75,100 Q75,110 65,110 L35,110 Q25,110 25,100 Z" fill="#2A6AB8"/>
+  <path d="M30,70 Q15,90 10,100 Q5,105 10,110 Q20,105 25,95 Z" fill="#2A6AB8"/>
+  <path d="M70,70 Q85,90 90,100 Q95,105 90,110 Q80,105 75,95 Z" fill="#2A6AB8"/>
+  <path d="M10,100 Q5,105 10,110 L20,110 L20,100 Z" fill="#C9BFAF"/>
+  <path d="M90,100 Q95,105 90,110 L80,110 L80,100 Z" fill="#C9BFAF"/>
+  <path d="M40,58 L50,55 L60,58 L55,65 L45,65 Z" fill="#6BB8FF"/>
+  <circle cx="50" cy="58" r="3" fill="#4DD2FF"/>
+  <path d="M25,50 Q20,20 50,15 Q80,20 75,50 Q70,55 50,55 Q30,55 25,50 Z" fill="#2A6AB8"/>
+  <path d="M25,25 Q30,15 40,20 Q35,30 30,35 Z" fill="#2A6AB8"/>
+  <path d="M75,25 Q70,15 60,20 Q65,30 70,35 Z" fill="#2A6AB8"/>
+  <ellipse cx="35" cy="35" rx="10" ry="12" fill="#1A1A1A"/>
+  <ellipse cx="65" cy="35" rx="10" ry="12" fill="#1A1A1A"/>
+  <ellipse cx="35" cy="32" rx="3" ry="4" fill="#FFF"/>
+  <ellipse cx="65" cy="32" rx="3" ry="4" fill="#FFF"/>
+  <path d="M30,40 Q50,40 70,40 Q60,55 50,55 Q40,55 30,40 Z" fill="#E84A7A"/>
+  <ellipse cx="45" cy="50" rx="4" ry="2" fill="#FF9E9E"/>
+  <ellipse cx="55" cy="50" rx="4" ry="2" fill="#FF9E9E"/>
 </svg>`;
 
 /* ============================================================
@@ -657,7 +707,7 @@ function checkAchievements(){
     if(unlocked.includes(a.id)) return;
     if(a.check(user)){ unlocked.push(a.id); newOnes.push(a); }
   });
-
+  
   if(newOnes.length){
     let additionalCoins = 0;
     if(newOnes.some(a => a.id === 'legendary')){
@@ -666,7 +716,7 @@ function checkAchievements(){
     Auth.updateUser(user.login, { achievements: unlocked, coins: user.coins + additionalCoins });
     const el = document.getElementById('coinsHeader');
     if(el) el.textContent = user.coins + additionalCoins;
-
+    
     newOnes.forEach((a, i) => setTimeout(() => showToast(a, a.id === 'legendary'), i*800));
   }
 }
@@ -685,6 +735,7 @@ function showToast(a, isLegendary = false){
 function renderSprite(sp, size='1em'){
   if(sp.id === 'sally') return `<span style="display:inline-flex;width:${size};height:${size};align-items:center;justify-content:center;">${SVG_SALLY}</span>`;
   if(sp.id === 'larry') return `<span style="display:inline-flex;width:${size};height:${size};align-items:center;justify-content:center;">${SVG_LARRY}</span>`;
+  if(sp.id === 'huggy') return `<span style="display:inline-flex;width:${size};height:${size};align-items:center;justify-content:center;">${SVG_HUGGY}</span>`;
   return `<span style="font-size:${size};line-height:1;">${sp.emoji}</span>`;
 }
 
@@ -1924,7 +1975,7 @@ const App = (() => {
       const g = c.getContext('2d');
       g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
       g.lineWidth = 4; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = color;
-
+      
       document.getElementById('drawColors').innerHTML = COLORS.map(col =>
         `<div class="draw-color ${col===color?'active':''}" data-color="${col}" style="background:${col}"></div>`
       ).join('');
